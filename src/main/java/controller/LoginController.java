@@ -41,7 +41,6 @@ public class LoginController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//reqestは「ブラウザからのリクエスト情報」、responseは「ブラウザへ送り返す情報」
-		
 		request.setCharacterEncoding("UTF-8");
 		
 		String loginId = request.getParameter("loginId");
