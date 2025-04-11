@@ -19,3 +19,6 @@ INSERT INTO users (login_id, password, name) VALUES ('user04', '44444444', '矢�
 INSERT INTO users (login_id, password, name) VALUES ('user05', '55555555', '松井');
 -- 確認
 SELECT * FROM users;
+
+
+test
