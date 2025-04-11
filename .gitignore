@@ -1,24 +1,32 @@
-# === Java + Eclipse + VSCode 用 追記 ===
-
-# Java build files
-*.class
-*.jar
-*.war
-*.ear
-
-# Eclipse files
+# Eclipse
 .project
 .classpath
 .settings/
 bin/
 
-# VSCode settings
+# VSCode
 .vscode/
 
-# OS files
+# Node.js
+node_modules/
+
+# Vue.js (ビルド結果や設定)
+dist/
+*.log
+*.lock
+
+# Vuetify (Vue.jsの依存パッケージ)
+node_modules/
+
+# サーブレット（Tomcatなどのサーバー関連）
+*.war
+*.ear
+target/
+
+# その他のOS固有ファイル
 .DS_Store
 Thumbs.db
 
-# Build directories
-/build/
-/out/
+# ローカル開発用設定ファイル
+*.local
+*.env
