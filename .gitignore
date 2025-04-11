@@ -30,3 +30,28 @@ Thumbs.db
 # ローカル開発用設定ファイル
 *.local
 *.env
+
+# === Java + Eclipse + VSCode 用 追記 ===
+
+# Java build files
+*.class
+*.jar
+*.war
+*.ear
+
+# Eclipse files
+.project
+.classpath
+.settings/
+bin/
+
+# VSCode settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build directories
+/build/
+/out/
