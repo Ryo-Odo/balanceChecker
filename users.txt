@@ -21,4 +21,13 @@ INSERT INTO users (login_id, password, name) VALUES ('user05', '55555555', '松�
 SELECT * FROM users;
 
 
-test
+CREATE DATABASE foods_db ENCODING 'UTF8' TEMPLATE template0;
+
+
+メモ
+バックエンド：JAVA（サーブレット）
+
+フロントエンド
+非同期処理:Vue.js（CDN？）
+デザイン・CSS：Vuetify（CDN?）
+https://vuetifyjs.com/ja/getting-started/installation/#cdn30924f7f304658345408

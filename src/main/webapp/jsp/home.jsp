@@ -4,6 +4,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.js"></script>
+<!-- Vue3 CDN -->
+<link href="https://cdn.jsdelivr.net/npm/vuetify@3.8.1/dist/vuetify.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/vuetify@3.8.1/dist/vuetify.min.js"></script>
+<!-- Vuetify3 CDN -->
+
 <meta charset="UTF-8">
 <title>ホーム画面</title>
 </head>
@@ -20,5 +26,11 @@
 	<p>
 		<a href="/balanceChecker/delete">退会する方はこちら</a>
 	</p>
+
+	<div id="app"></div>
+	<script src="js/app.js"></script>
+
+
+
 </body>
 </html>

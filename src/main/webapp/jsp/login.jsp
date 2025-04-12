@@ -9,8 +9,6 @@
 </head>
 <body>
 	<h1>ログイン画面</h1>
-	
-	
 	<c:if test = "${loginError != null }" >
 		<div style=""color:red;">
 			<p>${loginError }</p>
