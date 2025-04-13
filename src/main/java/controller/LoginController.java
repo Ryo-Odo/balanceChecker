@@ -51,14 +51,34 @@ public class LoginController extends HttpServlet {
 		//自作した「UserLoginService」のインスタンスを作成
 		
 		User user = loginService.loginCheck(loginId, password);
-		//自作した「User」クラスのインスタンスに入れる、ログインチェックで合っているか確認、
+		//自作した「User」クラスのインスタンスに入れる、ログインチェックで合っているか確認
 		
 		
 		if (user != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", user);
-			RequestDispatcher rd = request.getRequestDispatcher("jsp/home.jsp");
-			rd.forward(request, response);
+
+			
+//			FoodGetService getSelvice= new FoodGetService();
+//			//Foodのロジッククラスを初期化
+//			
+//			List<Food> foodList = getSelvice.getAllFoods();
+//			//foods_dbから全ての情報を取得し、Food型のListを作成
+//			
+//		    response.setContentType("application/json; charset=UTF-8");
+//		    //
+//		    
+//		    PrintWriter out = response.getWriter();
+//
+//		    Gson gson = new Gson();
+//		    String json = gson.toJson(foodList); // ← FoodでもGsonでそのままJSON化できる
+//		    out.print(json);
+//		    out.flush();
+			
+				
+//			RequestDispatcher rd = request.getRequestDispatcher("jsp/home.jsp");
+//			rd.forward(request, response);
+		    response.sendRedirect(request.getContextPath() + "/home"); // URL変更して遷移
 		} else {
 			request.setAttribute("loginError", "ログインIDまたはパスワードが間違っています。");
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/login.jsp");
