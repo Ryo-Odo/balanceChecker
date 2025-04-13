@@ -59,4 +59,6 @@ lib内に「gson-2.10.1.jar」配置、プロジェクトにビルド
 でデータベースの情報をフロントへ送るまでは作成、現在HOMEは見本
 残り作業はほぼフロントとデザイン、JSONの取り出しと使用方法を確認すること
 http://localhost:8080/balanceChecker/api/foodsへ接続すると送られたJSON構造が見れる
-
+https://wand.witchserver.jp/archives/46
+htmlファイルを分け、それぞれ部品として作成したほうが見やすいかも
+即時検索は「インクリメンタルサーチ」
