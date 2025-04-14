@@ -21,6 +21,7 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
+	
   <div id="app">
     <v-app>
       <v-container>
@@ -49,9 +50,14 @@
     </v-app>
   </div>
 
+
+
+
+
+
   <script>
     const { createApp, ref, watch, onMounted } = Vue;
-
+    
     createApp({
       setup() {
         const searchQuery = ref('');
@@ -60,7 +66,9 @@
         let fuse = null;
 
         // データ取得とFuse初期化
+        
         onMounted(async () => {
+        	console.log("データ取得とFuse初期化");
           const response = await axios.get('/balanceChecker/api/foods');
           foods.value = response.data;
 
@@ -74,14 +82,27 @@
         });
 
         // 検索語句の変更をリアルタイムで監視
-        watch(searchQuery, (query) => {
-          if (!fuse || query.trim() === '') {
-            filteredFoods.value = foods.value;
-          } else {
-            const results = fuse.search(query);
-            filteredFoods.value = results.map(result => result.item);
-          }
-        });
+        
+		let debounceTimer = null;
+
+		watch(searchQuery, (query) => {
+			  console.log("検索語句の変更をリアルタイムで監視");
+			  
+			  // 以前のdebounce処理がまだあればクリア
+			  if (debounceTimer) clearTimeout(debounceTimer);
+			  
+			  // setTimeoutで遅延を実施
+			  debounceTimer = setTimeout(() => {
+			    console.log("検索実行タイミング:", new Date().toLocaleTimeString()); // 実行タイミングの確認
+			    if (!fuse || query.trim() === '') {
+			      filteredFoods.value = foods.value;
+			    } else {
+			      const results = fuse.search(query);
+			      filteredFoods.value = results.map(result => result.item);
+			    }
+			  }, 100); // 300ms 待機
+			});
+
 
         return {
           searchQuery,
@@ -90,6 +111,6 @@
       }
     }).use(Vuetify.createVuetify()).mount('#app');
   </script>
-	<jsp:include page="mainApp.jsp" />	
+	<!--<jsp:include page="mainApp.jsp" /> -->
 </body>
 </html>

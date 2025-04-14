@@ -88,8 +88,8 @@ js（Vue）コンポーネント（部品）で分ける
 食品名検索機能
 ・foodNameSearch.js
 
-検索食品表示
-・food
+検索食品表示ページ
+・foodNameSearch.jsp？よくわからないのでとりあえずhomeに書いて後で分割
 
 栄養素別検索
 ・searchByNutrient.js
@@ -97,3 +97,6 @@ js（Vue）コンポーネント（部品）で分ける
 合計栄養素表示
 ・totalNutrientDisplay.js
 
+yahooのコンテンツ幅990px
+検索機能の動作が重いかもしれない、マシン（メモリ）依存？毎回SQLでDBから持ってきたほうが早い可能性
+検索機能用のJSON（id,foodName,other）を取得したほうがメモリ節約？
