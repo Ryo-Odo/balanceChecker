@@ -21,4 +21,44 @@ INSERT INTO users (login_id, password, name) VALUES ('user05', '55555555', '松�
 SELECT * FROM users;
 
 
-test
+CREATE DATABASE foods_db ENCODING 'UTF8' TEMPLATE template0;
+
+
+メモ
+バックエンド：JAVA（サーブレット）
+
+フロントエンド
+非同期処理:Vue.js（CDN？）
+デザイン・CSS：Vuetify（CDN?）
+https://vuetifyjs.com/ja/getting-started/installation/#cdn30924f7f304658345408
+関数ライブラリ？：VueUse 
+マウスポインタの位置情報などを取得できる？追加アニメーションに実装などが簡単かも
+
+4/12
+ログイン機能周りは実装済、BaseDAOは家の環境だと少し違う点に注意
+jsフォルダ及びapp.js追加
+homeにCDN追加
+FoodDTO/DAO作成
+logincontroller変更予定
+・domain Foods作成予定？
+・service 作成予定？使用用途を確認する
+役割分担を考える
+homeにindexを挿入する形でもいいかも
+JavaScriptを用いればPOSTでもブックマークできるかも。URLいじる？
+
+
+4/13
+loginController変更
+FoodApiController作成
+HomeController作成
+DAO/DTO/Domain変更
+FoodGetService変更
+
+home.jsp変更
+lib内に「gson-2.10.1.jar」配置、プロジェクトにビルド
+でデータベースの情報をフロントへ送るまでは作成、現在HOMEは見本
+残り作業はほぼフロントとデザイン、JSONの取り出しと使用方法を確認すること
+http://localhost:8080/balanceChecker/api/foodsへ接続すると送られたJSON構造が見れる
+https://wand.witchserver.jp/archives/46
+htmlファイルを分け、それぞれ部品として作成したほうが見やすいかも
+即時検索は「インクリメンタルサーチ」
