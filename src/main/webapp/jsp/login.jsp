@@ -12,7 +12,7 @@
 	
 	
 	<c:if test = "${loginError != null }" >
-		<div style=""color:red;">
+		<div style="color:red;">
 			<p>${loginError }</p>
 		</div>
 	</c:if>
@@ -31,7 +31,6 @@
 		<input type="submit" value="ログイン">
 	</form>
 	<p><a href="/balanceChecker/register">新規会員登録はこちら</a></p>
-	</form>
 
 </body>
 </html>

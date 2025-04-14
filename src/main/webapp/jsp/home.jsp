@@ -14,72 +14,82 @@
 <!-- フォントとアイコン -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <!-- Axios CDN -->
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<!-- Fuse.js 検索機能ライブラリ -->
 <meta charset="UTF-8">
 <title>ホーム画面</title>
 </head>
 <body>
-	<h1>ホーム画面</h1>
-	<p style="text-align: right">${user.name }様ログイン中</p>
-	<p style="text-align: right">
-		<a href="/balanceChecker/logout">ログアウト</a>
-	</p>
-	<h2>エヌ・ミニアプリ</h2>
-	<p>
-		<a href="/balanceChecker/edit">メンバー情報の編集</a>
-	</p>
-	<p>
-		<a href="/balanceChecker/delete">退会する方はこちら</a>
-	</p>
+	<jsp:include page="header.jsp" />
+  <div id="app">
+    <v-app>
+      <v-container>
+        <v-text-field
+          v-model="searchQuery"
+          label="食品名またはその他を検索"
+          prepend-inner-icon="mdi-magnify"
+          clearable
+        ></v-text-field>
 
+        <v-list v-if="filteredFoods.length">
+          <v-list-item
+            v-for="food in filteredFoods"
+            :key="food.id"
+          >
+            <v-list-item-content>
+              <v-list-item-title>{{ food.foodName }}</v-list-item-title>
+              <v-list-item-subtitle>{{ food.other }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <div v-else>
+          <p>該当する食品が見つかりませんでした。</p>
+        </div>
+      </v-container>
+    </v-app>
+  </div>
 
+  <script>
+    const { createApp, ref, watch, onMounted } = Vue;
 
+    createApp({
+      setup() {
+        const searchQuery = ref('');
+        const foods = ref([]);
+        const filteredFoods = ref([]);
+        let fuse = null;
 
+        // データ取得とFuse初期化
+        onMounted(async () => {
+          const response = await axios.get('/balanceChecker/api/foods');
+          foods.value = response.data;
 
+          fuse = new Fuse(foods.value, {
+            keys: ['foodName', 'other'],
+            threshold: 0.3,
+            includeScore: true
+          });
 
-    <div id="app">
-        <v-app>
-            <v-main class="pa-4">
-                <h2>食品リスト</h2>
-                <v-data-table
-                    :headers="headers"
-                    :items="foods"
-                    class="elevation-1"
-                    item-value="food_name"
-                >
-                    <template v-slot:[`item.foodName`]="{ item }">
-                        <td>{{ item.foodName }}</td> <!-- 食品名 -->
-                    </template>
-                    <template v-slot:[`item.energy`]="{ item }">
-                        <td>{{ item.energy }} kcal</td> <!-- エネルギー -->
-                    </template>
-                </v-data-table>
-            </v-main>
-        </v-app>
-    </div>
+          filteredFoods.value = foods.value; // 初期表示
+        });
 
-    <script>
-        const { createApp } = Vue;
+        // 検索語句の変更をリアルタイムで監視
+        watch(searchQuery, (query) => {
+          if (!fuse || query.trim() === '') {
+            filteredFoods.value = foods.value;
+          } else {
+            const results = fuse.search(query);
+            filteredFoods.value = results.map(result => result.item);
+          }
+        });
 
-        createApp({
-            data() {
-                return {
-                    foods: [],
-                    headers: [
-                        { text: '食品名', value: 'foodName' },
-                        { text: 'エネルギー(kcal)', value: 'energy' }
-                    ]
-                };
-            },
-            mounted() {
-                axios.get('/balanceChecker/api/foods')
-                    .then(response => {
-                        this.foods = response.data;  // レスポンスデータを格納
-                    })
-                    .catch(error => {
-                        console.error('食品データの取得に失敗しました', error);
-                    });
-            }
-        }).use(Vuetify.createVuetify()).mount('#app');
-    </script>
+        return {
+          searchQuery,
+          filteredFoods
+        };
+      }
+    }).use(Vuetify.createVuetify()).mount('#app');
+  </script>
+	<jsp:include page="mainApp.jsp" />	
 </body>
 </html>
