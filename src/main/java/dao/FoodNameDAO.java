@@ -20,16 +20,15 @@ public class FoodNameDAO extends BaseDAO{
 	    //DBへ接続
 	    
 	    try {
-	    	PreparedStatement ps = conn.prepareStatement("SELECT * FROM food_name WHERE food_name ILIKE ?");
+	    	PreparedStatement ps = conn.prepareStatement("SELECT * FROM food_name WHERE food_name ILIKE ? OR other ILIKE ?");
 	    	//SQL文セット
 	    	
 	    	ps.setString(1, "%" + keyword + "%");
-	    	
+	    	ps.setString(2, "%" + keyword + "%");
+	    	//正規表現、前後0文字以上に何かの文字
 	    	
 	    	ResultSet rs = ps.executeQuery();
 	    	//rsに実行結果を格納
-	    	System.out.println("3.FoodNameDAO内、searchFoodsメソッドのrs");
-	    	System.out.println(rs);
 	    	
 	    	while (rs.next()) {
 	    		FoodNameDTO foodNameDTO = new FoodNameDTO(
@@ -41,7 +40,6 @@ public class FoodNameDAO extends BaseDAO{
 	    		//SQL実行結果を順次取り出し、それを元にDTO作成
 	    		list.add(foodNameDTO);
 	    		//作成したリストに追加
-	    		System.out.println(foodNameDTO.getFoodName());
 	    	}
 			
 		} catch (Exception e) {

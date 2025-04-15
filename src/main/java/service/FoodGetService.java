@@ -14,7 +14,6 @@ public class FoodGetService {
 	
 	public List<FoodName> getSearchFoods(String keyword) {
 		//foods_dbから検索された食品情報を返すメソッド
-		System.out.println("2.getSearchFoods開始");
 		
 		FoodNameDAO foodNameDAO = new FoodNameDAO();
 		//DAOインスタンス作成
@@ -62,9 +61,7 @@ public class FoodGetService {
 		foodName.setId(dto.getId());
 		foodName.setFood_group(dto.getFood_group());
 		foodName.setFoodName(dto.getFoodName());
-		foodName.setOther(dto.getOther());
-		
-		
+		foodName.setOther(dto.getOther());	
 		return foodName;
 
 	}

@@ -161,3 +161,5 @@ yahooのコンテンツ幅990px
 モーダルウィンドウでもいい、https://v2.vuetifyjs.com/ja/components/dialogs/#section-4f7f304465b9
 検索専用DBを作成する？{id, food_group, food_name, other}、メモリの節約、約47％削減
 検索後、選択した食品はマスターから持ってくる、1つしか選択しないため早い
+検索機能を毎回サーバーサイドでSQLを行う方式へ変更、速度100倍くらい
+
