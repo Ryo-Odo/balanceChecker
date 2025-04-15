@@ -22,95 +22,91 @@
 <body>
 	<jsp:include page="header.jsp" />
 	
-  <div id="app">
-    <v-app>
-      <v-container>
-        <v-text-field
-          v-model="searchQuery"
-          label="食品名またはその他を検索"
-          prepend-inner-icon="mdi-magnify"
-          clearable
-        ></v-text-field>
+<div id="app">
+  <v-app>
+    <v-main>
+      <v-text-field
+        v-model="searchQuery"
+        label="食品名またはその他を検索"
+        prepend-inner-icon="mdi-magnify"
+        clearable
+        @input="onInput"
+      ></v-text-field>
 
-        <v-list v-if="filteredFoods.length">
-          <v-list-item
-            v-for="food in filteredFoods"
-            :key="food.id"
-          >
-            <v-list-item-content>
-              <v-list-item-title>{{ food.foodName }}</v-list-item-title>
-              <v-list-item-subtitle>{{ food.other }}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <div v-else>
-          <p>該当する食品が見つかりませんでした。</p>
-        </div>
-      </v-container>
-    </v-app>
-  </div>
+      <v-list v-if="filteredFoods.length">
+        <v-list-item
+          v-for="food in filteredFoods"
+          :key="food.id"
+        >
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ food.id }} - {{ food.foodName }}
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              {{ food.other }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+
+      <div v-else>
+        <p>該当する食品が見つかりませんでした。</p>
+      </div>
+    </v-main>
+  </v-app>
+</div>
 
 
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+<script>
+  const { createApp, ref } = Vue;
+  const { createVuetify } = Vuetify; // ← Vuetifyを取り出す
 
+  createApp({
+    setup() {
+      const searchQuery = ref('');
+      const filteredFoods = ref([]);
 
+      const onInput = () => {
+        if (searchQuery.value.trim().length === 0) {
+          filteredFoods.value = [];
+          return;
+        }
 
-  <script>
-    const { createApp, ref, watch, onMounted } = Vue;
-    
-    createApp({
-      setup() {
-        const searchQuery = ref('');
-        const foods = ref([]);
-        const filteredFoods = ref([]);
-        let fuse = null;
-
-        // データ取得とFuse初期化
-        
-        onMounted(async () => {
-        	console.log("データ取得とFuse初期化");
-          const response = await axios.get('/balanceChecker/api/foods');
-          foods.value = response.data;
-
-          fuse = new Fuse(foods.value, {
-            keys: ['foodName', 'other'],
-            threshold: 0.3,
-            includeScore: true
+        axios.post('/balanceChecker/api/foodSearch', { keyword: searchQuery.value })
+          .then(response => {
+            console.log('検索語:', searchQuery.value);
+            console.log('受信データ:', response.data);
+            filteredFoods.value = response.data;
+          })
+          .catch(error => {
+            console.error('検索エラー:', error);
           });
+      };
 
-          filteredFoods.value = foods.value; // 初期表示
-        });
-
-        // 検索語句の変更をリアルタイムで監視
-        
-		let debounceTimer = null;
-
-		watch(searchQuery, (query) => {
-			  console.log("検索語句の変更をリアルタイムで監視");
-			  
-			  // 以前のdebounce処理がまだあればクリア
-			  if (debounceTimer) clearTimeout(debounceTimer);
-			  
-			  // setTimeoutで遅延を実施
-			  debounceTimer = setTimeout(() => {
-			    console.log("検索実行タイミング:", new Date().toLocaleTimeString()); // 実行タイミングの確認
-			    if (!fuse || query.trim() === '') {
-			      filteredFoods.value = foods.value;
-			    } else {
-			      const results = fuse.search(query);
-			      filteredFoods.value = results.map(result => result.item);
-			    }
-			  }, 100); // 300ms 待機
-			});
+      return {
+        searchQuery,
+        filteredFoods,
+        onInput
+      };
+    }
+  }).use(Vuetify.createVuetify()).mount('#app') 
+</script>
 
 
-        return {
-          searchQuery,
-          filteredFoods
-        };
-      }
-    }).use(Vuetify.createVuetify()).mount('#app');
-  </script>
-	<!--<jsp:include page="mainApp.jsp" /> -->
 </body>
 </html>

@@ -23,6 +23,58 @@ SELECT * FROM users;
 
 CREATE DATABASE foods_db ENCODING 'UTF8' TEMPLATE template0;
 
+CREATE TABLE foods (
+id SERIAL,
+food_group INTEGER, 
+food_name VARCHAR(255) NOT NULL,
+energy DECIMAL,
+moisture DECIMAL,
+protein DECIMAL,
+lipid DECIMAL,
+food_fiber DECIMAL,
+carbohydrate DECIMAL,
+natrium DECIMAL,
+potassium DECIMAL,
+calcium DECIMAL,
+magnesium DECIMAL,
+phosphorus DECIMAL,
+iron DECIMAL,
+zinc DECIMAL,
+copper DECIMAL,
+manganese DECIMAL,
+iodine DECIMAL,
+selenium DECIMAL,
+chrome DECIMAL,
+molybdenum DECIMAL,
+vitamin_a DECIMAL,
+vitamin_d DECIMAL,
+vitamin_e DECIMAL,
+vitamin_k DECIMAL,
+vitamin_b1 DECIMAL,
+vitamin_b2 DECIMAL,
+niacin DECIMAL,
+vitamin_b6 DECIMAL,
+vitamin_b12 DECIMAL,
+folic_acid DECIMAL,
+pantothenic_acid DECIMAL,
+biotin DECIMAL,
+vitamin_c DECIMAL,
+sodium_content DECIMAL,
+other VARCHAR(255),
+  PRIMARY KEY(id)
+);
+\copy foods (id, food_group, food_name, energy, moisture, protein, lipid, food_fiber, carbohydrate, natrium, potassium, calcium, magnesium, phosphorus, iron, zinc, copper, manganese, iodine, selenium, chrome, molybdenum, vitamin_a, vitamin_d, vitamin_e, vitamin_k, vitamin_b1, vitamin_b2, niacin, vitamin_b6, vitamin_b12, folic_acid, pantothenic_acid, biotin, vitamin_c, sodium_content, other) FROM 'C:\Users\0203_PyJava\workspace\balanceChecker\food_data_0410.csv' WITH (FORMAT csv, HEADER false, DELIMITER ',', QUOTE '"', NULL '',  ENCODING 'UTF8');
+
+
+CREATE TABLE food_name (
+id SERIAL,
+food_group INTEGER, 
+food_name VARCHAR(255) NOT NULL,
+other VARCHAR(255),
+  PRIMARY KEY(id)
+);
+
+\copy food_name (id, food_group, food_name, other) FROM 'C:\Users\0203_PyJava\workspace\balanceChecker\food_name_data_0415.csv' WITH (FORMAT csv, HEADER false, DELIMITER ',', QUOTE '"', NULL '',  ENCODING 'UTF8');
 
 メモ
 バックエンド：JAVA（サーブレット）
@@ -61,7 +113,7 @@ lib内に「gson-2.10.1.jar」配置、プロジェクトにビルド
 http://localhost:8080/balanceChecker/api/foodsへ接続すると送られたJSON構造が見れる
 https://wand.witchserver.jp/archives/46
 htmlファイルを分け、それぞれ部品として作成したほうが見やすいかも
-即時検索は「インクリメンタルサーチ」
+即時検索は「インクリメンタルサーチ」https://qiita.com/taddy_korokoro/items/f1a9726f241bb027f0e9
 
 4/14
 JSONの構造は以下（http://localhost:8080/balanceChecker/api/foods）と同じ
@@ -101,3 +153,11 @@ yahooのコンテンツ幅990px
 検索機能の動作が重いかもしれない、マシン（メモリ）依存？毎回SQLでDBから持ってきたほうが早い可能性
 検索機能用のJSON（id,foodName,other）を取得したほうがメモリ節約？
 左のカードはタブで切り替える？https://www.aura-office.co.jp/blog/tab_menu_coding/
+
+4/15
+デザインを決める、左右で分ける？
+レイアウト手法を考える、Grid LayoutやFlexBox
+右は固定、左を検索ウィンドウ表示？https://qiita.com/umaxiaotian/items/582fb0a06ce3d4f3b164
+モーダルウィンドウでもいい、https://v2.vuetifyjs.com/ja/components/dialogs/#section-4f7f304465b9
+検索専用DBを作成する？{id, food_group, food_name, other}、メモリの節約、約47％削減
+検索後、選択した食品はマスターから持ってくる、1つしか選択しないため早い

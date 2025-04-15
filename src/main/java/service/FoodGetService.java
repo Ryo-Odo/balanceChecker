@@ -4,10 +4,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.FoodDAO;
+import dao.FoodNameDAO;
 import domain.Food;
+import domain.FoodName;
 import dto.FoodDTO;
+import dto.FoodNameDTO;
 
 public class FoodGetService {
+	
+	public List<FoodName> getSearchFoods(String keyword) {
+		//foods_dbから検索された食品情報を返すメソッド
+		System.out.println("2.getSearchFoods開始");
+		
+		FoodNameDAO foodNameDAO = new FoodNameDAO();
+		//DAOインスタンス作成
+		List<FoodNameDTO> foodNameDTOList = foodNameDAO.searchFoods(keyword);
+		//List<FoodDTO>型のデータを返すFoodDAOのfindAllメソッド
+		
+		List<FoodName> foodNameList = new ArrayList<>();
+		
+		//初期化
+		
+		for (FoodNameDTO dto : foodNameDTOList ) {
+			FoodName foodName = convertToFoodNameDomain(dto);
+			//List<FoodNameDTO>を順次取り出し、convertToFoodNameDomainメソッドでFoodName型に変換
+			
+			foodNameList.add(foodName);
+			//作成したLISTに追加
+		}		
+		return foodNameList;
+	}
 	
 	public List<Food> getAllFoods() {
 		//foods_dbからデータをすべてList<Food>として返すメソッド
@@ -20,7 +46,7 @@ public class FoodGetService {
 		//初期化
 		
 		for (FoodDTO dto : foodDTOList ) {
-			Food food = convertToDomain(dto);
+			Food food = convertToFoodDomain(dto);
 			//List<FoodDTO>を順次取り出し、convertToDomaiメソッドでFood型に変換
 			
 			foodList.add(food);
@@ -29,7 +55,21 @@ public class FoodGetService {
 		return foodList;
 	}
 	
-	public Food convertToDomain(FoodDTO dto) {
+	public FoodName convertToFoodNameDomain(FoodNameDTO dto) {
+		FoodName foodName = new FoodName();
+		//初期化
+		
+		foodName.setId(dto.getId());
+		foodName.setFood_group(dto.getFood_group());
+		foodName.setFoodName(dto.getFoodName());
+		foodName.setOther(dto.getOther());
+		
+		
+		return foodName;
+
+	}
+	
+	public Food convertToFoodDomain(FoodDTO dto) {
 		Food food = new Food();
 		//初期化
 		
