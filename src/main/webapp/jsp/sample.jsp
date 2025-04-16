@@ -1,31 +1,23 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<!-- 栄養素別検索モーダル -->
+      <v-dialog v-model="dialogNutrition" max-width="800" hide-overlay>
+        <v-card>
+          <v-card-title class="text-h6">
+            栄養素別検索
+          </v-card-title>
 
-  <div id="app">
-    <v-app>
-      <v-container>
-        <v-text-field
-          v-model="searchQuery"
-          label="食品名またはその他を検索"
-          prepend-inner-icon="mdi-magnify"
-          clearable
-        ></v-text-field>
+          <v-card-text>
+            <!-- 栄養素入力フィールド -->
+            <v-text-field
+              v-model="selectedNutrientInput"
+              label="栄養素を入力"
+              prepend-inner-icon="mdi-magnify"
+              clearable
+              @input="onNutritionInput"
+            ></v-text-field>
 
-        <v-list v-if="filteredFoods.length">
-          <v-list-item
-            v-for="food in filteredFoods"
-            :key="food.id"
-          >
-            <v-list-item-content>
-              <v-list-item-title>{{ food.foodName }}</v-list-item-title>
-              <v-list-item-subtitle>{{ food.other }}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <div v-else>
-          <p>該当する食品が見つかりませんでした。</p>
-        </div>
-      </v-container>
-    </v-app>
-  </div>
-  <script src="/balanceChecker/js/sample.js"></script>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text @click="dialogNutrition = false">閉じる</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>

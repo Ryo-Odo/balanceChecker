@@ -16,28 +16,30 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import domain.FoodName;
+import domain.FoodNutrien;
 import service.FoodGetService;
 
 /**
- * Servlet implementation class FoodSearchApiController
+ * Servlet implementation class NutrientSearchAPIController
  */
-@WebServlet(name = "api/foodSearch", urlPatterns = { "/api/foodSearch" })
-public class FoodSearchApiController extends HttpServlet {
+@WebServlet(name = "api/nutrientSearch", urlPatterns = { "/api/nutrientSearch" })
+public class NutrientSearchAPIController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FoodSearchApiController() {
+    public NutrientSearchAPIController() {
         super();
         // TODO Auto-generated constructor stub
     }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("nutrientSearch開始");
+		
 		HttpSession session = request.getSession(false);
 		if (session == null || session.getAttribute("user") == null) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
@@ -57,17 +59,23 @@ public class FoodSearchApiController extends HttpServlet {
 
 		JsonObject jsonObject = JsonParser.parseString(requestBody).getAsJsonObject();
 		
-		String keyword = jsonObject.get("keyword").getAsString();
+		
+		
+		
+		String nutrient = jsonObject.get("nutrient").getAsString();
 		
 		FoodGetService getService = new FoodGetService();
-		System.out.println("1.入力されたキーワード：" + keyword);
-		List<FoodName> foodList = getService.getSearchFoods(keyword);
+		
+		System.out.println("2.選択された栄養素：" + nutrient);
+		
+		List<FoodNutrien> foodList = getService.getSearchFoodNutrien(nutrient);
 		
 		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 
 		Gson gson = new Gson();
 		String json = gson.toJson(foodList);
+		System.out.println(json);
 		
 		out.print(json);
 		out.flush();
