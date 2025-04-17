@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import dto.FoodDTO;
@@ -20,13 +21,30 @@ public class FoodDAO extends BaseDAO{
 	    //DBへ接続
 	    
 	    try {
-	    	PreparedStatement ps = conn.prepareStatement("SELECT * FROM foods ORDER BY ? DESC;");
-	    	//SQL文セット
-	    	
-	    	ps.setString(1, nutrient);
-	    	
+	    	// 予め許可されているカラム名のリスト
+	    	List<String> validColumns = Arrays.asList(
+	    		    "energy", "protein", "lipid", "food_fiber", "carbohydrate", "natrium", "potassium", "calcium", 
+	    		    "magnesium", "phosphorus", "iron", "zinc", "copper", "manganese", "iodine", "selenium", "chrome", 
+	    		    "molybdenum", "vitamin_a", "vitamin_d", "vitamin_e", "vitamin_k", "vitamin_b1", "vitamin_b2", 
+	    		    "niacin", "vitamin_b6", "vitamin_b12", "folic_acid", "pantothenic_acid", "biotin", "vitamin_c", 
+	    		    "sodium_content"
+	    	);
+
+	    	// 入力されたカラム名がリストに存在するか確認
+	    	if (!validColumns.contains(nutrient)) {
+	    	    throw new IllegalArgumentException("Invalid nutrient column.");
+	    	}
+
+	    	// SQL文を組み立てる
+	    	String query = "SELECT * FROM foods ORDER BY " + nutrient + " DESC";
+
+	    	// PreparedStatementを使用してSQLを実行
+	    	PreparedStatement ps = conn.prepareStatement(query);
+	    	System.out.println(ps);
+
 	    	ResultSet rs = ps.executeQuery();
-	    	//rsに実行結果を格納
+	    	// rsに実行結果を格納
+
 	    	
 	    	while (rs.next()) {
 	    		FoodDTO foodDTO = new FoodDTO(

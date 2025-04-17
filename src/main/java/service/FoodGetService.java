@@ -93,13 +93,14 @@ public class FoodGetService {
 	    try {
 	        String methodName = "get" + nutrien.substring(0, 1).toUpperCase() + nutrien.substring(1);
 	        Method method = FoodDTO.class.getMethod(methodName);
-	        Double value = (Double) method.invoke(dto);
+	        Double setValue = (Double) method.invoke(dto);
 
 	        food.setId(dto.getId());
 	        food.setFood_group(dto.getFood_group());
 	        food.setFoodName(dto.getFoodName());
+	        food.setMoisture(dto.getMoisture());
 	        food.setOther(dto.getOther());
-	        food.setNutrien(value);
+	        food.setNutrien(setValue);
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }

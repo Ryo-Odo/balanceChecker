@@ -69,6 +69,8 @@ public class FoodSearchApiController extends HttpServlet {
 		Gson gson = new Gson();
 		String json = gson.toJson(foodList);
 		
+		System.out.println("食品名検索:");
+		System.out.println(json);
 		out.print(json);
 		out.flush();
 	}

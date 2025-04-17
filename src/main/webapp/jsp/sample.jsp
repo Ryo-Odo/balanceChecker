@@ -1,23 +1,48 @@
-<!-- 栄養素別検索モーダル -->
-      <v-dialog v-model="dialogNutrition" max-width="800" hide-overlay>
-        <v-card>
-          <v-card-title class="text-h6">
-            栄養素別検索
-          </v-card-title>
+              <v-list v-if="paginatedFoods.length">
+                <v-list-item v-for="food in paginatedFoods" :key="food.id">
+                  <v-list-item-title>{{ food.id }} - {{ food.foodName }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ food.other }}</v-list-item-subtitle>
+                </v-list-item>
+              </v-list>
+              <div v-else><p>該当する食品が見つかりませんでした。</p></div>
 
-          <v-card-text>
-            <!-- 栄養素入力フィールド -->
-            <v-text-field
-              v-model="selectedNutrientInput"
-              label="栄養素を入力"
-              prepend-inner-icon="mdi-magnify"
-              clearable
-              @input="onNutritionInput"
-            ></v-text-field>
+              <v-pagination
+                v-if="filteredFoods.length > itemsPerPage"
+                v-model="currentPage"
+                :length="totalPages"
+                :total-visible="7"
+                class="mt-4"
+              ></v-pagination>
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+                            <v-list v-if="paginatedNutrientFoods.length">
+                <v-list-item v-for="food in paginatedNutrientFoods" :key="food.id">
+                  <v-list-item-title>{{ food.id }} - {{ food.foodName }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ food[selectedNutrient] }}（{{ getNutrientTitle(selectedNutrient) }}）</v-list-item-subtitle>
+                </v-list-item>
+              </v-list>
+              <div v-else-if="selectedNutrient"><p>該当する食品が見つかりませんでした。</p></div>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn text @click="dialogNutrition = false">閉じる</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+              <v-pagination
+                v-if="nutrientFoods.length > itemsPerPage"
+                v-model="currentNutrientPage"
+                :length="totalNutrientPages"
+                :total-visible="7"
+                class="mt-4"
+              ></v-pagination>

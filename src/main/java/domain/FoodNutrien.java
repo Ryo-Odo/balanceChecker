@@ -4,7 +4,8 @@ public class FoodNutrien {
     private int id;
     private int food_group;
     private String foodName;
-    private double Nutrien;
+    private double nutrien;
+    private double moisture;
     private String other;    
     
 //	public FoodName(int id, int food_group, String foodName, String other) {
@@ -16,12 +17,12 @@ public class FoodNutrien {
 
 
 	public double getNutrien() {
-		return Nutrien;
+		return nutrien;
 	}
 
 
 	public void setNutrien(double nutrien) {
-		Nutrien = nutrien;
+		this.nutrien = nutrien;
 	}
 
 
@@ -52,6 +53,16 @@ public class FoodNutrien {
 
 	public void setFoodName(String foodName) {
 		this.foodName = foodName;
+	}
+
+
+	public double getMoisture() {
+		return moisture;
+	}
+
+
+	public void setMoisture(double moisture) {
+		this.moisture = moisture;
 	}
 
 
