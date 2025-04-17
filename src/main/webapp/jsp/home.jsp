@@ -101,10 +101,12 @@
           <v-card-text>
             <!-- 栄養素選択ドロップダウン -->
             <v-select
-  			v-model="selectedNutrient"
- 			:items="nutrients"
-  			label="栄養素を選択"
-			></v-select>
+  				v-model="selectedNutrient"
+  				:items="nutrients"
+ 				 item-value="value"
+ 				 label="栄養素を選択"
+  				@update:model-value="submitForm"
+			/>
 
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -116,6 +118,19 @@
  </v-app>
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
   const { createApp, ref, watch } = Vue;
   const { createVuetify } = Vuetify;
@@ -125,7 +140,7 @@
       const dialog = ref(false);
       const dialogNutrition = ref(false);
       const searchQuery = ref('');
-      const selectedNutrientInput = ref(''); // 栄養素入力フィールド
+      const selectedNutrientInput = ref('');
       const filteredFoods = ref([]);
       const nutrientFoods = ref([]);
       const paginatedFoods = ref([]);
@@ -136,18 +151,43 @@
       const totalPages = ref(1);
       const totalNutrientPages = ref(1);
       const errorMessage = ref('');
+      const selectedNutrient = ref("");
 
-      const selectedNutrient = ref(""); // 文字列（名前）だけを受け取る
-      
       const nutrients = ref([
-    	  "たんぱく質",
-    	  "炭水化物",
-    	  "脂質",
-    	  "ビタミンA",
-    	  "ビタミンC"
-    	]);
+        { title: 'エネルギー', value: 'energy' },
+        { title: 'たんぱく質', value: 'たんぱく質' },
+        { title: '脂質', value: 'lipid' },
+        { title: '炭水化物', value: 'carbohydrate' },
+        { title: 'ビタミンA', value: 'vitamin_a' },
+        { title: 'ビタミンD', value: 'vitamin_d' },
+        { title: 'ビタミンE', value: 'vitamin_e' },
+        { title: 'ビタミンK', value: 'vitamin_k' },
+        { title: 'ビタミンB1', value: 'vitamin_b1' },
+        { title: 'ビタミンB2', value: 'vitamin_b2' },
+        { title: 'ナイアシン', value: 'niacin' },
+        { title: 'ビタミンB6', value: 'vitamin_b6' },
+        { title: 'ビタミンB12', value: 'vitamin_b12' },
+        { title: '葉酸', value: 'folic_acid' },
+        { title: 'パントテン酸', value: 'pantothenic_acid' },
+        { title: 'ビオチン', value: 'biotin' },
+        { title: 'ビタミンＣ', value: 'vitamin_c' },
+        { title: '食物繊維', value: 'food_fiber' },
+        { title: 'ナトリウム', value: 'natrium' },
+        { title: 'カリウム', value: 'potassium' },
+        { title: 'カルシウム', value: 'calcium' },
+        { title: 'マグネシウム', value: 'magnesium' },
+        { title: 'リン', value: 'phosphorus' },
+        { title: '鉄', value: 'iron' },
+        { title: '亜鉛', value: 'zinc' },
+        { title: '銅', value: 'copper' },
+        { title: 'マンガン', value: 'manganese' },
+        { title: 'ヨウ素', value: 'iodine' },
+        { title: 'セレン', value: 'selenium' },
+        { title: 'クロム', value: 'chrome' },
+        { title: 'モリブデン', value: 'molybdenum' },
+        { title: '食塩相当量', value: 'sodium_content' }
+      ]);
 
-      // 食品検索処理
       const onInput = () => {
         if (searchQuery.value.trim().length === 0) {
           filteredFoods.value = [];
@@ -166,7 +206,6 @@
           });
       };
 
-      // 栄養素別検索処理
       const onNutritionInput = () => {
         if (!selectedNutrientInput.value.trim()) {
           nutrientFoods.value = [];
@@ -185,7 +224,20 @@
           });
       };
 
-      // ページネーション用のフィルタリング
+      const submitForm = async () => {
+        try {
+          const response = await axios.post('/balanceChecker/api/nutrientSearch', {
+            nutrient: selectedNutrient.value
+          });
+          nutrientFoods.value = response.data;
+          totalNutrientPages.value = Math.ceil(nutrientFoods.value.length / itemsPerPage);
+          paginateNutrientFoods();
+          console.log('送信成功:', response.data);
+        } catch (error) {
+          console.error('送信失敗:', error);
+        }
+      };
+
       const paginateFoods = () => {
         const start = (currentPage.value - 1) * itemsPerPage;
         const end = start + itemsPerPage;
@@ -218,10 +270,12 @@
         itemsPerPage,
         selectedNutrient,
         nutrients,
+        submitForm // ← これを忘れるとボタンが動作しない！
       };
     }
-  }).use(Vuetify.createVuetify()).mount('#app');
+  }).use(createVuetify()).mount('#app');
 </script>
+
 
 
 
