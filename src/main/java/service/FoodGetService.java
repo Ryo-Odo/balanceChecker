@@ -1,13 +1,72 @@
 package service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import dao.FoodDAO;
+import dao.FoodNameDAO;
 import domain.Food;
+import domain.FoodName;
+import domain.FoodNutrien;
 import dto.FoodDTO;
+import dto.FoodNameDTO;
 
 public class FoodGetService {
+	
+	public List<FoodNutrien> getSearchFoodNutrien(String nutrient) {
+		//foods_dbから検索された食品情報を返すメソッド
+		
+		FoodDAO foodDAO = new FoodDAO();
+		//DAOインスタンス作成
+		List<FoodDTO> foodDTOList = foodDAO.searchNutrien(nutrient);
+		//List<FoodDTO>型のデータを返すFoodDAOのsearchNutrienメソッド
+		
+		List<FoodNutrien> foodNutrienList = new ArrayList<>();
+		//最終的に返すFoodNutrien型のリストを初期化
+		
+		for (FoodDTO dto : foodDTOList ) {
+			FoodNutrien food = new FoodNutrien();
+			try {
+				food = convertToFoodNutrienDomain(dto, nutrient);
+			} catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+			//List<FoodDTO>を順次取り出し、convertToDomaiメソッドでFood型に変換
+			
+			foodNutrienList.add(food);
+			//作成したLISTに追加
+		}		
+		return foodNutrienList;
+	}
+	
+	
+	
+	
+	public List<FoodName> getSearchFoods(String keyword) {
+		//foods_dbから検索された食品情報を返すメソッド
+		
+		FoodNameDAO foodNameDAO = new FoodNameDAO();
+		//DAOインスタンス作成
+		List<FoodNameDTO> foodNameDTOList = foodNameDAO.searchFoods(keyword);
+		//List<FoodDTO>型のデータを返すFoodDAOのfindAllメソッド
+		
+		List<FoodName> foodNameList = new ArrayList<>();
+		
+		//初期化
+		
+		for (FoodNameDTO dto : foodNameDTOList ) {
+			FoodName foodName = convertToFoodNameDomain(dto);
+			//List<FoodNameDTO>を順次取り出し、convertToFoodNameDomainメソッドでFoodName型に変換
+			
+			foodNameList.add(foodName);
+			//作成したLISTに追加
+		}		
+		return foodNameList;
+	}
 	
 	public List<Food> getAllFoods() {
 		//foods_dbからデータをすべてList<Food>として返すメソッド
@@ -20,7 +79,7 @@ public class FoodGetService {
 		//初期化
 		
 		for (FoodDTO dto : foodDTOList ) {
-			Food food = convertToDomain(dto);
+			Food food = convertToFoodDomain(dto);
 			//List<FoodDTO>を順次取り出し、convertToDomaiメソッドでFood型に変換
 			
 			foodList.add(food);
@@ -29,7 +88,39 @@ public class FoodGetService {
 		return foodList;
 	}
 	
-	public Food convertToDomain(FoodDTO dto) {
+	public FoodNutrien convertToFoodNutrienDomain(FoodDTO dto, String nutrien) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	    FoodNutrien food = new FoodNutrien();
+	    try {
+	        String methodName = "get" + nutrien.substring(0, 1).toUpperCase() + nutrien.substring(1);
+	        Method method = FoodDTO.class.getMethod(methodName);
+	        Double setValue = (Double) method.invoke(dto);
+
+	        food.setId(dto.getId());
+	        food.setFood_group(dto.getFood_group());
+	        food.setFoodName(dto.getFoodName());
+	        food.setMoisture(dto.getMoisture());
+	        food.setOther(dto.getOther());
+	        food.setNutrien(setValue);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return food;
+	}
+
+	
+	public FoodName convertToFoodNameDomain(FoodNameDTO dto) {
+		FoodName foodName = new FoodName();
+		//初期化
+		
+		foodName.setId(dto.getId());
+		foodName.setFood_group(dto.getFood_group());
+		foodName.setFoodName(dto.getFoodName());
+		foodName.setOther(dto.getOther());	
+		return foodName;
+
+	}
+	
+	public Food convertToFoodDomain(FoodDTO dto) {
 		Food food = new Food();
 		//初期化
 		

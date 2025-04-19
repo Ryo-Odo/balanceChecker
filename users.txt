@@ -23,6 +23,61 @@ SELECT * FROM users;
 
 CREATE DATABASE foods_db ENCODING 'UTF8' TEMPLATE template0;
 
+CREATE TABLE foods (
+id SERIAL,
+food_group INTEGER, 
+food_name VARCHAR(255) NOT NULL,
+energy DECIMAL,
+moisture DECIMAL,
+protein DECIMAL,
+lipid DECIMAL,
+food_fiber DECIMAL,
+carbohydrate DECIMAL,
+natrium DECIMAL,
+potassium DECIMAL,
+calcium DECIMAL,
+magnesium DECIMAL,
+phosphorus DECIMAL,
+iron DECIMAL,
+zinc DECIMAL,
+copper DECIMAL,
+manganese DECIMAL,
+iodine DECIMAL,
+selenium DECIMAL,
+chrome DECIMAL,
+molybdenum DECIMAL,
+vitamin_a DECIMAL,
+vitamin_d DECIMAL,
+vitamin_e DECIMAL,
+vitamin_k DECIMAL,
+vitamin_b1 DECIMAL,
+vitamin_b2 DECIMAL,
+niacin DECIMAL,
+vitamin_b6 DECIMAL,
+vitamin_b12 DECIMAL,
+folic_acid DECIMAL,
+pantothenic_acid DECIMAL,
+biotin DECIMAL,
+vitamin_c DECIMAL,
+sodium_content DECIMAL,
+other VARCHAR(255),
+  PRIMARY KEY(id)
+);
+\copy foods (id, food_group, food_name, energy, moisture, protein, lipid, food_fiber, carbohydrate, natrium, potassium, calcium, magnesium, phosphorus, iron, zinc, copper, manganese, iodine, selenium, chrome, molybdenum, vitamin_a, vitamin_d, vitamin_e, vitamin_k, vitamin_b1, vitamin_b2, niacin, vitamin_b6, vitamin_b12, folic_acid, pantothenic_acid, biotin, vitamin_c, sodium_content, other) FROM 'C:\Users\0203_PyJava\workspace\balanceChecker\food_data_0410.csv' WITH (FORMAT csv, HEADER false, DELIMITER ',', QUOTE '"', NULL '',  ENCODING 'UTF8');
+
+
+CREATE TABLE food_name (
+id SERIAL,
+food_group INTEGER, 
+food_name VARCHAR(255) NOT NULL,
+other VARCHAR(255),
+  PRIMARY KEY(id)
+);
+
+\copy food_name (id, food_group, food_name, other) FROM 'C:\Users\0203_PyJava\workspace\balanceChecker\food_name_data_0415.csv' WITH (FORMAT csv, HEADER false, DELIMITER ',', QUOTE '"', NULL '',  ENCODING 'UTF8');
+\copy food_name (id, food_group, food_name, other) FROM 'C:\pleiades\2022-12\workspace\balanceChecker\food_name_data_0415.csv' WITH (FORMAT csv, HEADER false, DELIMITER ',', QUOTE '"', NULL '',  ENCODING 'UTF8');
+
+
 
 メモ
 バックエンド：JAVA（サーブレット）
@@ -61,4 +116,71 @@ lib内に「gson-2.10.1.jar」配置、プロジェクトにビルド
 http://localhost:8080/balanceChecker/api/foodsへ接続すると送られたJSON構造が見れる
 https://wand.witchserver.jp/archives/46
 htmlファイルを分け、それぞれ部品として作成したほうが見やすいかも
-即時検索は「インクリメンタルサーチ」
+即時検索は「インクリメンタルサーチ」https://qiita.com/taddy_korokoro/items/f1a9726f241bb027f0e9
+
+4/14
+JSONの構造は以下（http://localhost:8080/balanceChecker/api/foods）と同じ
+[{"id":1,"food_group":1,"foodName":"こめ　［うるち米製品］　水稲全かゆ　レトルト　精白米","other":"食塩無添加品食物繊維：AOAC2011.25法","energy":37.0,"moisture":90.7,"protein":0.6,"lipid":0.1,"food_fiber":0.5,"carbohydrate":8.6,"natrium":1.0,"potassium":6.0,"calcium":2.0,"magnesium":2.0,"phosphorus":7.0,"iron":0.1,"zinc":0.1,"copper":0.01,"manganese":0.06,"iodine":0.0,"selenium":0.0,"chrome":0.0,"molybdenum":6.0,"vitamin_a":0.0,"vitamin_d":0.0,"vitamin_e":0.0,"vitamin_k":0.0,"vitamin_b1":0.0,"vitamin_b2":0.0,"niacin":0.0,"vitamin_b6":0.0,"vitamin_b12":0.0,"folic_acid":0.0,"pantothenic_acid":0.03,"biotin":0.1,"vitamin_c":0.0,"sodium_content":0.0},
+ {"id":2,"food_group":1,"foodName":"こめ　［水稲めし］　精白米　うるち米","other":"精白米47 g相当量を含む食物繊維：AOAC2011.25法","energy":156.0,"moisture":60.0,"protein":2.5,"lipid":0.3,"food_fiber":1.5,"carbohydrate":37.1,"natrium":1.0,"potassium":29.0,"calcium":3.0,"magnesium":7.0,"phosphorus":34.0,"iron":0.1,"zinc":0.6,"copper":0.1,"manganese":0.35,"iodine":0.0,"selenium":1.0,"chrome":0.0,"molybdenum":30.0,"vitamin_a":0.0,"vitamin_d":0.0,"vitamin_e":0.0,"vitamin_k":0.0,"vitamin_b1":0.02,"vitamin_b2":0.01,"niacin":0.2,"vitamin_b6":0.02,"vitamin_b12":0.0,"folic_acid":3.0,"pantothenic_acid":0.25,"biotin":0.5,"vitamin_c":0.0,"sodium_content":0.0},
+定数をJSON形式で渡したい
+
+ファイルを分けたい、静的部分はJSP、動的部分はjs?
+js（Vue）コンポーネント（部品）で分ける
+
+ヘッダー
+・header.jsp
+
+メインアプリケーション
+・mainApp.jsp
+・mainApp.js
+
+定数情報(基準値や単位など？)
+・constants.js
+
+食品情報API取得
+・foodApi.js
+
+食品名検索機能
+・foodNameSearch.js
+
+検索食品表示ページ
+・foodNameSearch.jsp？よくわからないのでとりあえずhomeに書いて後で分割
+
+栄養素別検索
+・searchByNutrient.js
+
+合計栄養素表示
+・totalNutrientDisplay.js
+
+yahooのコンテンツ幅990px
+検索機能の動作が重いかもしれない、マシン（メモリ）依存？毎回SQLでDBから持ってきたほうが早い可能性
+検索機能用のJSON（id,foodName,other）を取得したほうがメモリ節約？
+左のカードはタブで切り替える？https://www.aura-office.co.jp/blog/tab_menu_coding/
+
+4/15
+デザインを決める、左右で分ける？
+レイアウト手法を考える、Grid LayoutやFlexBox
+右は固定、左を検索ウィンドウ表示？https://qiita.com/umaxiaotian/items/582fb0a06ce3d4f3b164
+モーダルウィンドウでもいい、https://v2.vuetifyjs.com/ja/components/dialogs/#section-4f7f304465b9
+検索専用DBを作成する？{id, food_group, food_name, other}、メモリの節約、約47％削減
+検索後、選択した食品はマスターから持ってくる、1つしか選択しないため早い
+検索機能を毎回サーバーサイドでSQLを行う方式へ変更、速度100倍くらい
+
+4/16
+ボタンを押してモーダルウィンドウ起動へ変更（step4）
+栄養素別食品表示、必要な情報は{id, food_group, food_name, moisture, 各栄養素, other}
+各栄養素別にDBを作るのは大変すぎる、持ってくる時に必要な情報だけ持ってくる
+モーダルウィンドウを全画面にして、２グループずつ２列で表示
+栄養素の選択モーダルウィンドウ仮作成、値送信ししていない、記述増やすとモーダルウィンドウ起動しない？
+バックエンドは仮作成
+
+4/17
+栄養素別検索のリスト表示がうまくいかない、データの受信はできている。
+リスト表示と、デバッグ用のテキストカードが生成されていない。
+生成条件のIF文がうまくいっていないかもしれないが、テキストカード外ではまったく同じコードで生成される。
+IF文実行時に空のまま（値の変更が反映されていない）か、そもそものモーダルウィンドウの構造がうまくできていない。
+構造の問題かも
+解決！構造の問題だった、閉じタグが記述されていなかった、チャットGPTでも検出できない時があるらしい
+
+4/19
+家のデータベース構築、動作確認済
