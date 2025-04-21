@@ -1,25 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<head>
-  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.8.1/dist/vuetify.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.8.1/dist/vuetify.min.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <meta charset="UTF-8">
-  <title>ホーム画面</title>
-</head>
-<body>
-  <jsp:include page="header.jsp" />
-  <div id="app">
-    <v-app>
-      <v-main>
-  
+    <head>
+        <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css">
+        <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/vuetify@3.8.1/dist/vuetify.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/vuetify@3.8.1/dist/vuetify.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <meta charset="UTF-8">
+        <title>ホーム画面</title>
+    </head>
+    <body>
+        <jsp:include page="header.jsp" />
+        <div id="app">
+            <v-app>
+                <v-main>
+                    <v-con
+                
+                
+                
+                
+                
 <!----------------------------------------------------------------------------------------------------------------->    
-
         <!-- 検索ボタン -->
         <v-btn color="primary" @click="dialog = true">検索</v-btn>
         <v-btn color="secondary" @click="dialogNutrition = true">栄養素別検索</v-btn>
@@ -102,25 +106,6 @@
           </v-card>
         </v-dialog>
 <!----------------------------------------------------------------------------------------------------------------->  
-  <div class="box1">
-  <h3 class="text-h6">選択中の食品</h3>
-  <v-list>
-<v-list-item v-for="food in selectedFoods" :key="food.id">
-  <v-list-item-title>{{ food.foodName }}</v-list-item-title>
-  <v-list-item-subtitle>エネルギー: {{ food.calc_energy }} kcal</v-list-item-subtitle>
-  <v-text-field
-    v-model="food.weight"
-    label="グラム数"
-    model-value="100"
-    type="number"
-    min="1"
-    step="1"
-    @input="onInputWeight(food)"
-  ></v-text-field>
-</v-list-item>
-  </v-list>
-  </div>
-<!----------------------------------------------------------------------------------------------------------------->  
 
   <div class="box1">
     <v-row>
@@ -136,10 +121,8 @@
         outlined
         required
       ></v-text-field>
-    </v-col>
     
     <!-- 性別 -->
-    <v-col cols="12" sm="6" md="3">
       <v-select
         label="性別"
         v-model="user_gender"
@@ -148,10 +131,8 @@
         outlined
         required
       ></v-select>
-    </v-col>
     
     <!-- 身長 -->
-    <v-col cols="12" sm="6" md="3">
       <v-text-field
         label="身長 (cm)"
         v-model="user_height"
@@ -162,10 +143,8 @@
         outlined
         required
       ></v-text-field>
-    </v-col>
 
     <!-- 体重 -->
-    <v-col cols="12" sm="6" md="3">
       <v-text-field
         label="体重 (kg)"
         v-model="user_weight"
@@ -176,10 +155,8 @@
         outlined
         required
       ></v-text-field>
-    </v-col>
     
     <!-- 運動量 -->
-    <v-col cols="12" sm="6" md="3">
       <v-select
         label="活動レベル"
         v-model="user_activity_level"
@@ -194,14 +171,38 @@
         required
       ></v-select>
     </v-col>
+<!-----------------------------------------------------------------------------------------------------------------> 
     
   </v-row>
+  <div class="box1">
+<p>合計カロリー：{{ total_energy.toFixed(1) }} kcal</p>
+</div>
   </div>
-  {{ user_age }}
-  {{ user_gender }}
-  {{ user_height }}
-  {{ user_weight }}
-  {{ user_activity_level }}
+<!----------------------------------------------------------------------------------------------------------------->  
+  <div class="box1">
+<p>合計カロリー：{{ total_energy.toFixed(1) }} kcal</p>
+</div>
+  <div class="box1">
+  <h3 class="text-h6">選択中の食品</h3>
+  <p>食品数: {{selectedFoods.length}}</p>
+  <v-list>
+<v-list-item v-for="food in selectedFoods" :key="food.id">
+  <v-list-item-title>{{ food.foodName }}</v-list-item-title>
+  <v-list-item-subtitle>エネルギー: {{ food.calc_energy }} kcal</v-list-item-subtitle>
+  <v-text-field
+    v-model="food.weight"
+    label="グラム数"
+    model-value="food.weight"
+    type="number"
+    min="1"
+    step="1"
+    @input="onInputWeight(food)"
+  ></v-text-field>
+</v-list-item>
+  </v-list>
+  </div>
+<!----------------------------------------------------------------------------------------------------------------->  
+  
 
       </v-main>
     </v-app>
@@ -268,6 +269,77 @@
         const user_height = ref(158);        // 初期身長(cm)
         const user_weight = ref(54);          // 初期体重(kg)
         const user_activity_level = ref('軽い活動レベル (1.375):週1～3回の軽い運動、立ち仕事が多い人。');
+
+
+        //合計栄養素変数
+		const total_protein = ref(0);
+		const total_energy = ref(0);
+		const total_lipid = ref(0);
+		const total_food_fiber = ref(0);
+		const total_carbohydrate = ref(0);
+		const total_natrium = ref(0);
+		const total_potassium = ref(0);
+		const total_calcium = ref(0);
+		const total_magnesium = ref(0);
+		const total_phosphorus = ref(0);
+		const total_iron = ref(0);
+		const total_zinc = ref(0);
+		const total_copper = ref(0);
+		const total_manganese = ref(0);
+		const total_iodine = ref(0);
+		const total_selenium = ref(0);
+		const total_chrome = ref(0);
+		const total_molybdenum = ref(0);
+		const total_vitamin_a = ref(0);
+		const total_vitamin_d = ref(0);
+		const total_vitamin_e = ref(0);
+		const total_vitamin_k = ref(0);
+		const total_vitamin_b1 = ref(0);
+		const total_vitamin_b2 = ref(0);
+		const total_niacin = ref(0);
+		const total_vitamin_b6 = ref(0);
+		const total_vitamin_b12 = ref(0);
+		const total_folic_acid = ref(0);
+		const total_pantothenic_acid = ref(0);
+		const total_biotin = ref(0);
+		const total_vitamin_c = ref(0);
+		const total_sodium_content = ref(0);
+
+		const updateNutrition = () => {
+			  total_protein.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_protein || 0), 0);
+			  total_energy.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_energy || 0), 0);
+			  total_lipid.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_lipid || 0), 0);
+			  total_food_fiber.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_food_fiber || 0), 0);
+			  total_carbohydrate.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_carbohydrate || 0), 0);
+			  total_natrium.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_natrium || 0), 0);
+			  total_potassium.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_potassium || 0), 0);
+			  total_calcium.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_calcium || 0), 0);
+			  total_magnesium.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_magnesium || 0), 0);
+			  total_phosphorus.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_phosphorus || 0), 0);
+			  total_iron.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_iron || 0), 0);
+			  total_zinc.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_zinc || 0), 0);
+			  total_copper.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_copper || 0), 0);
+			  total_manganese.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_manganese || 0), 0);
+			  total_iodine.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_iodine || 0), 0);
+			  total_selenium.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_selenium || 0), 0);
+			  total_chrome.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_chrome || 0), 0);
+			  total_molybdenum.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_molybdenum || 0), 0);
+			  total_vitamin_a.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_vitamin_a || 0), 0);
+			  total_vitamin_d.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_vitamin_d || 0), 0);
+			  total_vitamin_e.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_vitamin_e || 0), 0);
+			  total_vitamin_k.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_vitamin_k || 0), 0);
+			  total_vitamin_b1.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_vitamin_b1 || 0), 0);
+			  total_vitamin_b2.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_vitamin_b2 || 0), 0);
+			  total_niacin.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_niacin || 0), 0);
+			  total_vitamin_b6.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_vitamin_b6 || 0), 0);
+			  total_vitamin_b12.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_vitamin_b12 || 0), 0);
+			  total_folic_acid.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_folic_acid || 0), 0);
+			  total_pantothenic_acid.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_pantothenic_acid || 0), 0);
+			  total_biotin.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_biotin || 0), 0);
+			  total_vitamin_c.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_vitamin_c || 0), 0);
+			  total_sodium_content.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_sodium_content || 0), 0);
+			};
+
 
 
 
@@ -458,6 +530,7 @@
         	    submitForm();
         	  }
         	});
+        watch(selectedFoods, updateNutrition, { deep: true });
         	        
 
         return {
@@ -489,6 +562,7 @@
           user_height,      
           user_weight,    
           user_activity_level,
+          total_energy,
         };
       }
     }).use(createVuetify()).mount('#app');
