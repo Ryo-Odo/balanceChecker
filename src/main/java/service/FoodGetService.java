@@ -88,6 +88,17 @@ public class FoodGetService {
 		return foodList;
 	}
 	
+	public Food getFood(String food_id) {
+		//homeで「追加」ボタンを押した食品を、データベースから取得するメソッド
+		FoodDAO foodDAO = new FoodDAO();
+		
+		FoodDTO foodDTO = foodDAO.findFood(food_id);
+		
+		Food food = convertToFoodDomain(foodDTO);
+		
+		return food;		
+	}
+	
 	public FoodNutrien convertToFoodNutrienDomain(FoodDTO dto, String nutrien) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 	    FoodNutrien food = new FoodNutrien();
 	    try {
