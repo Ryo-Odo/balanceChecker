@@ -40,7 +40,6 @@ public class FoodDTO {
 			vitamin_c,
 			sodium_content;
     
-    
 	public FoodDTO(int id, 
             int food_group,
             String foodName,

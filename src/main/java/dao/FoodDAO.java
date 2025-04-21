@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -163,4 +164,62 @@ public class FoodDAO extends BaseDAO{
 		}
 	    return list;
 	}
+	
+	public FoodDTO findFood(String food_id) {
+	    Connection conn = getonConnection();
+
+	    try {
+	        PreparedStatement ps = conn.prepareStatement("SELECT * FROM foods WHERE id = ?");
+	        ps.setInt(1, Integer.parseInt(food_id));
+	        ResultSet rs = ps.executeQuery();
+
+	        if (rs.next()) {
+	            FoodDTO foodDTO = new FoodDTO(
+	                rs.getInt("id"),
+	                rs.getInt("food_group"),
+	                rs.getString("food_name"),
+	                rs.getString("other"),
+	                rs.getDouble("energy"),
+	                rs.getDouble("moisture"),
+	                rs.getDouble("protein"),
+	                rs.getDouble("lipid"),
+	                rs.getDouble("food_fiber"),
+	                rs.getDouble("carbohydrate"),
+	                rs.getDouble("natrium"),
+	                rs.getDouble("potassium"),
+	                rs.getDouble("calcium"),
+	                rs.getDouble("magnesium"),
+	                rs.getDouble("phosphorus"),
+	                rs.getDouble("iron"),
+	                rs.getDouble("zinc"),
+	                rs.getDouble("copper"),
+	                rs.getDouble("manganese"),
+	                rs.getDouble("iodine"),
+	                rs.getDouble("selenium"),
+	                rs.getDouble("chrome"),
+	                rs.getDouble("molybdenum"),
+	                rs.getDouble("vitamin_a"),
+	                rs.getDouble("vitamin_d"),
+	                rs.getDouble("vitamin_e"),
+	                rs.getDouble("vitamin_k"),
+	                rs.getDouble("vitamin_b1"),
+	                rs.getDouble("vitamin_b2"),
+	                rs.getDouble("niacin"),
+	                rs.getDouble("vitamin_b6"),
+	                rs.getDouble("vitamin_b12"),
+	                rs.getDouble("folic_acid"),
+	                rs.getDouble("pantothenic_acid"),
+	                rs.getDouble("biotin"),
+	                rs.getDouble("vitamin_c"),
+	                rs.getDouble("sodium_content")
+	            );
+	            return foodDTO;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return null; // 見つからなかった場合
+	}
+
 }

@@ -10,7 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -40,11 +39,11 @@ public class NutrientSearchAPIController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("nutrientSearch開始");
 		
-		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("user") == null) {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-			return;
-		}
+//		HttpSession session = request.getSession(false);
+//		if (session == null || session.getAttribute("user") == null) {
+//			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+//			return;
+//		}
 		
 		request.setCharacterEncoding("UTF-8");
 
