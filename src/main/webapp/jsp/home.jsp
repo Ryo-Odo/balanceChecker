@@ -17,199 +17,195 @@
         <div id="app">
             <v-app>
                 <v-main>
-                    <v-con
-                
-                
-                
-                
-                
-<!----------------------------------------------------------------------------------------------------------------->    
-        <!-- 検索ボタン -->
-        <v-btn color="primary" @click="dialog = true">検索</v-btn>
-        <v-btn color="secondary" @click="dialogNutrition = true">栄養素別検索</v-btn>
-<!----------------------------------------------------------------------------------------------------------------->    
-
-        <!-- 食品名検索モーダル -->
-        <v-dialog v-model="dialog" max-width="800" hide-overlay>
-          <v-card>
-            <v-card-title class="text-h6">食品名検索</v-card-title>
-            <v-card-text>
-              <v-text-field
-                v-model="searchQuery"
-                label="食品名またはその他を検索"
-                prepend-inner-icon="mdi-magnify"
-                clearable
-                @input="onInput"
-              ></v-text-field>
-
-              <v-list v-if="paginatedFoods.length">
-                <v-list-item v-for="food in paginatedFoods" :key="food.id">
-                  <v-list-item-title>{{ food.id }} - {{ food.foodName }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ food.other }}</v-list-item-subtitle>
-                  <v-btn color="success" @click="addFoodToSelection(food.id)">追加</v-btn>
-                </v-list-item>
-              </v-list>
-              <div v-else><p>該当する食品が見つかりませんでした。</p></div>
-
-              <v-pagination
-                v-if="filteredFoods.length > itemsPerPage"
-                v-model="currentPage"
-                :length="totalPages"
-                :total-visible="7"
-                class="mt-4"
-              ></v-pagination>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn text @click="dialog = false">閉じる</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-<!----------------------------------------------------------------------------------------------------------------->  
-
-        <!-- 栄養素別検索モーダル -->
-        <v-dialog v-model="dialogNutrition" max-width="800" hide-overlay persistent>
-          <v-card>
-            <v-card-title class="text-h6">栄養素別検索</v-card-title>          
-              <v-card-text>
-              <v-select
-                v-model="selectedNutrient"
-                :items="nutrients"
-                item-value="value"
-                label="栄養素を選択"
-                @update:model-value="submitForm"
-              ></v-select>
-              
-<v-list v-if="paginatedNutrientFoods.length">
-  <v-list-item v-for="food in paginatedNutrientFoods" :key="food.id">
-    <v-list-item-title>{{ food.id }} - {{ food.foodName }}</v-list-item-title>
-    <v-list-item-subtitle>{{ food[selectedNutrient] }}（{{ getNutrientTitle(selectedNutrient) }}）</v-list-item-subtitle>
-    <v-btn color="success" @click="addFoodToSelection(food.id)">追加</v-btn>
-  </v-list-item>
-</v-list>
-<div v-else>
-  <p v-if="errorMessage">{{ errorMessage }}</p>
-  <p v-else>該当する食品が見つかりませんでした。</p>
-</div>
-              <v-pagination
-                v-if="nutrientFoods.length > itemsPerPage"
-                v-model="currentNutrientPage"
-                :length="totalNutrientPages"
-                :total-visible="7"
-                class="mt-4"
-              ></v-pagination>          
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn text @click="dialogNutrition = false">閉じる</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-<!----------------------------------------------------------------------------------------------------------------->  
-
-  <div class="box1">
-    <v-row>
-    <!-- 年齢 -->
-    <v-col cols="12" sm="6" md="3">
-      <v-text-field
-        label="年齢"
-        v-model="user_age"
-        type="number"
-        min="0"
-        max="120"
-        density="compact"
-        outlined
-        required
-      ></v-text-field>
-    
-    <!-- 性別 -->
-      <v-select
-        label="性別"
-        v-model="user_gender"
-        :items="['男性', '女性']"
-        density="compact"
-        outlined
-        required
-      ></v-select>
-    
-    <!-- 身長 -->
-      <v-text-field
-        label="身長 (cm)"
-        v-model="user_height"
-        type="number"
-        min="50"
-        max="250"
-        density="compact"
-        outlined
-        required
-      ></v-text-field>
-
-    <!-- 体重 -->
-      <v-text-field
-        label="体重 (kg)"
-        v-model="user_weight"
-        type="number"
-        min="20"
-        max="300"
-        density="compact"
-        outlined
-        required
-      ></v-text-field>
-    
-    <!-- 運動量 -->
-      <v-select
-        label="活動レベル"
-        v-model="user_activity_level"
-        :items="[
-        '低い活動レベル (1.2):ほとんど運動しない、デスクワーク中心の人。',
-        '軽い活動レベル (1.375):週1～3回の軽い運動、立ち仕事が多い人。',
-        '中程度の活動レベル (1.55):週3～5回の中程度の運動、活動的な仕事の人。',
-        '高い活動レベル (1.725):週5～7回のハードな運動、肉体労働が多い人。',
-        '非常に高い活動レベル (1.9):毎日のハードな運動と肉体労働、アスリートなど。﻿']"
-        density="compact"
-        outlined
-        required
-      ></v-select>
-    </v-col>
-<!-----------------------------------------------------------------------------------------------------------------> 
-    
-  </v-row>
-  <div class="box1">
-<p>合計カロリー：{{ total_energy.toFixed(1) }} kcal</p>
-</div>
-  </div>
-<!----------------------------------------------------------------------------------------------------------------->  
-  <div class="box1">
-<p>合計カロリー：{{ total_energy.toFixed(1) }} kcal</p>
-</div>
-  <div class="box1">
-  <h3 class="text-h6">選択中の食品</h3>
-  <p>食品数: {{selectedFoods.length}}</p>
-  <v-list>
-<v-list-item v-for="food in selectedFoods" :key="food.id">
-  <v-list-item-title>{{ food.foodName }}</v-list-item-title>
-  <v-list-item-subtitle>エネルギー: {{ food.calc_energy }} kcal</v-list-item-subtitle>
-  <v-text-field
-    v-model="food.weight"
-    label="グラム数"
-    model-value="food.weight"
-    type="number"
-    min="1"
-    step="1"
-    @input="onInputWeight(food)"
-  ></v-text-field>
-</v-list-item>
-  </v-list>
-  </div>
-<!----------------------------------------------------------------------------------------------------------------->  
-  
-
-      </v-main>
-    </v-app>
-  </div>
-
- <script>
-    const { createApp, ref, watch } = Vue;
+                    <v-container style="max-width: 1480px; margin: 0 auto;" class="box1">
+                        <v-row>
+                            <v-col cols="12" sm="6">
+                                <v-container class="box1">
+                                    <v-container class="box1">
+                                        <!----------------------------------------------------------------------------------------------------------------->
+                                        <!-- 検索ボタン -->
+                                        <v-btn color="primary" @click="dialog = true">検索</v-btn>
+                                        <v-btn color="secondary" @click="dialogNutrition = true">栄養素別検索</v-btn>
+                                        <!----------------------------------------------------------------------------------------------------------------->
+                                    </v-container>
+                                    <div class="box1">
+                                        <p>合計カロリー：{{ total_energy.toFixed(1) }} kcal</p>
+                                    </div>
+                                    <!-- 食品名検索モーダル -->
+                                    <v-dialog v-model="dialog" max-width="800" hide-overlay>
+                                        <v-card>
+                                            <v-card-title class="text-h6">食品名検索</v-card-title>
+                                            <v-card-text>
+                                                <v-text-field
+                                                    v-model="searchQuery"
+                                                    label="食品名またはその他を検索"
+                                                    prepend-inner-icon="mdi-magnify"
+                                                    clearable
+                                                    @input="onInput"
+                                                ></v-text-field>
+                                                <v-list v-if="paginatedFoods.length">
+                                                    <v-list-item v-for="food in paginatedFoods" :key="food.id">
+                                                        <v-list-item-title>{{ food.id }} - {{ food.foodName }}</v-list-item-title>
+                                                        <v-list-item-subtitle>{{ food.other }}</v-list-item-subtitle>
+                                                        <v-btn color="success" @click="addFoodToSelection(food.id)">追加</v-btn>
+                                                    </v-list-item>
+                                                </v-list>
+                                                <div v-else><p>該当する食品が見つかりませんでした。</p></div>
+                                                <v-pagination
+                                                    v-if="filteredFoods.length > itemsPerPage"
+                                                    v-model="currentPage"
+                                                    :length="totalPages"
+                                                    :total-visible="7"
+                                                    class="mt-4"
+                                                ></v-pagination>
+                                            </v-card-text>
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn text @click="dialog = false">閉じる</v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </v-dialog>
+                                    <!----------------------------------------------------------------------------------------------------------------->
+                                    <!-- 栄養素別検索モーダル -->
+                                    <v-dialog v-model="dialogNutrition" max-width="800" hide-overlay persistent>
+                                        <v-card>
+                                            <v-card-title class="text-h6">栄養素別検索</v-card-title>          
+                                            <v-card-text>
+                                                <v-select
+                                                    v-model="selectedNutrient"
+                                                    :items="nutrients"
+                                                    item-value="value"
+                                                    label="栄養素を選択"
+                                                    @update:model-value="submitForm"
+                                                ></v-select>
+                                                <v-list v-if="paginatedNutrientFoods.length">
+                                                    <v-list-item v-for="food in paginatedNutrientFoods" :key="food.id">
+                                                        <v-list-item-title>{{ food.id }} - {{ food.foodName }}</v-list-item-title>
+                                                        <v-list-item-subtitle>{{ food[selectedNutrient] }}（{{ getNutrientTitle(selectedNutrient) }}</v-list-item-subtitle>
+                                                        <v-btn color="success" @click="addFoodToSelection(food.id)">追加</v-btn>
+                                                    </v-list-item>
+                                                </v-list>
+                                                <div v-else>
+                                                    <p v-if="errorMessage">{{ errorMessage }}</p>
+                                                    <p v-else>該当する食品が見つかりませんでした。</p>
+                                                </div>
+                                                <v-pagination
+                                                    v-if="nutrientFoods.length > itemsPerPage"
+                                                    v-model="currentNutrientPage"
+                                                    :length="totalNutrientPages"
+                                                    :total-visible="7"
+                                                    class="mt-4"
+                                                ></v-pagination>          
+                                            </v-card-text>
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn text @click="dialogNutrition = false">閉じる</v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </v-dialog>
+                                    <!----------------------------------------------------------------------------------------------------------------->
+                                </v-container>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <v-container class="box1">
+                                    <!----------------------------------------------------------------------------------------------------------------->
+                                    <div class="box1">
+                                        <v-row>
+                                            <!-- 年齢 -->
+                                            <v-col cols="12" sm="6" md="6">
+                                                <v-text-field
+                                                    label="年齢"
+                                                    v-model="user_age"
+                                                    type="number"
+                                                    min="0"
+                                                    max="120"
+                                                    density="compact"
+                                                    outlined
+                                                    required
+                                                ></v-text-field>
+                                                <!-- 性別 -->
+                                                <v-select
+                                                    label="性別"
+                                                    v-model="user_gender"
+                                                    :items="['男性', '女性']"
+                                                    density="compact"
+                                                    outlined
+                                                    required
+                                                ></v-select>
+                                                <!-- 身長 -->
+                                                <v-text-field
+                                                    label="身長 (cm)"
+                                                    v-model="user_height"
+                                                    type="number"
+                                                    min="50"
+                                                    max="250"
+                                                    density="compact"
+                                                    outlined
+                                                    required
+                                                ></v-text-field>
+                                                <!-- 体重 -->
+                                                <v-text-field
+                                                    label="体重 (kg)"
+                                                    v-model="user_weight"
+                                                    type="number"
+                                                    min="20"
+                                                    max="300"
+                                                    density="compact"
+                                                    outlined
+                                                    required
+                                                ></v-text-field>
+                                                <!-- 運動量 -->
+                                                <v-select
+                                                    label="活動レベル"
+                                                    v-model="user_activity_level"
+                                                    :items="[
+                                                        { title: '低い活動レベル (1.2):ほとんど運動しない、デスクワーク中心の人。', value: 1.2 },
+                                                        { title: '軽い活動レベル (1.375):週1～3回の軽い運動、立ち仕事が多い人。', value: 1.375 },
+                                                        { title: '中程度の活動レベル (1.55):週3～5回の中程度の運動、活動的な仕事の人。', value: 1.55 },
+                                                        { title: '高い活動レベル (1.725):週5～7回のハードな運動、肉体労働が多い人。', value: 1.725 },
+                                                        { title: '非常に高い活動レベル (1.9):毎日のハードな運動と肉体労働、アスリートなど。', value: 1.9 }
+                                                    ]"
+                                                    item-title="title"
+                                                    item-value="value"
+                                                    density="compact"
+                                                    outlined
+                                                    required
+                                                ></v-select>
+                                            </v-col>
+                                        </v-row>
+                                     <div class="box1">
+                                        <p>想定総消費カロリー：{{ tdee.toFixed(1) }} kcal</p>
+                                    </div>
+                                    </div>
+                                    <!----------------------------------------------------------------------------------------------------------------->
+                                    <div class="box1">
+                                        <h3 class="text-h6">選択中の食品</h3>
+                                        <p>食品数: {{selectedFoods.length}}</p>
+                                        <v-list>
+                                            <v-list-item v-for="food in selectedFoods" :key="food.id">
+                                                <v-list-item-title>{{ food.foodName }}</v-list-item-title>
+                                                <v-list-item-subtitle>エネルギー: {{ food.calc_energy }} kcal</v-list-item-subtitle>
+                                                <v-text-field
+                                                    v-model="food.weight"
+                                                    label="グラム数"
+                                                    type="number"
+                                                    min="1"
+                                                    step="1"
+                                                    @input="onInputWeight(food)"
+                                                ></v-text-field>
+                                            </v-list-item>
+                                        </v-list>
+                                    </div>
+                                    <!----------------------------------------------------------------------------------------------------------------->  
+                                </v-container>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-main>
+            </v-app>
+        </div>
+        <script>
+    const { createApp, ref, computed, watch } = Vue;
     const { createVuetify } = Vuetify;
 
     createApp({
@@ -268,7 +264,24 @@
         const user_gender =  ref('女性');     // 初期性別
         const user_height = ref(158);        // 初期身長(cm)
         const user_weight = ref(54);          // 初期体重(kg)
-        const user_activity_level = ref('軽い活動レベル (1.375):週1～3回の軽い運動、立ち仕事が多い人。');
+        const user_activity_level = ref(1.375);//初期活動レベルの値
+
+        //基礎代謝計算
+        const bmr = computed(() => {
+
+          if (user_gender.value === '男性') {
+            return 13.397 * user_weight.value + 4.799 * user_height.value - 5.677 * user_age.value + 88.362;
+          } else {
+            return 9.247 * user_weight.value + 3.098 * user_height.value - 4.33 * user_age.value + 447.593;
+          }
+        });
+
+        // TDEEの計算（基礎代謝 × 活動レベル）
+        const tdee = computed(() => {
+          return bmr.value * user_activity_level.value;
+        });
+                
+        
 
 
         //合計栄養素変数
@@ -339,6 +352,8 @@
 			  total_vitamin_c.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_vitamin_c || 0), 0);
 			  total_sodium_content.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_sodium_content || 0), 0);
 			};
+
+
 
 
 
@@ -563,9 +578,12 @@
           user_weight,    
           user_activity_level,
           total_energy,
+          bmr,
+          tdee,
+          
         };
       }
     }).use(createVuetify()).mount('#app');
-  </script>
-</body>
+        </script>
+    </body>
 </html>
