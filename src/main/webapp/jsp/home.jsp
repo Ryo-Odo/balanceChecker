@@ -22,15 +22,67 @@
                             <v-col cols="12" sm="6">
                                 <v-container class="box1">
                                     <v-container class="box1">
+                                    <div class="box1">
+                                        <p>tdeeの値{{tdee}}</p>
+                                        <p>たんぱく質（下限）: {{ protein_low_standard }}</p>
+										<p>たんぱく質（上限）: {{ protein_high_standard }}</p>
+										<p>脂質（下限）: {{ lipid_low_standard }}</p>
+										<p>脂質（上限）: {{ lipid_high_standard }}</p>
+										<p>炭水化物（下限）: {{ carbohydrate_low_standard }}</p>
+										<p>炭水化物（上限）: {{ carbohydrate_high_standard }}</p>
+										<p>食物繊維: {{ fiber_standard }}</p>
+										
+										<p>ビタミンA: {{ vitamin_a_standard }}</p>
+										<p>ビタミンA 上限: {{ vitamin_a_upper_limit }}</p>
+										<p>ビタミンD: {{ vitamin_d_standard }}</p>
+										<p>ビタミンD 上限: {{ vitamin_d_upper_limit }}</p>
+										<p>ビタミンE: {{ vitamin_e_standard }}</p>
+										<p>ビタミンE 上限: {{ vitamin_e_upper_limit }}</p>
+										<p>ビタミンK: {{ vitamin_k_standard }}</p>
+										<p>ビタミンB1: {{ vitamin_b1_standard }}</p>
+										<p>ビタミンB2: {{ vitamin_b2_standard }}</p>
+										<p>ナイアシン: {{ niacin_standard }}</p>
+										<p>ナイアシン 上限: {{ niacin_upper_limit }}</p>
+										<p>ビタミンB6: {{ vitamin_b6_standard }}</p>
+										<p>ビタミンB6 上限: {{ vitamin_b6_upper_limit }}</p>
+										<p>ビタミンB12: {{ vitamin_b12_standard }}</p>
+										<p>葉酸: {{ folic_acid_standard }}</p>
+										<p>葉酸 上限: {{ folic_acid_upper_limit }}</p>
+										<p>パントテン酸: {{ pantothenic_acid_standard }}</p>
+										<p>ビオチン: {{ biotin_standard }}</p>
+										<p>ビタミンC: {{ vitamin_c_standard }}</p>
+										
+										<p>食塩相当量（基準）: {{ sodium_content_standard }}</p>
+										<p>ナトリウム（換算値）: {{ natrium_standard }}</p>
+										<p>カリウム: {{ potassium_standard }}</p>
+										<p>カルシウム: {{ calcium_standard }}</p>
+										<p>カルシウム 上限: {{ calcium_upper_limit }}</p>
+										<p>マグネシウム: {{ magnesium_standard }}</p>
+										<p>リン: {{ phosphorus_standard }}</p>
+										<p>リン 上限: {{ phosphorus_upper_limit }}</p>
+										<p>鉄: {{ iron_standard }}</p>
+										<p>亜鉛: {{ zinc_standard }}</p>
+										<p>亜鉛 上限: {{ zinc_upper_limit }}</p>
+										<p>銅: {{ copper_standard }}</p>
+										<p>銅 上限: {{ copper_upper_limit }}</p>
+										<p>マンガン: {{ manganese_standard }}</p>
+										<p>マンガン 上限: {{ manganese_upper_limit }}</p>
+										<p>ヨウ素: {{ iodine_standard }}</p>
+										<p>ヨウ素 上限: {{ iodine_upper_limit }}</p>
+										<p>セレン: {{ selenium_standard }}</p>
+										<p>セレン 上限: {{ selenium_upper_limit }}</p>
+										<p>クロム: {{ chrome_standard }}</p>
+										<p>クロム 上限: {{ chrome_upper_limit }}</p>
+										<p>モリブデン: {{ molybdenum_standard }}</p>
+										<p>モリブデン 上限: {{ molybdenum_upper_limit }}</p>
+										                                        
+                                    </div>
                                         <!----------------------------------------------------------------------------------------------------------------->
                                         <!-- 検索ボタン -->
                                         <v-btn color="primary" @click="dialog = true">検索</v-btn>
                                         <v-btn color="secondary" @click="dialogNutrition = true">栄養素別検索</v-btn>
                                         <!----------------------------------------------------------------------------------------------------------------->
                                     </v-container>
-                                    <div class="box1">
-                                        <p>合計カロリー：{{ total_energy.toFixed(1) }} kcal</p>
-                                    </div>
                                     <!-- 食品名検索モーダル -->
                                     <v-dialog v-model="dialog" max-width="800" hide-overlay>
                                         <v-card>
@@ -67,7 +119,7 @@
                                     </v-dialog>
                                     <!----------------------------------------------------------------------------------------------------------------->
                                     <!-- 栄養素別検索モーダル -->
-                                    <v-dialog v-model="dialogNutrition" max-width="800" hide-overlay persistent>
+                                    <v-dialog v-model="dialogNutrition" max-width="800" hide-overlay>
                                         <v-card>
                                             <v-card-title class="text-h6">栄養素別検索</v-card-title>          
                                             <v-card-text>
@@ -78,13 +130,30 @@
                                                     label="栄養素を選択"
                                                     @update:model-value="submitForm"
                                                 ></v-select>
-                                                <v-list v-if="paginatedNutrientFoods.length">
+                                                
+                                                
+													<v-list v-if="paginatedNutrientFoods.length">
+													  <div v-for="(foods, groupId) in groupedFoods" :key="groupId">
+													    <v-list-subheader>{{ foodGroupNames[groupId] || '未分類' }}</v-list-subheader>
+													    <v-list-item v-for="food in foods" :key="food.id">
+													      <v-list-item-title>{{ food.id }} - {{ food.foodName }}</v-list-item-title>
+													      <v-list-item-subtitle>
+													        {{ food[selectedNutrient] }}（{{ getNutrientTitle(selectedNutrient) }}）
+													      </v-list-item-subtitle>
+													      <v-btn color="success" @click="addFoodToSelection(food.id)">追加</v-btn>
+													    </v-list-item>
+													  </div>
+													</v-list>
+                                                
+                                                                                              
+<!--                                            <v-list v-if="paginatedNutrientFoods.length">
                                                     <v-list-item v-for="food in paginatedNutrientFoods" :key="food.id">
                                                         <v-list-item-title>{{ food.id }} - {{ food.foodName }}</v-list-item-title>
                                                         <v-list-item-subtitle>{{ food[selectedNutrient] }}（{{ getNutrientTitle(selectedNutrient) }}</v-list-item-subtitle>
                                                         <v-btn color="success" @click="addFoodToSelection(food.id)">追加</v-btn>
                                                     </v-list-item>
-                                                </v-list>
+                                                </v-list> -->
+                                                
                                                 <div v-else>
                                                     <p v-if="errorMessage">{{ errorMessage }}</p>
                                                     <p v-else>該当する食品が見つかりませんでした。</p>
@@ -179,6 +248,9 @@
                                     </div>
                                     <!----------------------------------------------------------------------------------------------------------------->
                                     <div class="box1">
+                                        <div class="box1">
+                                            <p>合計カロリー：{{ total_energy.toFixed(1) }} kcal</p>
+                                        </div>
                                         <h3 class="text-h6">選択中の食品</h3>
                                         <p>食品数: {{selectedFoods.length}}</p>
                                         <v-list>
@@ -270,9 +342,16 @@
         const bmr = computed(() => {
 
           if (user_gender.value === '男性') {
-            return 13.397 * user_weight.value + 4.799 * user_height.value - 5.677 * user_age.value + 88.362;
+            /* ハリスベネディクト
+            return 13.397 * user_weight.value + 4.799 * user_height.value - 5.677 * user_age.value + 88.362; 
+            */
+            return 10 * user_weight.value + 6.25 * user_height.value - 5 * user_age.value + 5;
           } else {
-            return 9.247 * user_weight.value + 3.098 * user_height.value - 4.33 * user_age.value + 447.593;
+            /* ハリスベネディクト
+            return 9.247 * user_weight.value + 3.098 * user_height.value - 4.33 * user_age.value + 447.593; 
+            */
+            return 10 * user_weight.value + 6.25 * user_height.value - 5 * user_age.value - 161
+            
           }
         });
 
@@ -353,11 +432,820 @@
 			  total_sodium_content.value = selectedFoods.value.reduce((sum, food) => sum + Number(food?.calc_sodium_content || 0), 0);
 			};
 
+		//各栄養素目標値、下限と上限
+		//たんぱく質
+		const protein_low_standard = computed(() => {
+			if (user_age.value <= 49) return tdee.value * 0.13 / 4;
+			if (user_age.value <= 64) return tdee.value * 0.14 / 4;
+		    return tdee.value * 0.15 / 4
+		    });
+		const protein_high_standard = computed(() => tdee.value * 0.20 / 4);
+		//脂質
+		const lipid_low_standard = computed(() => tdee.value * 0.2 / 9);
+		const lipid_high_standard = computed(() => tdee.value * 0.3 / 9);
+		//炭水化物
+		const carbohydrate_low_standard = computed(() => tdee.value * 0.5 / 4);
+		const carbohydrate_high_standard = computed(() => tdee.value * 0.65 / 4);
+		//食物繊維
+		const fiber_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 0;
+		    if (user_age.value <= 5) return 8;
+		    if (user_age.value <= 7) return 10;
+		    if (user_age.value <= 9) return 11;
+		    if (user_age.value <= 11) return 13;
+		    if (user_age.value <= 14) return 17;
+		    if (user_age.value <= 17) return 19;
+		    if (user_age.value <= 29) return 20;
+		    if (user_age.value <= 49) return 22;
+		    if (user_age.value <= 64) return 22;
+		    if (user_age.value <= 74) return 21;
+		    return 20;
+		  } else {
+		    if (user_age.value <= 2) return 0;
+		    if (user_age.value <= 5) return 8;
+		    if (user_age.value <= 7) return 9;
+		    if (user_age.value <= 9) return 11;
+		    if (user_age.value <= 11) return 13;
+		    if (user_age.value <= 14) return 16;
+		    if (user_age.value <= 17) return 18;
+		    if (user_age.value <= 64) return 18;
+		    if (user_age.value <= 74) return 18;
+		    return 17;
+		  }
+		});
+		//ビタミンA
+		const vitamin_a_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 400;
+		    if (user_age.value <= 5) return 500;
+		    if (user_age.value <= 7) return 500;
+		    if (user_age.value <= 9) return 500;
+		    if (user_age.value <= 11) return 600;
+		    if (user_age.value <= 14) return 800;
+		    if (user_age.value <= 17) return 900;
+		    if (user_age.value <= 29) return 850;
+		    if (user_age.value <= 49) return 900;
+		    if (user_age.value <= 64) return 900;
+		    if (user_age.value <= 74) return 850;
+		    return 800;
+		  } else {
+		    if (user_age.value <= 2) return 350;
+		    if (user_age.value <= 5) return 500;
+		    if (user_age.value <= 7) return 500;
+		    if (user_age.value <= 9) return 500;
+		    if (user_age.value <= 11) return 600;
+		    if (user_age.value <= 14) return 700;
+		    if (user_age.value <= 17) return 650;
+		    if (user_age.value <= 29) return 650;
+		    if (user_age.value <= 49) return 700;
+		    if (user_age.value <= 64) return 700;
+		    if (user_age.value <= 74) return 700;
+		    return 650;
+		  }
+		});
+		const vitamin_a_upper_limit = computed(() => {
+		  if (user_age.value <= 2) return 600;
+		  if (user_age.value <= 5) return 700;
+		  if (user_age.value <= 7) return 950;
+		  if (user_age.value <= 9) return 1200;
+		  if (user_age.value <= 11) return 1500;
+		  if (user_age.value <= 14) return 2100;
+		  if (user_age.value <= 17) return 2600;
+		  return 2700;
+		});
+		//ビタミンD
+		const vitamin_d_standard = computed(() => {
+		    if (user_age.value <= 2) return 3.5;
+		    if (user_age.value <= 5) return 4.5;
+		    if (user_age.value <= 7) return 5.5;
+		    if (user_age.value <= 9) return 6.5;
+		    if (user_age.value <= 11) return 8;
+		    return 9;
+		});
+		const vitamin_d_upper_limit = computed(() => {
+		  if (user_age.value <= 2) return 25;
+		  if (user_age.value <= 5) return 30;
+		  if (user_age.value <= 7) return 40;
+		  if (user_age.value <= 9) return 40;
+		  if (user_age.value <= 11) return 60;
+		  if (user_age.value <= 14) return 80;
+		  if (user_age.value <= 17) return 90;
+		  return 100;
+		});
+		//ビタミンE
+		const vitamin_e_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 3;
+		    if (user_age.value <= 5) return 4;
+		    if (user_age.value <= 7) return 4.5;
+		    if (user_age.value <= 9) return 5;
+		    if (user_age.value <= 11) return 5;
+		    if (user_age.value <= 14) return 6.5;
+		    if (user_age.value <= 17) return 7;
+		    if (user_age.value <= 29) return 6.5;
+		    if (user_age.value <= 49) return 6.5;
+		    if (user_age.value <= 64) return 6.5;
+		    if (user_age.value <= 74) return 7.5;
+		    return 7;
+		  } else {
+		    if (user_age.value <= 2) return 3;
+		    if (user_age.value <= 5) return 4;
+		    if (user_age.value <= 7) return 4;
+		    if (user_age.value <= 9) return 5;
+		    if (user_age.value <= 11) return 5.5;
+		    if (user_age.value <= 14) return 6;
+		    if (user_age.value <= 17) return 6;
+		    if (user_age.value <= 29) return 5;
+		    if (user_age.value <= 49) return 6;
+		    if (user_age.value <= 64) return 6;
+		    if (user_age.value <= 74) return 7;
+		    return 6;
+		  }
+		});
+		const vitamin_e_upper_limit = computed(() => {
+			if (user_gender.value === '男性') {
+			    if (user_age.value <= 2) return 150;
+			    if (user_age.value <= 5) return 200;
+			    if (user_age.value <= 7) return 300;
+			    if (user_age.value <= 9) return 350;
+			    if (user_age.value <= 11) return 450;
+			    if (user_age.value <= 14) return 650;
+			    if (user_age.value <= 17) return 750;
+			    return 800;
+			  } else {
+			    if (user_age.value <= 2) return 150;
+			    if (user_age.value <= 5) return 200;
+			    if (user_age.value <= 7) return 300;
+			    if (user_age.value <= 9) return 350;
+			    if (user_age.value <= 11) return 450;
+			    if (user_age.value <= 14) return 600;
+			    if (user_age.value <= 17) return 650;
+			    if (user_age.value <= 29) return 650;
+			    if (user_age.value <= 49) return 700;
+			    if (user_age.value <= 64) return 700;
+			    if (user_age.value <= 74) return 700;
+			    return 650;
+			  }
+			});
+		//ビタミンK
+		const vitamin_k_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 50;
+		    if (user_age.value <= 5) return 60;
+		    if (user_age.value <= 7) return 80;
+		    if (user_age.value <= 9) return 90;
+		    if (user_age.value <= 11) return 110;
+		    if (user_age.value <= 14) return 140;
+		    return 150;
+		  } else {
+		    if (user_age.value <= 2) return 60;
+		    if (user_age.value <= 5) return 70;
+		    if (user_age.value <= 7) return 90;
+		    if (user_age.value <= 9) return 110;
+		    if (user_age.value <= 11) return 130;
+		    return 150;
+		  }
+		});
+		//ビタミンB1
+		const vitamin_b1_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+			if (user_age.value <= 2) return 0.4;
+			if (user_age.value <= 5) return 0.5;
+			if (user_age.value <= 7) return 0.7;
+			if (user_age.value <= 9) return 0.8;
+			if (user_age.value <= 11) return 0.9;
+			if (user_age.value <= 14) return 1.1;
+			if (user_age.value <= 17) return 1.2;
+			if (user_age.value <= 29) return 1.1;
+			if (user_age.value <= 49) return 1.2;
+			if (user_age.value <= 64) return 1.1;
+		    return 1;
+		  } else {
+			if (user_age.value <= 2) return 0.4;
+			if (user_age.value <= 5) return 0.5;
+			if (user_age.value <= 7) return 0.6;
+			if (user_age.value <= 9) return 0.7;
+			if (user_age.value <= 11) return 0.9;
+			if (user_age.value <= 14) return 1;
+			if (user_age.value <= 17) return 1;
+			if (user_age.value <= 29) return 0.8;
+			if (user_age.value <= 49) return 0.9;
+			if (user_age.value <= 64) return 0.8;
+			if (user_age.value <= 74) return 0.8;
+		    return 0.7;
+		  }
+		});
+		//ビタミンB2
+		const vitamin_b2_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+			if (user_age.value <= 2) return 0.6;
+			if (user_age.value <= 5) return 0.8;
+			if (user_age.value <= 7) return 0.9;
+			if (user_age.value <= 9) return 1.1;
+			if (user_age.value <= 11) return 1.4;
+			if (user_age.value <= 14) return 1.6;
+			if (user_age.value <= 17) return 1.7;
+			if (user_age.value <= 29) return 1.6;
+			if (user_age.value <= 49) return 1.7;
+			if (user_age.value <= 64) return 1.6;
+		    return 1.4;
+		  } else {
+			if (user_age.value <= 2) return 0.5;
+			if (user_age.value <= 5) return 0.8;
+			if (user_age.value <= 7) return 0.9;
+			if (user_age.value <= 9) return 1;
+			if (user_age.value <= 11) return 1.3;
+			if (user_age.value <= 14) return 1.4;
+			if (user_age.value <= 17) return 1.4;
+			if (user_age.value <= 29) return 1.2;
+			if (user_age.value <= 49) return 1.2;
+			if (user_age.value <= 64) return 1.2;
+		    return 1.1;
+		  }
+		});
+		//ナイアシン
+		const niacin_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 6;
+		    if (user_age.value <= 5) return 8;
+		    if (user_age.value <= 7) return 9;
+		    if (user_age.value <= 9) return 11;
+		    if (user_age.value <= 11) return 13;
+		    if (user_age.value <= 14) return 15;
+		    if (user_age.value <= 17) return 16;
+		    if (user_age.value <= 29) return 15;
+		    if (user_age.value <= 49) return 16;
+		    if (user_age.value <= 64) return 15;
+		    if (user_age.value <= 74) return 14;
+		    return 13;
+		  } else {
+		    if (user_age.value <= 2) return 5;
+		    if (user_age.value <= 5) return 7;
+		    if (user_age.value <= 7) return 8;
+		    if (user_age.value <= 9) return 10;
+		    if (user_age.value <= 11) return 12;
+		    if (user_age.value <= 14) return 14;
+		    if (user_age.value <= 17) return 13;
+		    if (user_age.value <= 29) return 11;
+		    if (user_age.value <= 49) return 12;
+		    if (user_age.value <= 64) return 11;
+		    if (user_age.value <= 74) return 11;
+		    return 10;
+		  }
+		});
+		const niacin_upper_limit = computed(() => {
+			if (user_gender.value === '男性') {
+				if (user_age.value <= 2) return 60;
+			    if (user_age.value <= 5) return 80;
+			    if (user_age.value <= 7) return 100;
+			    if (user_age.value <= 9) return 150;
+			    if (user_age.value <= 11) return 200;
+			    if (user_age.value <= 14) return 250;
+			    if (user_age.value <= 17) return 300;
+			    if (user_age.value <= 29) return 300;
+			    if (user_age.value <= 49) return 350;
+			    if (user_age.value <= 64) return 350;
+			    return 300;
+			  } else {
+			    if (user_age.value <= 2) return 60;
+			    if (user_age.value <= 5) return 80;
+			    if (user_age.value <= 7) return 100;
+			    if (user_age.value <= 9) return 150;
+			    if (user_age.value <= 11) return 200;
+			    return 250;
+			  }
+			});
+		//ビタミンB6
+		const vitamin_b6_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 0.5;
+		    if (user_age.value <= 5) return 0.6;
+		    if (user_age.value <= 7) return 0.7;
+		    if (user_age.value <= 9) return 0.9;
+		    if (user_age.value <= 11) return 1;
+		    if (user_age.value <= 14) return 1.4;
+		    if (user_age.value <= 17) return 1.5;
+		    if (user_age.value <= 29) return 1.5;
+		    if (user_age.value <= 49) return 1.5;
+		    if (user_age.value <= 64) return 1.5;
+		    return 1.4;
+		  } else {
+		    if (user_age.value <= 2) return 0.5;
+		    if (user_age.value <= 5) return 0.6;
+		    if (user_age.value <= 7) return 0.7;
+		    if (user_age.value <= 9) return 0.9;
+		    if (user_age.value <= 11) return 1.2;
+		    if (user_age.value <= 14) return 1.3;
+		    if (user_age.value <= 17) return 1.3;
+		    return 1.2;
+		  }
+		});
+		const vitamin_b6_upper_limit = computed(() => {
+			if (user_gender.value === '男性') {
+				if (user_age.value <= 2) return 10;
+			    if (user_age.value <= 5) return 15;
+			    if (user_age.value <= 7) return 20;
+			    if (user_age.value <= 9) return 25;
+			    if (user_age.value <= 11) return 30;
+			    if (user_age.value <= 14) return 40;
+			    if (user_age.value <= 17) return 50;
+			    if (user_age.value <= 29) return 55;
+			    if (user_age.value <= 49) return 60;
+			    if (user_age.value <= 64) return 60;
+			    if (user_age.value <= 74) return 55;
+			    return 50;
+			  } else {
+				if (user_age.value <= 2) return 10;
+			    if (user_age.value <= 5) return 15;
+			    if (user_age.value <= 7) return 20;
+			    if (user_age.value <= 9) return 25;
+			    if (user_age.value <= 11) return 30;
+			    if (user_age.value <= 14) return 40;
+			    if (user_age.value <= 17) return 45;
+			    if (user_age.value <= 29) return 45;
+			    if (user_age.value <= 49) return 45;
+			    if (user_age.value <= 64) return 45;
+			    if (user_age.value <= 74) return 45;
+			    return 40;
+			  }
+			});
+		//ビタミンB12 
+		const vitamin_b12_standard = computed(() => {
+		    if (user_age.value <= 2) return 1.5;
+		    if (user_age.value <= 5) return 1.5;
+		    if (user_age.value <= 7) return 2;
+		    if (user_age.value <= 9) return 2.5;
+		    if (user_age.value <= 11) return 3;
+		    return 4;
+		    });
+	    //葉酸
+	    const folic_acid_standard = computed(() => {
+		    if (user_age.value <= 2) return 90;
+		    if (user_age.value <= 5) return 100;
+		    if (user_age.value <= 7) return 130;
+		    if (user_age.value <= 9) return 150;
+		    if (user_age.value <= 11) return 180;
+		    if (user_age.value <= 14) return 230;
+		    return 240;
+		});
+		const folic_acid_upper_limit = computed(() => {
+				if (user_age.value <= 2) return 200;
+			    if (user_age.value <= 5) return 300;
+			    if (user_age.value <= 7) return 400;
+			    if (user_age.value <= 9) return 500;
+			    if (user_age.value <= 11) return 700;
+			    if (user_age.value <= 14) return 900;
+			    if (user_age.value <= 17) return 900;
+			    if (user_age.value <= 29) return 900;
+			    if (user_age.value <= 49) return 1000;
+			    if (user_age.value <= 64) return 1000;
+			    return 900;
+			});
+		//パントテン酸
+		const pantothenic_acid_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 3;
+		    if (user_age.value <= 5) return 4;
+		    if (user_age.value <= 7) return 5;
+		    if (user_age.value <= 9) return 6;
+		    if (user_age.value <= 11) return 6;
+		    if (user_age.value <= 14) return 7;
+		    if (user_age.value <= 17) return 7;
+		    return 6;
+		  } else {
+		    if (user_age.value <= 2) return 3;
+		    if (user_age.value <= 5) return 4;
+		    if (user_age.value <= 7) return 5;
+		    if (user_age.value <= 9) return 6;
+		    if (user_age.value <= 11) return 6;
+		    if (user_age.value <= 14) return 6;
+		    if (user_age.value <= 17) return 6;
+		    return 5;
+		  }
+		});
+		//ビオチン
+		const biotin_standard = computed(() => {
+		    if (user_age.value <= 2) return 20;
+		    if (user_age.value <= 5) return 20;
+		    if (user_age.value <= 7) return 30;
+		    if (user_age.value <= 9) return 30;
+		    if (user_age.value <= 11) return 40;
+		    return 50;
+		});
+		//ビタミンC
+		const vitamin_c_standard = computed(() => {
+		    if (user_age.value <= 2) return 35;
+		    if (user_age.value <= 5) return 40;
+		    if (user_age.value <= 7) return 50;
+		    if (user_age.value <= 9) return 60;
+		    if (user_age.value <= 11) return 70;
+		    if (user_age.value <= 14) return 90;
+		    return 100;
+		});
+		//食塩相当量
+		const sodium_content_standard = computed(() => {
+			if (user_gender.value === '男性') {
+				if (user_age.value <= 2) return 3;
+			    if (user_age.value <= 5) return 3.5;
+			    if (user_age.value <= 7) return 4.5;
+			    if (user_age.value <= 9) return 5;
+			    if (user_age.value <= 11) return 6;
+			    if (user_age.value <= 14) return 7;
+			    return 7.5;
+			  } else {
+				if (user_age.value <= 2) return 2.5;
+			    if (user_age.value <= 5) return 3.5;
+			    if (user_age.value <= 7) return 4.5;
+			    if (user_age.value <= 9) return 5;
+			    if (user_age.value <= 11) return 6;
+			    return 6.5;
+			  }
+			});
+		//ナトリウム、公式資料にないので食塩から換算して基準を算出
+		const natrium_standard = computed(() => {
+			    return sodium_content_standard.value * 393.4;
+			});
+		//カリウム
+		const potassium_standard = computed(() => {
+			if (user_gender.value === '男性') {
+				if (user_age.value <= 2) return 0;
+			    if (user_age.value <= 5) return 1600;
+			    if (user_age.value <= 7) return 1800;
+			    if (user_age.value <= 9) return 2000;
+			    if (user_age.value <= 11) return 2200;
+			    if (user_age.value <= 14) return 2600;
+			    return 3000;
+			  } else {
+				if (user_age.value <= 2) return 0;
+			    if (user_age.value <= 5) return 1400;
+			    if (user_age.value <= 7) return 1600;
+			    if (user_age.value <= 9) return 1800;
+			    if (user_age.value <= 11) return 2000;
+			    if (user_age.value <= 14) return 2400;
+			    return 2600;
+			  }
+			});
+		//カルシウム、17歳以下は耐容上限ないので表示するとき分岐忘れずに
+		const calcium_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 450;
+		    if (user_age.value <= 5) return 600;
+		    if (user_age.value <= 7) return 600;
+		    if (user_age.value <= 9) return 650;
+		    if (user_age.value <= 11) return 700;
+		    if (user_age.value <= 14) return 1000;
+		    if (user_age.value <= 17) return 800;
+		    if (user_age.value <= 29) return 800;
+		    return 750;
+		  } else {
+		    if (user_age.value <= 2) return 400;
+		    if (user_age.value <= 5) return 550;
+		    if (user_age.value <= 7) return 550;
+		    if (user_age.value <= 9) return 750;
+		    if (user_age.value <= 11) return 750;
+		    if (user_age.value <= 14) return 800;
+		    if (user_age.value <= 17) return 650;
+		    if (user_age.value <= 29) return 650;
+		    if (user_age.value <= 49) return 650;
+		    if (user_age.value <= 64) return 650;
+		    if (user_age.value <= 74) return 650;
+		    return 600;
+		  }
+		});
+		const calcium_upper_limit = computed(() => {
+			    return 2500;
+			});
+		//マグネシウム
+		const magnesium_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 70;
+		    if (user_age.value <= 5) return 100;
+		    if (user_age.value <= 7) return 130;
+		    if (user_age.value <= 9) return 170;
+		    if (user_age.value <= 11) return 210;
+		    if (user_age.value <= 14) return 290;
+		    if (user_age.value <= 17) return 360;
+		    if (user_age.value <= 29) return 340;
+		    if (user_age.value <= 49) return 380;
+		    if (user_age.value <= 64) return 370;
+		    if (user_age.value <= 74) return 350;
+		    return 330;
+		  } else {
+		    if (user_age.value <= 2) return 70;
+		    if (user_age.value <= 5) return 100;
+		    if (user_age.value <= 7) return 130;
+		    if (user_age.value <= 9) return 160;
+		    if (user_age.value <= 11) return 220;
+		    if (user_age.value <= 14) return 290;
+		    if (user_age.value <= 17) return 310;
+		    if (user_age.value <= 29) return 280;
+		    if (user_age.value <= 49) return 290;
+		    if (user_age.value <= 64) return 290;
+		    if (user_age.value <= 74) return 280;
+		    return 270;
+		  }
+		});
+		//リン、17歳以下は耐容上限がないので表示するとき分岐する
+		const phosphorus_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 600;
+		    if (user_age.value <= 5) return 700;
+		    if (user_age.value <= 7) return 900;
+		    if (user_age.value <= 9) return 1000;
+		    if (user_age.value <= 11) return 1100;
+		    if (user_age.value <= 14) return 1200;
+		    if (user_age.value <= 17) return 1200;
+		    return 1000;
+		  } else {
+		    if (user_age.value <= 2) return 500;
+		    if (user_age.value <= 5) return 700;
+		    if (user_age.value <= 7) return 800;
+		    if (user_age.value <= 9) return 900;
+		    if (user_age.value <= 11) return 1000;
+		    if (user_age.value <= 14) return 1100;
+		    if (user_age.value <= 17) return 1000;
+		    return 800;
+		  }
+		});
+		const phosphorus_upper_limit = computed(() => {
+			    return 3000;
+			});
+		//鉄
+		const iron_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 4;
+		    if (user_age.value <= 5) return 5;
+		    if (user_age.value <= 7) return 6;
+		    if (user_age.value <= 9) return 7.5;
+		    if (user_age.value <= 11) return 9.5;
+		    if (user_age.value <= 14) return 9;
+		    if (user_age.value <= 17) return 9;
+		    if (user_age.value <= 29) return 7;
+		    if (user_age.value <= 49) return 7.5;
+		    if (user_age.value <= 64) return 7;
+		    if (user_age.value <= 74) return 7;
+		    return 6.5;
+		  } else {
+		    if (user_age.value <= 2) return 4;
+		    if (user_age.value <= 5) return 5;
+		    if (user_age.value <= 7) return 6;
+		    if (user_age.value <= 9) return 8;
+		    if (user_age.value <= 11) return 9;
+		    if (user_age.value <= 14) return 8;
+		    if (user_age.value <= 17) return 6.5;
+		    if (user_age.value <= 29) return 6;
+		    if (user_age.value <= 49) return 6;
+		    if (user_age.value <= 64) return 6;
+		    if (user_age.value <= 74) return 6;
+		    return 5.5;
+		  }
+		});
+		//亜鉛、17歳以下は許容上限がないので表示するとき分岐する
+		const zinc_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 3.5;
+		    if (user_age.value <= 5) return 4;
+		    if (user_age.value <= 7) return 5;
+		    if (user_age.value <= 9) return 5.5;
+		    if (user_age.value <= 11) return 8;
+		    if (user_age.value <= 14) return 8.5;
+		    if (user_age.value <= 17) return 10;
+		    if (user_age.value <= 29) return 9;
+		    if (user_age.value <= 49) return 9.5;
+		    if (user_age.value <= 64) return 9.5;
+		    if (user_age.value <= 74) return 9;
+		    return 9;
+		  } else {
+			if (user_age.value <= 2) return 3;
+			if (user_age.value <= 5) return 3.5;
+			if (user_age.value <= 7) return 4.5;
+			if (user_age.value <= 9) return 5.5;
+			if (user_age.value <= 11) return 7.5;
+			if (user_age.value <= 14) return 8.5;
+			if (user_age.value <= 17) return 8;
+			if (user_age.value <= 29) return 7.5;
+			if (user_age.value <= 49) return 8;
+			if (user_age.value <= 64) return 8;
+			if (user_age.value <= 74) return 7.5;
+			return 7;
+		  }
+		});
+		const zinc_upper_limit = computed(() => {
+			if (user_gender.value === '男性') {
+			    if (user_age.value <= 29) return 40;
+			    if (user_age.value <= 49) return 45;
+			    if (user_age.value <= 64) return 45;
+			    if (user_age.value <= 74) return 45;
+			    return 40;
+			  } else {
+				return 35;
+			  }
+			});
+		//銅、17歳以下は耐容上限がないため表示するとき分岐
+		const copper_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 0.3;
+		    if (user_age.value <= 5) return 0.4;
+		    if (user_age.value <= 7) return 0.4;
+		    if (user_age.value <= 9) return 0.5;
+		    if (user_age.value <= 11) return 0.6;
+		    if (user_age.value <= 14) return 0.8;
+		    if (user_age.value <= 17) return 0.9;
+		    if (user_age.value <= 29) return 0.8;
+		    if (user_age.value <= 49) return 0.9;
+		    if (user_age.value <= 64) return 0.9;
+		    if (user_age.value <= 74) return 0.8;
+		    return 0.8;
+		  } else {
+			if (user_age.value <= 2) return 0.3;
+			if (user_age.value <= 5) return 0.3;
+			if (user_age.value <= 7) return 0.4;
+			if (user_age.value <= 9) return 0.5;
+			if (user_age.value <= 11) return 0.6;
+			if (user_age.value <= 14) return 0.8;
+			return 0.7;
+		  }
+		});
+		const copper_upper_limit = computed(() => {
+			    return 7;
+			});
+		//マンガン、17歳以下は耐容上限がないため表示するとき分岐
+		const manganese_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 1.5;
+		    if (user_age.value <= 5) return 2;
+		    if (user_age.value <= 7) return 2;
+		    if (user_age.value <= 9) return 2.5;
+		    if (user_age.value <= 11) return 3;
+		    return 3.5;
+		  } else {
+			if (user_age.value <= 2) return 1.5;
+			if (user_age.value <= 5) return 2;
+			if (user_age.value <= 7) return 2;
+			if (user_age.value <= 9) return 2.5;
+			return 3;
+		  }
+		});
+		const manganese_upper_limit = computed(() => {
+			    return 11;
+			});
+		//ヨウ素
+		const iodine_standard = computed(() => {
+		    if (user_age.value <= 2) return 50;
+		    if (user_age.value <= 5) return 60;
+		    if (user_age.value <= 7) return 75;
+		    if (user_age.value <= 9) return 90;
+		    if (user_age.value <= 11) return 110;
+			return 140;
+		});
+		const iodine_upper_limit = computed(() => {
+			    if (user_age.value <= 2) return 600;
+			    if (user_age.value <= 5) return 900;
+			    if (user_age.value <= 7) return 1200;
+			    if (user_age.value <= 9) return 1500;
+			    if (user_age.value <= 11) return 2000;
+			    if (user_age.value <= 14) return 2500;
+			    return 3000;
+			});
+		//セレン
+		const selenium_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 10;
+		    if (user_age.value <= 5) return 15;
+		    if (user_age.value <= 7) return 15;
+		    if (user_age.value <= 9) return 20;
+		    if (user_age.value <= 11) return 25;
+		    if (user_age.value <= 14) return 30;
+		    if (user_age.value <= 17) return 35;
+		    if (user_age.value <= 29) return 30;
+		    if (user_age.value <= 49) return 35;
+		    return 30;
+		  } else {
+		    if (user_age.value <= 2) return 10;
+		    if (user_age.value <= 5) return 10;
+		    if (user_age.value <= 7) return 15;
+		    if (user_age.value <= 9) return 20;
+		    if (user_age.value <= 11) return 25;
+		    if (user_age.value <= 14) return 30;
+		    return 25;
+		  }
+		});
+		const selenium_upper_limit = computed(() => {
+			if (user_gender.value === '男性') {
+				if (user_age.value <= 2) return 100;
+			    if (user_age.value <= 5) return 100;
+			    if (user_age.value <= 7) return 150;
+			    if (user_age.value <= 9) return 200;
+			    if (user_age.value <= 11) return 250;
+			    if (user_age.value <= 14) return 350;
+			    if (user_age.value <= 17) return 400;
+			    if (user_age.value <= 29) return 400;
+			    if (user_age.value <= 49) return 450;
+			    if (user_age.value <= 64) return 450;
+			    if (user_age.value <= 74) return 450;
+			    return 400;
+			  } else {
+				if (user_age.value <= 2) return 100;
+			    if (user_age.value <= 5) return 100;
+			    if (user_age.value <= 7) return 150;
+			    if (user_age.value <= 9) return 200;
+			    if (user_age.value <= 11) return 250;
+			    if (user_age.value <= 14) return 300;
+			    return 350;
+			  }
+			});
+		//クロム、17歳以下は目安量も許容上限もないので表示するとき分岐する
+		const chrome_standard = computed(() => {
+		    return 10;
+		});
+		const chrome_upper_limit = computed(() => {
+			    return 500;
+			});
+		//モリブデン、17歳以下は耐容上限がないため表示するとき分岐
+		const molybdenum_standard = computed(() => {
+		  if (user_gender.value === '男性') {
+		    if (user_age.value <= 2) return 10;
+		    if (user_age.value <= 5) return 10;
+		    if (user_age.value <= 7) return 15;
+		    if (user_age.value <= 9) return 20;
+		    if (user_age.value <= 11) return 20;
+		    if (user_age.value <= 14) return 25;
+		    if (user_age.value <= 17) return 30;
+		    if (user_age.value <= 29) return 30;
+		    if (user_age.value <= 49) return 30;
+		    if (user_age.value <= 64) return 30;
+		    if (user_age.value <= 74) return 30;
+		    return 25;
+		  } else {
+			    if (user_age.value <= 2) return 10;
+			    if (user_age.value <= 5) return 10;
+			    if (user_age.value <= 7) return 15;
+			    if (user_age.value <= 9) return 15;
+		    return 25;
+		  }
+		});
+		const molybdenum_upper_limit = computed(() => {
+			if (user_gender.value === '男性') {
+			    return 600;
+			  } else {
+			    return 500;
+			  }
+			});
+
+
+
+		//食品グループ別名称
+		const foodGroupNames = {
+		  1: '穀類',
+		  2: 'いも及びでん粉類',
+		  3: '砂糖及び甘味類',
+		  4: '豆類',
+		  5: '種実類',
+		  6: '野菜類',
+		  7: '果実類',
+		  8: 'きのこ類',
+		  9: '藻類',
+		  10: '魚介類',
+		  11: '肉類',
+		  12: '卵類',
+		  13: '乳類',
+		  14: '油脂類',
+		  15: '菓子類',
+		  16: 'し好飲料類',
+		  17: '調味料及び香辛料類',
+		  18: '調理済み流通食品類'
+		};
+
+		//栄養素別検索結果を食品グループ分け
+		const groupedFoods = computed(() => {
+			  const grouped = {};
+			  for (const food of paginatedNutrientFoods.value) {
+			    const groupId = food.food_group;
+			    if (!grouped[groupId]) {
+			      grouped[groupId] = [];
+			    }
+			    grouped[groupId].push(food);
+			  }
+			  return grouped;
+			});
+					
+		
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+		
         const onInput = () => {
           if (searchQuery.value.trim().length === 0) {
             filteredFoods.value = [];
@@ -577,10 +1465,95 @@
           user_height,      
           user_weight,    
           user_activity_level,
-          total_energy,
+
+		  total_protein,
+		  total_energy,
+		  total_lipid,
+		  total_food_fiber,
+		  total_carbohydrate,
+		  total_natrium,
+		  total_potassium,
+		  total_calcium,
+		  total_magnesium,
+		  total_phosphorus,
+		  total_iron,
+		  total_zinc,
+		  total_copper,
+		  total_manganese,
+		  total_iodine,
+		  total_selenium,
+		  total_chrome,
+		  total_molybdenum,
+		  total_vitamin_a,
+		  total_vitamin_d,
+		  total_vitamin_e,
+		  total_vitamin_k,
+		  total_vitamin_b1,
+		  total_vitamin_b2,
+		  total_niacin,
+		  total_vitamin_b6,
+		  total_vitamin_b12,
+		  total_folic_acid,
+		  total_pantothenic_acid,
+		  total_biotin,
+		  total_vitamin_c,
+		  total_sodium_content,
+
+		  //各栄養素基準値（パーソナルデータから計算後）
           bmr,
           tdee,
-          
+		  protein_low_standard,
+		  protein_high_standard,
+		  lipid_low_standard,
+		  lipid_high_standard,
+		  carbohydrate_low_standard,
+		  carbohydrate_high_standard,
+		  fiber_standard,
+		  vitamin_a_standard,
+		  vitamin_a_upper_limit,
+		  vitamin_d_standard,
+		  vitamin_d_upper_limit,
+		  vitamin_e_standard,
+		  vitamin_e_upper_limit,
+		  vitamin_k_standard,
+		  vitamin_b1_standard,
+		  vitamin_b2_standard,
+		  niacin_standard,
+		  niacin_upper_limit,
+		  vitamin_b6_standard,
+		  vitamin_b6_upper_limit,
+		  vitamin_b12_standard,
+		  folic_acid_standard,
+		  folic_acid_upper_limit,
+		  pantothenic_acid_standard,
+		  biotin_standard,
+		  vitamin_c_standard,
+		  sodium_content_standard,
+		  natrium_standard,
+		  potassium_standard,
+		  calcium_standard,
+		  calcium_upper_limit,
+		  magnesium_standard,
+		  phosphorus_standard,
+		  phosphorus_upper_limit,
+		  iron_standard,
+		  zinc_standard,
+		  zinc_upper_limit,
+		  copper_standard,
+		  copper_upper_limit,
+		  manganese_standard,
+		  manganese_upper_limit,
+		  iodine_standard,
+		  iodine_upper_limit,
+		  selenium_standard,
+		  selenium_upper_limit,
+		  chrome_standard,
+		  chrome_upper_limit,
+		  molybdenum_standard,
+		  molybdenum_upper_limit,
+		  groupedFoods,
+		  foodGroupNames,
+		  
         };
       }
     }).use(createVuetify()).mount('#app');
