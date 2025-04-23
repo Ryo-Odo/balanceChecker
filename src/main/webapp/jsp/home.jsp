@@ -17,72 +17,876 @@
         <div id="app">
             <v-app>
                 <v-main>
-                    <v-container style="max-width: 1480px; margin: 0 auto;" class="box1">
+                    <v-container class="box1">
                         <v-row>
                             <v-col cols="12" sm="6">
-                                <v-container class="box1">
-                                    <v-container class="box1">
+                                <div class="box1">
+                                
                                     <div class="box1">
-                                        <p>tdeeの値{{tdee}}</p>
-                                        <p>たんぱく質（下限）: {{ protein_low_standard }}</p>
-										<p>たんぱく質（上限）: {{ protein_high_standard }}</p>
-										<p>脂質（下限）: {{ lipid_low_standard }}</p>
-										<p>脂質（上限）: {{ lipid_high_standard }}</p>
-										<p>炭水化物（下限）: {{ carbohydrate_low_standard }}</p>
-										<p>炭水化物（上限）: {{ carbohydrate_high_standard }}</p>
-										<p>食物繊維: {{ fiber_standard }}</p>
-										
-										<p>ビタミンA: {{ vitamin_a_standard }}</p>
-										<p>ビタミンA 上限: {{ vitamin_a_upper_limit }}</p>
-										<p>ビタミンD: {{ vitamin_d_standard }}</p>
-										<p>ビタミンD 上限: {{ vitamin_d_upper_limit }}</p>
-										<p>ビタミンE: {{ vitamin_e_standard }}</p>
-										<p>ビタミンE 上限: {{ vitamin_e_upper_limit }}</p>
-										<p>ビタミンK: {{ vitamin_k_standard }}</p>
-										<p>ビタミンB1: {{ vitamin_b1_standard }}</p>
-										<p>ビタミンB2: {{ vitamin_b2_standard }}</p>
-										<p>ナイアシン: {{ niacin_standard }}</p>
-										<p>ナイアシン 上限: {{ niacin_upper_limit }}</p>
-										<p>ビタミンB6: {{ vitamin_b6_standard }}</p>
-										<p>ビタミンB6 上限: {{ vitamin_b6_upper_limit }}</p>
-										<p>ビタミンB12: {{ vitamin_b12_standard }}</p>
-										<p>葉酸: {{ folic_acid_standard }}</p>
-										<p>葉酸 上限: {{ folic_acid_upper_limit }}</p>
-										<p>パントテン酸: {{ pantothenic_acid_standard }}</p>
-										<p>ビオチン: {{ biotin_standard }}</p>
-										<p>ビタミンC: {{ vitamin_c_standard }}</p>
-										
-										<p>食塩相当量（基準）: {{ sodium_content_standard }}</p>
-										<p>ナトリウム（換算値）: {{ natrium_standard }}</p>
-										<p>カリウム: {{ potassium_standard }}</p>
-										<p>カルシウム: {{ calcium_standard }}</p>
-										<p>カルシウム 上限: {{ calcium_upper_limit }}</p>
-										<p>マグネシウム: {{ magnesium_standard }}</p>
-										<p>リン: {{ phosphorus_standard }}</p>
-										<p>リン 上限: {{ phosphorus_upper_limit }}</p>
-										<p>鉄: {{ iron_standard }}</p>
-										<p>亜鉛: {{ zinc_standard }}</p>
-										<p>亜鉛 上限: {{ zinc_upper_limit }}</p>
-										<p>銅: {{ copper_standard }}</p>
-										<p>銅 上限: {{ copper_upper_limit }}</p>
-										<p>マンガン: {{ manganese_standard }}</p>
-										<p>マンガン 上限: {{ manganese_upper_limit }}</p>
-										<p>ヨウ素: {{ iodine_standard }}</p>
-										<p>ヨウ素 上限: {{ iodine_upper_limit }}</p>
-										<p>セレン: {{ selenium_standard }}</p>
-										<p>セレン 上限: {{ selenium_upper_limit }}</p>
-										<p>クロム: {{ chrome_standard }}</p>
-										<p>クロム 上限: {{ chrome_upper_limit }}</p>
-										<p>モリブデン: {{ molybdenum_standard }}</p>
-										<p>モリブデン 上限: {{ molybdenum_upper_limit }}</p>
-										                                        
-                                    </div>
                                         <!----------------------------------------------------------------------------------------------------------------->
                                         <!-- 検索ボタン -->
                                         <v-btn color="primary" @click="dialog = true">検索</v-btn>
                                         <v-btn color="secondary" @click="dialogNutrition = true">栄養素別検索</v-btn>
                                         <!----------------------------------------------------------------------------------------------------------------->
-                                    </v-container>
+                                    </div>
+                                <div class="scroll-area">
+                                <div class="box1" >
+                                
+                                    <p>総エネルギー及び三大栄養素</p>
+                                    <!-- エネルギー -->
+                                    <div>
+										  <v-row>
+										    <v-col cols="3">エネルギー</v-col>
+										    <v-col cols="3">{{ total_energy.toFixed(1)}} kcal</v-col>
+										    <v-col cols="2">{{ getFillRate(total_energy, tdee).toFixed(1) }}%</v-col>
+										    <v-col class="text-right" cols="4">{{ tdee.toFixed(1)}} kcal</v-col>
+										  </v-row>
+								        <v-progress-linear
+								          :model-value="getFillRate(total_energy, tdee)"
+								          :color="total_energy < tdee ? 'blue'
+								                    : total_energy < tdee_high_standard  ? 'green' 
+													    : 'yellow'"
+								          height="10"
+								          :striped="getFillRate(total_energy, tdee) < 100"
+								        ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>推奨上限（想定総消費エネルギーの120％）： {{ tdee_high_standard.toFixed(1) }} kcal</p>
+										    </v-col>
+										  </v-row>
+                                    </div>
+                                    
+                                     <!-- たんぱく質 -->
+                                    <div>
+										  <v-row>
+										    <v-col cols="3">たんぱく質</v-col>
+										    <v-col cols="3">{{ total_protein.toFixed(1)}} g</v-col>
+										    <v-col cols="2">{{ getFillRate(total_protein, protein_low_standard).toFixed(1) }}%</v-col>
+										    <v-col class="text-right" cols="4">{{ protein_low_standard.toFixed(1)}} g</v-col>
+										  </v-row>
+								        <v-progress-linear
+								          :model-value="getFillRate(total_protein, protein_low_standard)"
+								          :color="total_protein < protein_low_standard ? 'blue'
+								                    : total_protein < protein_high_standard  ? 'green' 
+													    : 'yellow'"
+								          height="10"
+								          :striped="getFillRate(total_protein, protein_low_standard) < 100"
+								        ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>推奨上限（総エネルギーの20％）： {{ protein_high_standard.toFixed(1) }} g</p>
+										    </v-col>
+										  </v-row>
+                                    </div>
+                                    
+                                    <!-- 脂質 -->
+                                    <div>
+										  <v-row>
+										    <v-col cols="3">脂質</v-col>
+										    <v-col cols="3">{{ total_lipid.toFixed(1)}} g</v-col>
+										    <v-col cols="2">{{ getFillRate(total_lipid, lipid_low_standard).toFixed(1) }}%</v-col>
+										    <v-col class="text-right" cols="4">{{ lipid_low_standard.toFixed(1)}} g</v-col>
+										  </v-row>
+								        <v-progress-linear
+								          :model-value="getFillRate(total_lipid, lipid_low_standard)"
+								          :color="total_lipid < lipid_low_standard ? 'blue'
+								                    : total_lipid < lipid_high_standard  ? 'green' 
+													    : 'yellow'"
+								          height="10"
+								          :striped="getFillRate(total_lipid, lipid_low_standard) < 100"
+								        ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>推奨上限（総エネルギーの30％）： {{ lipid_high_standard.toFixed(1) }} g</p>
+										    </v-col>
+										  </v-row>
+                                    </div> 
+                                    
+                                    <!-- 炭水化物 -->
+                                    <div>
+										  <v-row>
+										    <v-col cols="3">炭水化物</v-col>
+										    <v-col cols="3">{{ total_carbohydrate.toFixed(1)}} g</v-col>
+										    <v-col cols="2">{{ getFillRate(total_carbohydrate, carbohydrate_low_standard).toFixed(1) }}%</v-col>
+										    <v-col class="text-right" cols="4">{{ carbohydrate_low_standard.toFixed(1)}} g</v-col>
+										  </v-row>
+								        <v-progress-linear
+								          :model-value="getFillRate(total_carbohydrate, carbohydrate_low_standard)"
+								          :color="total_carbohydrate < carbohydrate_low_standard ? 'blue'
+								                    : total_carbohydrate < carbohydrate_high_standard  ? 'green' 
+													    : 'yellow'"
+								          height="10"
+								          :striped="getFillRate(total_carbohydrate, carbohydrate_low_standard) < 100"
+								        ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>推奨上限（総エネルギーの65％）： {{ carbohydrate_high_standard.toFixed(1) }} g</p>
+										    </v-col>
+										  </v-row>
+                                    </div> 
+                                </div>
+                                <div class="box1">
+                                    <p>ビタミン</p>
+                                    <!-- ビタミンA -->
+                                    <div>
+										  <v-row>
+										    <v-col cols="3">ビタミンA</v-col>
+										    <v-col cols="3">{{ total_vitamin_a.toFixed(1)}} μg</v-col>
+										    <v-col cols="2">{{ getFillRate(total_vitamin_a, vitamin_a_standard).toFixed(1) }}%</v-col>
+										    <v-col cols="4">{{ vitamin_a_standard.toFixed(1)}} μg</v-col>
+										  </v-row>
+								        <v-progress-linear
+								          :model-value="getFillRate(total_vitamin_a, vitamin_a_standard)"
+								          :color="total_vitamin_a < vitamin_a_standard ? 'blue'
+								                    : total_vitamin_a < vitamin_a_upper_limit  ? 'green' 
+													    : 'red'"
+								          height="10"
+								          :striped="getFillRate(total_vitamin_a, vitamin_a_standard) < 100"
+								        ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限： {{ vitamin_a_upper_limit.toFixed(1) }} μg</p>
+										    </v-col>
+										  </v-row>
+                                    </div> 
+                                    
+                                    <!-- ビタミンD -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">ビタミンD</v-col>
+									    <v-col cols="3">{{ total_vitamin_d.toFixed(1)}} μg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_vitamin_d, vitamin_d_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ vitamin_d_standard.toFixed(1)}} μg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_vitamin_d, vitamin_d_standard)"
+									    :color="total_vitamin_d < vitamin_d_standard ? 'blue'
+								                    : total_vitamin_d < vitamin_d_upper_limit  ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_vitamin_d, vitamin_d_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限： {{ vitamin_d_upper_limit.toFixed(1) }} μg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- ビタミンE -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">ビタミンE</v-col>
+									    <v-col cols="3">{{ total_vitamin_e.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_vitamin_e, vitamin_e_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ vitamin_e_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_vitamin_e, vitamin_e_standard)"
+									    :color="total_vitamin_e < vitamin_e_standard ? 'blue'
+								                    : total_vitamin_e < vitamin_e_upper_limit  ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_vitamin_e, vitamin_e_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限： {{ vitamin_e_upper_limit.toFixed(1) }} mg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- ビタミンK -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">ビタミンK</v-col>
+									    <v-col cols="3">{{ total_vitamin_k.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_vitamin_k, vitamin_k_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ vitamin_k_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_vitamin_k, vitamin_k_standard)"
+									    :color="total_vitamin_k < vitamin_k_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_vitamin_k, vitamin_k_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限なし</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- ビタミンB1 -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">ビタミンB1</v-col>
+									    <v-col cols="3">{{ total_vitamin_b1.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_vitamin_b1, vitamin_b1_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ vitamin_b1_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_vitamin_b1, vitamin_b1_standard)"
+									    :color="total_vitamin_b1 < vitamin_b1_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_vitamin_b1, vitamin_b1_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限なし</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- ビタミンB2 -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">ビタミンB2</v-col>
+									    <v-col cols="3">{{ total_vitamin_b2.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_vitamin_b2, vitamin_b2_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ vitamin_b2_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_vitamin_b2, vitamin_b2_standard)"
+									    :color="total_vitamin_b2 < vitamin_b2_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_vitamin_b2, vitamin_b2_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限なし</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- ナイアシン -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">ナイアシン</v-col>
+									    <v-col cols="3">{{ total_niacin.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_niacin, niacin_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ niacin_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_niacin, niacin_standard)"
+									    :color="total_niacin < niacin_standard ? 'blue'
+								                    : total_niacin < niacin_upper_limit  ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_niacin, niacin_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限： {{ niacin_upper_limit.toFixed(1) }} mg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- ビタミンB6 -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">ビタミンB6</v-col>
+									    <v-col cols="3">{{ total_vitamin_b6.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_vitamin_b6, vitamin_b6_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ vitamin_b6_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_vitamin_b6, vitamin_b6_standard)"
+									    :color="total_vitamin_b6 < vitamin_b6_standard ? 'blue'
+								                    : total_vitamin_b6 < vitamin_b6_upper_limit  ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_vitamin_b6, vitamin_b6_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限： {{ vitamin_b6_upper_limit.toFixed(1) }} mg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- ビタミンB12 -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">ビタミンB12</v-col>
+									    <v-col cols="3">{{ total_vitamin_b12.toFixed(1)}} μg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_vitamin_b12, vitamin_b12_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ vitamin_b12_standard.toFixed(1)}} μg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_vitamin_b12, vitamin_b12_standard)"
+									    :color="total_vitamin_b12 < vitamin_b12_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_vitamin_b12, vitamin_b12_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限なし</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- 葉酸 (Folic Acid) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">葉酸</v-col>
+									    <v-col cols="3">{{ total_folic_acid.toFixed(1)}} μg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_folic_acid, folic_acid_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ folic_acid_standard.toFixed(1)}} μg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_folic_acid, folic_acid_standard)"
+									    :color="total_folic_acid < folic_acid_standard ? 'blue'
+								                    : total_folic_acid < folic_acid_upper_limit  ? 'green' 
+													    : 'red'"
+									    :color="total_folic_acid > folic_acid_upper_limit ? 'red' : 'green'" 
+									    height="10"
+									    :striped="getFillRate(total_folic_acid, folic_acid_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限： {{ folic_acid_upper_limit.toFixed(1) }} μg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- パントテン酸 (Pantothenic Acid) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">パントテン酸</v-col>
+									    <v-col cols="3">{{ total_pantothenic_acid.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_pantothenic_acid, pantothenic_acid_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ pantothenic_acid_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_pantothenic_acid, pantothenic_acid_standard)"
+									    :color="total_pantothenic_acid < pantothenic_acid_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_pantothenic_acid, pantothenic_acid_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限なし</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- ビオチン (Biotin) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">ビオチン</v-col>
+									    <v-col cols="3">{{ total_biotin.toFixed(1)}} μg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_biotin, biotin_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ biotin_standard.toFixed(1)}} μg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_biotin, biotin_standard)"
+									    :color="total_biotin < biotin_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_biotin, biotin_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限なし</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- ビタミンC (Vitamin C) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">ビタミンC</v-col>
+									    <v-col cols="3">{{ total_vitamin_c.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_vitamin_c, vitamin_c_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ vitamin_c_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_vitamin_c, vitamin_c_standard)"
+									    :color="total_vitamin_c < vitamin_c_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_vitamin_c, vitamin_c_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限なし</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									</div>
+									
+									
+									<div class="box1">
+									<p>ミネラル</p>									
+									<!-- ナトリウム (Natrium) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">ナトリウム</v-col>
+									    <v-col cols="3">{{ total_natrium.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_natrium, natrium_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ natrium_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_natrium, natrium_standard)"
+									    :color="total_natrium < natrium_standard ? 'blue'
+								                    : total_natrium < natrium_standard * 2  ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_natrium, natrium_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>推奨上限（推奨量×2）： {{ (natrium_standard * 2).toFixed(1) }} mg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- カリウム (Potassium) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">カリウム</v-col>
+									    <v-col cols="3">{{ total_potassium.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_potassium, potassium_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ potassium_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_potassium, potassium_standard)"
+									    :color="total_potassium < potassium_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_potassium, potassium_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限なし</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- カルシウム (Calcium) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">カルシウム</v-col>
+									    <v-col cols="3">{{ total_calcium.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_calcium, calcium_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ calcium_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <!-- 17歳以下耐容上限なし -->
+									  <v-progress-linear
+									    v-if="user_age <= 17"
+									    :model-value="getFillRate(total_calcium, calcium_standard)"
+									    :color="total_calcium < calcium_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_calcium, calcium_standard) < 100"
+									  ></v-progress-linear>
+									  <v-progress-linear
+									    v-else
+									    :model-value="getFillRate(total_calcium, calcium_standard)"
+									    :color="total_calcium < calcium_standard ? 'blue'
+								                    : total_calcium < calcium_upper_limit ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_calcium, calcium_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p v-if="user_age <= 17">推奨上限なし</p>
+										      <p v-else>許容上限： {{ calcium_upper_limit.toFixed(1) }} mg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- マグネシウム (Magnesium) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">マグネシウム</v-col>
+									    <v-col cols="3">{{ total_magnesium.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_magnesium, magnesium_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ magnesium_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_magnesium, magnesium_standard)"
+									    :color="total_magnesium < magnesium_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_magnesium, magnesium_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限なし</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- リン (Phosphorus) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">リン</v-col>
+									    <v-col cols="3">{{ total_phosphorus.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_phosphorus, phosphorus_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ phosphorus_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  
+									  <v-progress-linear
+									    v-if="user_age <= 17"
+									    :model-value="getFillRate(total_phosphorus, phosphorus_standard)"
+									    :color="total_phosphorus < phosphorus_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_phosphorus, phosphorus_standard) < 100"
+									  ></v-progress-linear>
+									  
+									  <v-progress-linear
+									    v-else
+									    :model-value="getFillRate(total_phosphorus, phosphorus_standard)"
+									    :color="total_phosphorus < phosphorus_standard ? 'blue'
+								                    : total_phosphorus < phosphorus_upper_limit ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_phosphorus, phosphorus_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p v-if="user_age <= 17">推奨上限なし</p>
+										      <p v-else>許容上限： {{ phosphorus_upper_limit.toFixed(1) }} mg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- 鉄分 (Iron) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">鉄分</v-col>
+									    <v-col cols="3">{{ total_iron.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_iron, iron_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ iron_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_iron, iron_standard)"
+									    :color="total_iron < iron_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_iron, iron_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限なし</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- 亜鉛 (Zinc) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">亜鉛</v-col>
+									    <v-col cols="3">{{ total_zinc.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_zinc, zinc_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ zinc_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  
+									  <!-- 17歳以下の場合耐容上限なしに分岐 -->
+									  <v-progress-linear
+									    v-if="user_age <= 17"
+									    :model-value="getFillRate(total_zinc, zinc_standard)"
+									    :color="total_zinc < zinc_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_zinc, zinc_standard) < 100"
+									  ></v-progress-linear>
+									  
+									  <v-progress-linear
+									    v-else
+									    :model-value="getFillRate(total_zinc, zinc_standard)"
+									    :color="total_zinc < zinc_standard ? 'blue'
+								                    : total_zinc < zinc_upper_limit ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_zinc, zinc_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p v-if="user_age <= 17">推奨上限なし</p>
+										      <p v-else>許容上限： {{ zinc_upper_limit.toFixed(1) }} mg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- 銅 (Copper) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">銅</v-col>
+									    <v-col cols="3">{{ total_copper.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_copper, copper_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ copper_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  
+									  <v-progress-linear
+									    v-if="user_age <= 17"
+									    :model-value="getFillRate(total_copper, copper_standard)"
+									    :color="total_copper < copper_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_copper, copper_standard) < 100"
+									  ></v-progress-linear>
+									  <v-progress-linear
+									    v-else
+									    :model-value="getFillRate(total_copper, copper_standard)"
+									    :color="total_copper < copper_standard ? 'blue'
+								                    : total_copper < copper_upper_limit ? 'green' 
+													    : 'red'"
+									    :color="total_copper > copper_upper_limit ? 'red' : 'green'" 
+									    height="10"
+									    :striped="getFillRate(total_copper, copper_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p v-if="user_age <= 17">推奨上限なし</p>
+										      <p v-else>許容上限： {{ copper_upper_limit.toFixed(1) }} mg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- マンガン (Manganese) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">マンガン</v-col>
+									    <v-col cols="3">{{ total_manganese.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_manganese, manganese_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ manganese_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  
+									  <v-progress-linear
+									    v-if="user_age <= 17"
+									    :model-value="getFillRate(total_manganese, manganese_standard)"
+									    :color="total_manganese < manganese_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_manganese, manganese_standard) < 100"
+									  ></v-progress-linear>
+									  <v-progress-linear
+									    v-else
+									    :model-value="getFillRate(total_manganese, manganese_standard)"
+									    :color="total_manganese < manganese_standard ? 'blue'
+								                    : total_manganese < manganese_upper_limit ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_manganese, manganese_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p v-if="user_age <= 17">推奨上限なし</p>
+										      <p v-else>許容上限： {{ manganese_upper_limit.toFixed(1) }} mg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- ヨウ素 (Iodine) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">ヨウ素</v-col>
+									    <v-col cols="3">{{ total_iodine.toFixed(1)}} μg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_iodine, iodine_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ iodine_standard.toFixed(1)}} μg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_iodine, iodine_standard)"
+									    :color="total_iodine < iodine_standard ? 'blue'
+								                    : total_iodine < iodine_upper_limit ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_iodine, iodine_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限： {{ iodine_upper_limit.toFixed(1) }} μg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- セレン (Selenium) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">セレン</v-col>
+									    <v-col cols="3">{{ total_selenium.toFixed(1)}} μg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_selenium, selenium_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ selenium_standard.toFixed(1)}} μg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_selenium, selenium_standard)"
+									    :color="total_selenium < selenium_standard ? 'blue'
+								                    : total_selenium < selenium_upper_limit ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_selenium, selenium_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限： {{ selenium_upper_limit.toFixed(1) }} μg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- クロム (Chrome) -->
+									<!-- 17歳以下で分岐 -->
+									<div v-if="user_age <= 17">
+									  <v-row>
+									    <v-col cols="3">クロム</v-col>
+									    <v-col cols="3">{{ total_chrome.toFixed(1)}} μg</v-col>
+									    <v-col cols="2">N/A</v-col>
+									    <v-col cols="4">17歳以下は推奨量なし</v-col>
+									  </v-row>									  
+									  <v-progress-linear
+									    :model-value="100"
+									    color="green" 
+									    height="10"
+									    :striped="false"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限なし</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									  
+									<div v-if="user_age >= 18">
+									  <v-row>
+									    <v-col cols="3">クロム</v-col>
+									    <v-col cols="3">{{ total_chrome.toFixed(1)}} μg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_chrome, chrome_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ chrome_standard.toFixed(1)}} μg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_chrome, chrome_standard)"
+									    :color="total_chrome < chrome_standard ? 'blue'
+								                    : total_chrome < chrome_upper_limit ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_chrome, chrome_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限： {{ selenium_upper_limit.toFixed(1) }} μg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- モリブデン (Molybdenum) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">モリブデン</v-col>
+									    <v-col cols="3">{{ total_molybdenum.toFixed(1)}} μg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_molybdenum, molybdenum_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ molybdenum_standard.toFixed(1)}} μg</v-col>
+									  </v-row>
+									  
+									  <v-progress-linear
+									    v-if="user_age <= 17"
+									    :model-value="getFillRate(total_molybdenum, molybdenum_standard)"
+									    :color="total_molybdenum < molybdenum_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_molybdenum, molybdenum_standard) < 100"
+									  ></v-progress-linear>
+									  <v-progress-linear
+									    v-else
+									    :model-value="getFillRate(total_molybdenum, molybdenum_standard)"
+									    :color="total_molybdenum < molybdenum_standard ? 'blue'
+								                    : total_molybdenum < molybdenum_upper_limit ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_molybdenum, molybdenum_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p v-if="user_age <= 17">推奨上限なし</p>
+										      <p v-else>許容上限： {{ molybdenum_upper_limit.toFixed(1) }} μg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									</div>
+									
+									<div class="box1">
+									<p>その他</p>
+									<!-- 食塩相当量 (Sodium Content) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">食塩相当量</v-col>
+									    <v-col cols="3">{{ total_sodium_content.toFixed(1)}} mg</v-col>
+									    <v-col cols="2">{{ getFillRate(total_sodium_content, sodium_content_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ sodium_content_standard.toFixed(1)}} mg</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_sodium_content, sodium_content_standard)"
+									    :color="total_sodium_content < sodium_content_standard ? 'blue'
+								                    : total_sodium_content < sodium_content_standard * 2 ? 'green' 
+													    : 'red'"
+									    height="10"
+									    :striped="getFillRate(total_sodium_content, sodium_content_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>推奨上限（推奨量×2）： {{ (sodium_content_standard * 2).toFixed(1) }} mg</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									
+									<!-- 食物繊維 (Fiber) -->
+									<div>
+									  <v-row>
+									    <v-col cols="3">食物繊維</v-col>
+									    <v-col cols="3">{{ total_food_fiber.toFixed(1)}} g</v-col>
+									    <v-col cols="2">{{ getFillRate(total_food_fiber, fiber_standard).toFixed(1) }}%</v-col>
+									    <v-col cols="4">{{ fiber_standard.toFixed(1)}} g</v-col>
+									  </v-row>
+									  <v-progress-linear
+									    :model-value="getFillRate(total_food_fiber, fiber_standard)"
+									    :color="total_food_fiber < fiber_standard ? 'blue' :'green'"
+									    height="10"
+									    :striped="getFillRate(total_food_fiber, fiber_standard) < 100"
+									  ></v-progress-linear>
+										  <v-row class="mt-0">
+										    <v-col class="text-right text-caption ma-0 pa-0" cols="12">
+										      <p>許容上限なし</p>
+										    </v-col>
+										  </v-row>
+									</div>
+									</div>
+								</div>
+
+									
+                                   
+                                    
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    
                                     <!-- 食品名検索モーダル -->
                                     <v-dialog v-model="dialog" max-width="800" hide-overlay>
                                         <v-card>
@@ -119,7 +923,7 @@
                                     </v-dialog>
                                     <!----------------------------------------------------------------------------------------------------------------->
                                     <!-- 栄養素別検索モーダル -->
-                                    <v-dialog v-model="dialogNutrition" max-width="800" hide-overlay>
+                                    <v-dialog v-model="dialogNutrition" max-width="740" hide-overlay>
                                         <v-card>
                                             <v-card-title class="text-h6">栄養素別検索</v-card-title>          
                                             <v-card-text>
@@ -131,28 +935,40 @@
                                                     @update:model-value="submitForm"
                                                 ></v-select>
                                                 
+                                                        <v-list v-if="paginatedNutrientFoods.length">
+                                                            <v-list-item v-for="food in paginatedNutrientFoods" :key="food.id">
+                                                                <v-list-item-title>{{ food.id }} - {{ food.foodName }}</v-list-item-title>                                       
+                                                                <v-list-item-subtitle>{{ food[selectedNutrient] }}（{{ getNutrientTitle(selectedNutrient) }}</v-list-item-subtitle>
+                                                                <v-btn color="success" @click="addFoodToSelection(food.id)">追加</v-btn>
+                                                            </v-list-item>
+                                                        </v-list>
                                                 
-													<v-list v-if="paginatedNutrientFoods.length">
-													  <div v-for="(foods, groupId) in groupedFoods" :key="groupId">
-													    <v-list-subheader>{{ foodGroupNames[groupId] || '未分類' }}</v-list-subheader>
-													    <v-list-item v-for="food in foods" :key="food.id">
-													      <v-list-item-title>{{ food.id }} - {{ food.foodName }}</v-list-item-title>
-													      <v-list-item-subtitle>
-													        {{ food[selectedNutrient] }}（{{ getNutrientTitle(selectedNutrient) }}）
-													      </v-list-item-subtitle>
-													      <v-btn color="success" @click="addFoodToSelection(food.id)">追加</v-btn>
-													    </v-list-item>
-													  </div>
-													</v-list>
                                                 
-                                                                                              
-<!--                                            <v-list v-if="paginatedNutrientFoods.length">
-                                                    <v-list-item v-for="food in paginatedNutrientFoods" :key="food.id">
-                                                        <v-list-item-title>{{ food.id }} - {{ food.foodName }}</v-list-item-title>
-                                                        <v-list-item-subtitle>{{ food[selectedNutrient] }}（{{ getNutrientTitle(selectedNutrient) }}</v-list-item-subtitle>
-                                                        <v-btn color="success" @click="addFoodToSelection(food.id)">追加</v-btn>
-                                                    </v-list-item>
-                                                </v-list> -->
+<!--                                                 <div class="box1" v-if="paginatedNutrientFoods.length">
+                                                    <v-row>
+                                                    
+                                                        <v-col cols="12" sm="6">
+                                                        <v-list v-if="paginatedNutrientFoods.length">
+                                                            <v-list-item v-for="food in paginatedNutrientFoods" :key="food.id">
+                                                                <v-list-item-title v-if="food.food_group == 1">{{ food.id }} - {{ food.foodName }}</v-list-item-title>                                       
+                                                                <v-list-item-subtitle>{{ food[selectedNutrient] }}（{{ getNutrientTitle(selectedNutrient) }}</v-list-item-subtitle>
+                                                                <v-btn color="success" @click="addFoodToSelection(food.id)">追加</v-btn>
+                                                            </v-list-item>
+                                                        </v-list>
+                                                        </v-col>
+                                                        
+                                                        <v-col cols="12" sm="6">
+                                                        <v-list v-if="paginatedNutrientFoods.length">
+                                                            <v-list-item v-for="food in paginatedNutrientFoods" :key="food.id">
+                                                                <v-list-item-title v-if="food.food_group == 2">{{ food.id }} - {{ food.foodName }}</v-list-item-title>                                       
+                                                                <v-list-item-subtitle>{{ food[selectedNutrient] }}（{{ getNutrientTitle(selectedNutrient) }}</v-list-item-subtitle>
+                                                                <v-btn color="success" @click="addFoodToSelection(food.id)">追加</v-btn>
+                                                            </v-list-item>
+                                                        </v-list>
+                                                        </v-col>
+                                                        
+                                                    </v-row>                                                
+                                                </div>      -->                            
                                                 
                                                 <div v-else>
                                                     <p v-if="errorMessage">{{ errorMessage }}</p>
@@ -173,10 +989,10 @@
                                         </v-card>
                                     </v-dialog>
                                     <!----------------------------------------------------------------------------------------------------------------->
-                                </v-container>
+                                </div>
                             </v-col>
                             <v-col cols="12" sm="6">
-                                <v-container class="box1">
+                                <div class="box1">
                                     <!----------------------------------------------------------------------------------------------------------------->
                                     <div class="box1">
                                         <v-row>
@@ -253,6 +1069,7 @@
                                         </div>
                                         <h3 class="text-h6">選択中の食品</h3>
                                         <p>食品数: {{selectedFoods.length}}</p>
+                                        <div class="scroll-area">
                                         <v-list>
                                             <v-list-item v-for="food in selectedFoods" :key="food.id">
                                                 <v-list-item-title>{{ food.foodName }}</v-list-item-title>
@@ -265,11 +1082,13 @@
                                                     step="1"
                                                     @input="onInputWeight(food)"
                                                 ></v-text-field>
+                                                <v-btn @click="selectedFoods.splice(index, 1)" color="red" small>削除</v-btn>
                                             </v-list-item>
                                         </v-list>
+                                        </div>
                                     </div>
                                     <!----------------------------------------------------------------------------------------------------------------->  
-                                </v-container>
+                                </div>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -359,7 +1178,14 @@
         const tdee = computed(() => {
           return bmr.value * user_activity_level.value;
         });
-                
+        	        
+         const tdee_high_standard = computed(() => {
+            return tdee.value * 1.2;
+            });
+
+
+    	
+
         
 
 
@@ -914,7 +1740,8 @@
 		  }
 		});
 		const calcium_upper_limit = computed(() => {
-			    return 2500;
+			if (user_age.value <= 17) return Infinity;
+			  return 2500;
 			});
 		//マグネシウム
 		const magnesium_standard = computed(() => {
@@ -969,6 +1796,7 @@
 		  }
 		});
 		const phosphorus_upper_limit = computed(() => {
+			if (user_age.value <= 17) return Infinity;
 			    return 3000;
 			});
 		//鉄
@@ -1033,12 +1861,14 @@
 		});
 		const zinc_upper_limit = computed(() => {
 			if (user_gender.value === '男性') {
+				if (user_age.value <= 17) return Infinity;
 			    if (user_age.value <= 29) return 40;
 			    if (user_age.value <= 49) return 45;
 			    if (user_age.value <= 64) return 45;
 			    if (user_age.value <= 74) return 45;
 			    return 40;
 			  } else {
+				if (user_age.value <= 17) return Infinity;
 				return 35;
 			  }
 			});
@@ -1068,6 +1898,7 @@
 		  }
 		});
 		const copper_upper_limit = computed(() => {
+			if (user_age.value <= 17) return Infinity;
 			    return 7;
 			});
 		//マンガン、17歳以下は耐容上限がないため表示するとき分岐
@@ -1088,6 +1919,7 @@
 		  }
 		});
 		const manganese_upper_limit = computed(() => {
+			if (user_age.value <= 17) return Infinity;
 			    return 11;
 			});
 		//ヨウ素
@@ -1157,9 +1989,11 @@
 			});
 		//クロム、17歳以下は目安量も許容上限もないので表示するとき分岐する
 		const chrome_standard = computed(() => {
+			if (user_age.value <= 17) return Infinity;
 		    return 10;
 		});
 		const chrome_upper_limit = computed(() => {
+			if (user_age.value <= 17) return Infinity;
 			    return 500;
 			});
 		//モリブデン、17歳以下は耐容上限がないため表示するとき分岐
@@ -1187,14 +2021,78 @@
 		});
 		const molybdenum_upper_limit = computed(() => {
 			if (user_gender.value === '男性') {
+				if (user_age.value <= 17) return Infinity;
 			    return 600;
 			  } else {
+				if (user_age.value <= 17) return Infinity;
 			    return 500;
 			  }
 			});
 
 
+	    const getFillRate = (currentValue, standardValue) => {
+	        return (currentValue / standardValue) * 100;
+	      };
+	      
+		//エネルギー充足率
+ 		const energy_fill_rate = computed(() => {
+			if (total_energy.value == 0 || tdee.value == 0) {
+				return 0;
+		    } else {
+		    	return (total_energy.value / tdee.value) * 100
+			    }
+			}); 
+ 		//たんぱく質充足率
+ 		const protein_fill_rate = computed(() => {
+			if (total_protein.value == 0 || protein_low_standard.value == 0) {
+				return 0;
+		    } else {
+		    	return (total_protein.value / protein_low_standard.value) * 100
+			    }
+			}); 
 
+
+
+ 		
+					
+
+/*         const base_value_list = ref({
+            energy: tdee,
+            protein: protein_low_standard
+            });
+
+
+		//栄養素充足率バー生成
+		  computed: {
+		    rateMap() {
+		      const rates = {};
+		      for (const nutrient of this.nutrients) {
+		        const required = this.requiredNutrients[nutrient] || 1;
+		        const total = this.totalNutrients[nutrient] || 0;
+		        rates[nutrient] = Math.min((total / required) * 100, 200);
+		      }
+		      return rates;
+		    }
+		  } */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
 		//食品グループ別名称
 		const foodGroupNames = {
 		  1: '穀類',
@@ -1217,19 +2115,6 @@
 		  18: '調理済み流通食品類'
 		};
 
-		//栄養素別検索結果を食品グループ分け
-		const groupedFoods = computed(() => {
-			  const grouped = {};
-			  for (const food of paginatedNutrientFoods.value) {
-			    const groupId = food.food_group;
-			    if (!grouped[groupId]) {
-			      grouped[groupId] = [];
-			    }
-			    grouped[groupId].push(food);
-			  }
-			  return grouped;
-			});
-					
 		
 
 
@@ -1426,6 +2311,9 @@
           return nutrient ? nutrient.title : value;
         };
 
+
+	        
+
         watch(currentPage, paginateFoods);
         watch(currentNutrientPage, paginateNutrientFoods);
         watch(selectedNutrient, () => {
@@ -1502,6 +2390,7 @@
 		  //各栄養素基準値（パーソナルデータから計算後）
           bmr,
           tdee,
+          tdee_high_standard,
 		  protein_low_standard,
 		  protein_high_standard,
 		  lipid_low_standard,
@@ -1551,9 +2440,11 @@
 		  chrome_upper_limit,
 		  molybdenum_standard,
 		  molybdenum_upper_limit,
-		  groupedFoods,
+
+		  //栄養素割合産出関数
+		  getFillRate,
+
 		  foodGroupNames,
-		  
         };
       }
     }).use(createVuetify()).mount('#app');

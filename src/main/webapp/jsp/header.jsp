@@ -1,15 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<div>
-	<p>balanceChecker</p>
-	<p style="text-align: right">${user.name }様ログイン中</p>
-	<p style="text-align: right">
-		<a href="/balanceChecker/logout">ログアウト</a>
-	</p>
-	<p>
-		<a href="/balanceChecker/edit">メンバー情報編集</a>
-	</p>
-	<p>
-		<a href="/balanceChecker/delete">退会</a>
-	</p>
-</div>
+<header>
+<v-container>
+    <v-row>
+        <v-col cols="8">balanceChecker</v-col>
+        <v-col class="text-right" cols="1">${user.name }様ログイン中</v-col>
+        <v-col class="text-right" cols="1">ログアウト</v-col>
+        <v-col class="text-right" cols="1"><a href="/balanceChecker/edit">メンバー情報編集</a></v-col>
+        <v-col class="text-right" cols="1"><a href="/balanceChecker/delete">退会</a></v-col>
+    </v-row>
+</v-container>
+</header>
