@@ -1,7 +1,5 @@
 package service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +10,7 @@ import domain.FoodName;
 import domain.FoodNutrien;
 import dto.FoodDTO;
 import dto.FoodNameDTO;
+import dto.FoodNutrienDTO;
 
 public class FoodGetService {
 	
@@ -20,23 +19,15 @@ public class FoodGetService {
 		
 		FoodDAO foodDAO = new FoodDAO();
 		//DAOインスタンス作成
-		List<FoodDTO> foodDTOList = foodDAO.searchNutrien(nutrient);
+		List<FoodNutrienDTO> foodNutrienDTOList = foodDAO.searchNutrien(nutrient);
 		//List<FoodDTO>型のデータを返すFoodDAOのsearchNutrienメソッド
 		
 		List<FoodNutrien> foodNutrienList = new ArrayList<>();
 		//最終的に返すFoodNutrien型のリストを初期化
 		
-		for (FoodDTO dto : foodDTOList ) {
+		for (FoodNutrienDTO dto : foodNutrienDTOList ) {
 			FoodNutrien food = new FoodNutrien();
-			try {
-				food = convertToFoodNutrienDomain(dto, nutrient);
-			} catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
-			//List<FoodDTO>を順次取り出し、convertToDomaiメソッドでFood型に変換
-			
+			food = convertToFoodNutrienDomain(dto, nutrient);
 			foodNutrienList.add(food);
 			//作成したLISTに追加
 		}		
@@ -99,24 +90,21 @@ public class FoodGetService {
 		return food;		
 	}
 	
-	public FoodNutrien convertToFoodNutrienDomain(FoodDTO dto, String nutrien) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public FoodNutrien convertToFoodNutrienDomain(FoodNutrienDTO dto, String nutrient) {
 	    FoodNutrien food = new FoodNutrien();
-	    try {
-	        String methodName = "get" + nutrien.substring(0, 1).toUpperCase() + nutrien.substring(1);
-	        Method method = FoodDTO.class.getMethod(methodName);
-	        Double setValue = (Double) method.invoke(dto);
 
-	        food.setId(dto.getId());
-	        food.setFood_group(dto.getFood_group());
-	        food.setFoodName(dto.getFoodName());
-	        food.setMoisture(dto.getMoisture());
-	        food.setOther(dto.getOther());
-	        food.setNutrien(setValue);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+	    food.setId(dto.getId());
+	    food.setFood_group(dto.getFood_group());
+	    food.setFoodName(dto.getFoodName());
+	    food.setMoisture(dto.getMoisture());
+	    food.setOther(dto.getOther());
+	    
+	    // ここが重要！nutrien フィールドに nutrient 値をセット
+	    food.setNutrien(dto.getNutrien());
+
 	    return food;
 	}
+
 
 	
 	public FoodName convertToFoodNameDomain(FoodNameDTO dto) {
