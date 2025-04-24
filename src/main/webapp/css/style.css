@@ -1,55 +1,33 @@
 @charset "UTF-8";
-html, body {
+/* すべてのマージン・パディングを0に */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: solid 1px #6091d3;
+}
+
+body, #app, v-app, .v-container{
     height: 100%;
-    margin: 0;
-    overflow: hidden; /* スクロールを無効にする */
+    
 }
-
-/* ヘッダー部分の高さ */
-header {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    background-color: #3f51b5; /* ヘッダー背景色 */
-    z-index: 10;
-}
-/* メインコンテンツ部分の高さを調整 */
-#app {
-    height: 100%;
-    display: flex;
-    flex-direction: column;  /* コンテンツを縦に並べる */
-}
-
-v-app {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-
-/* コンテンツのスクロール部分 */
-.v-main {
-    height: 100%;
-    overflow-y: auto; /* コンテンツ部分だけスクロール可能に */
-}
-
-
 
 
 .box1 {
     padding: 0.5em 1em;
     margin: 0;
     font-weight: bold;
-    color: #6091d3;/*文字色*/
+    color: #6091d3;
     background: #FFF;
-    border: solid 3px #6091d3;/*線*/
-    border-radius: 10px;/*角の丸み*/
-    overflow: hidden; /* スクロールを無効にする */
+    border: solid 3px #6091d3;
+    border-radius: 10px;
+    overflow: hidden; 
 }
 
 
+
 .scroll-area {
-  height: 35vh; /* 画面の50%の高さに設定 */
+  height: 50vh; /* 画面の50%の高さに設定 */
   overflow-y: auto; /* 縦スクロールを表示 */
   border: 1px dashed gray;
   padding: 1em;

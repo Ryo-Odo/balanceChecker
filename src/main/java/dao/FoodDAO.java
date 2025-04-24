@@ -9,13 +9,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import dto.FoodDTO;
+import dto.FoodNutrienDTO;
 
 public class FoodDAO extends BaseDAO{
 	
-	public List<FoodDTO> searchNutrien(String nutrient) {
+	public List<FoodNutrienDTO> searchNutrien(String nutrient) {
 		//すべてのfoods_dbを取得して、選択された栄養素の降順にして、List<FoodDTO>として返すメソッド
 		
-		List<FoodDTO> list = new ArrayList<>();
+		List<FoodNutrienDTO> list = new ArrayList<>();
 	    //DTOList作成
 	    
 	    Connection conn = getonConnection();
@@ -37,58 +38,30 @@ public class FoodDAO extends BaseDAO{
 	    	}
 
 	    	// SQL文を組み立てる
-	    	String query = "SELECT * FROM foods ORDER BY " + nutrient + " DESC";
+	    	//String query = "SELECT * FROM foods ORDER BY " + nutrient + " DESC";
+	    	String query = "SELECT id, food_group, food_name, " + nutrient + " AS nutrien, moisture, other FROM foods ORDER BY " + nutrient + " DESC";
+
 
 	    	// PreparedStatementを使用してSQLを実行
 	    	PreparedStatement ps = conn.prepareStatement(query);
-	    	System.out.println(ps);
+	    	System.out.println("実行したSQL:" + ps);
 
 	    	ResultSet rs = ps.executeQuery();
 	    	// rsに実行結果を格納
+	    	System.out.println(rs);
 
 	    	
 	    	while (rs.next()) {
-	    		FoodDTO foodDTO = new FoodDTO(
+	    		FoodNutrienDTO foodNutrienDTO = new FoodNutrienDTO(
 	    		        rs.getInt("id"),
 	    		        rs.getInt("food_group"),
 	    		        rs.getString("food_name"),
-	    		        rs.getString("other"),
-	    		        rs.getDouble("energy"),
+	    		        rs.getDouble("nutrien"),
 	    		        rs.getDouble("moisture"),
-	    		        rs.getDouble("protein"),
-	    		        rs.getDouble("lipid"),
-	    		        rs.getDouble("food_fiber"),
-	    		        rs.getDouble("carbohydrate"),
-	    		        rs.getDouble("natrium"),
-	    		        rs.getDouble("potassium"),
-	    		        rs.getDouble("calcium"),
-	    		        rs.getDouble("magnesium"),
-	    		        rs.getDouble("phosphorus"),
-	    		        rs.getDouble("iron"),
-	    		        rs.getDouble("zinc"),
-	    		        rs.getDouble("copper"),
-	    		        rs.getDouble("manganese"),
-	    		        rs.getDouble("iodine"),
-	    		        rs.getDouble("selenium"),
-	    		        rs.getDouble("chrome"),
-	    		        rs.getDouble("molybdenum"),
-	    		        rs.getDouble("vitamin_a"),
-	    		        rs.getDouble("vitamin_d"),
-	    		        rs.getDouble("vitamin_e"),
-	    		        rs.getDouble("vitamin_k"),
-	    		        rs.getDouble("vitamin_b1"),
-	    		        rs.getDouble("vitamin_b2"),
-	    		        rs.getDouble("niacin"),
-	    		        rs.getDouble("vitamin_b6"),
-	    		        rs.getDouble("vitamin_b12"),
-	    		        rs.getDouble("folic_acid"),
-	    		        rs.getDouble("pantothenic_acid"),
-	    		        rs.getDouble("biotin"),
-	    		        rs.getDouble("vitamin_c"),
-	    		        rs.getDouble("sodium_content")
+	    		        rs.getString("other")
 	    		    );
 	    		//SQL実行結果を順次取り出し、それを元にDTO作成
-	    		list.add(foodDTO);
+	    		list.add(foodNutrienDTO);
 	    		//作成したリストに追加
 	    	}
 			
