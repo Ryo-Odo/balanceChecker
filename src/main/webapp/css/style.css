@@ -1,18 +1,26 @@
 @charset "UTF-8";
-/* すべてのマージン・パディングを0に */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  border: solid 1px #6091d3;
 }
+
+
 
 body, #app, v-app, .v-container{
     height: 100%;
-    
+}
+
+.v-btn {
+	margin: 0.5rem;
 }
 
 
+
+
+
+/*
 .box1 {
     padding: 0.5em 1em;
     margin: 0;
@@ -23,12 +31,17 @@ body, #app, v-app, .v-container{
     border-radius: 10px;
     overflow: hidden; 
 }
-
+*/
 
 
 .scroll-area {
-  height: 50vh; /* 画面の50%の高さに設定 */
+  padding: 0.5em 1em;
+  margin: 0;
+  height: 100vh;
   overflow-y: auto; /* 縦スクロールを表示 */
-  border: 1px dashed gray;
-  padding: 1em;
+  font-weight: bold;
+  color: #6091d3;
+  background: #FFF;
+  border: solid 3px #6091d3;
+  border-radius: 10px;
 }

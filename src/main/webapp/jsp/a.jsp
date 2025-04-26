@@ -3,7 +3,7 @@
 	<!DOCTYPE html>	
 	<html class="common_html">
 	<head>
-		<link rel="stylesheet" href="/balanceChecker/css/common_style.css">
+		<link rel="stylesheet" href="../css/common_style.css">
 		<script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.js"></script>
 		<link href="https://cdn.jsdelivr.net/npm/vuetify@3.8.1/dist/vuetify.min.css" rel="stylesheet">
 		<script src="https://cdn.jsdelivr.net/npm/vuetify@3.8.1/dist/vuetify.min.js"></script>
@@ -20,11 +20,7 @@
 						<v-row justify="center" align="center">
 							<v-col md="12">
 								<div class="common_div">
-	<h1>ユーザー登録完了</h1>
-	<h2>ユーザー登録が完了しました</h2>
-	<div>
-		<a href="/balanceChecker/login">ログイン画面に戻る</a>
-	</div>
+
 								</div>
 							</v-col>
 						</v-row>
