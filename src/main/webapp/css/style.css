@@ -6,42 +6,78 @@
   box-sizing: border-box;
 }
 
-
+html, body, .v-main, #app, v-app, .v-container {
+	background-color: #fcfbf5;
+	color: #333333 !important;
+}
 
 body, #app, v-app, .v-container{
     height: 100%;
 }
 
+.v-toolbar__content{
+  background-color: #fcfbf5; /* 任意の色 */
+}
+
+.v-toolbar-title {
+  color: #ff9800; /* 濃いオレンジに変更 */
+  font-weight: bold;
+  font-size: 2rem;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25); /* 少し強めの影で背景に負けない */
+}
+
+
+
+.v-list.v-theme--light.v-list--density-default.v-list--one-line {
+  background-color: #ecf4eb; /* 任意の色 */
+}
+
+
 .v-btn {
 	margin: 0.5rem;
+	background-color: #588F50 !important;
+	color: rgb(255, 255, 255) !important;
+}
+
+a {
+  color: inherit; /* 色を継承する */
+  text-decoration: none; /* 下線を削除 */
 }
 
 
 
-
-
-/*
-.box1 {
-    padding: 0.5em 1em;
-    margin: 0;
-    font-weight: bold;
-    color: #6091d3;
-    background: #FFF;
-    border: solid 3px #6091d3;
-    border-radius: 10px;
-    overflow: hidden; 
+.top_left_div, .bottom_left_div, .top_right_div, .bottom_right_div {
+  background: #ecf4eb;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* ソフトな影 */
 }
-*/
+
+/*.top_left_div, .top_right_div{
+	margin: 12px 0;
+}*/
 
 
 .scroll-area {
-  padding: 0.5em 1em;
-  margin: 0;
-  height: 100vh;
-  overflow-y: auto; /* 縦スクロールを表示 */
+  padding: 0.5em;
+  height: 40vh;
+  overflow-y: auto;
   font-weight: bold;
-  color: #6091d3;
-  background: #FFF;
-  border: solid 3px #6091d3;
-  border-radius: 10px;
+}
+
+.other_div, .energy_div, .vitamin_div, .mineral_div{
+	margin: 1rem;
+	padding: 1rem;
+	border: 2px solid #588F50;
+	border-radius: 12px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* ソフトな影 */
+}
+
+p {
+	margin: 0.25rem;
+}
+
+.checkbox {
+	margin: 1rem;
 }
