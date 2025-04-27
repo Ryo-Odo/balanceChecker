@@ -62,7 +62,7 @@
                                                     ]" item-title="title" item-value="value" density="compact" outlined
 													required></v-select>
 												<div class="box1">
-													<p>総消費カロリー：{{ tdee.toFixed(1) }} kcal</p>
+													<p class="tdee">総消費カロリー：{{ tdee.toFixed(1) }} kcal</p>
 												</div>
 											</v-col>
 											<v-col cols="12" sm="6" md="6">
@@ -227,7 +227,7 @@
 													<v-col cols="3">{{ total_vitamin_a.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_a,
 														vitamin_a_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_a_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_a_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_a, vitamin_a_standard)"
@@ -248,7 +248,7 @@
 													<v-col cols="3">{{ total_vitamin_d.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_d,
 														vitamin_d_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_d_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_d_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_d, vitamin_d_standard)"
@@ -269,7 +269,7 @@
 													<v-col cols="3">{{ total_vitamin_e.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_e,
 														vitamin_e_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_e_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_e_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_e, vitamin_e_standard)"
@@ -290,7 +290,7 @@
 													<v-col cols="3">{{ total_vitamin_k.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_k,
 														vitamin_k_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_k_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_k_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_k, vitamin_k_standard)"
@@ -311,7 +311,7 @@
 													<v-col cols="3">{{ total_vitamin_b1.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_b1,
 														vitamin_b1_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_b1_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_b1_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_b1, vitamin_b1_standard)"
@@ -332,7 +332,7 @@
 													<v-col cols="3">{{ total_vitamin_b2.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_b2,
 														vitamin_b2_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_b2_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_b2_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_b2, vitamin_b2_standard)"
@@ -353,7 +353,7 @@
 													<v-col cols="3">{{ total_niacin.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_niacin,
 														niacin_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ niacin_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ niacin_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_niacin, niacin_standard)" :color="total_niacin < niacin_standard ? 'blue'
@@ -373,7 +373,7 @@
 													<v-col cols="3">{{ total_vitamin_b6.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_b6,
 														vitamin_b6_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_b6_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_b6_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_b6, vitamin_b6_standard)"
@@ -394,7 +394,7 @@
 													<v-col cols="3">{{ total_vitamin_b12.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_b12,
 														vitamin_b12_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_b12_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_b12_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_b12, vitamin_b12_standard)"
@@ -415,7 +415,7 @@
 													<v-col cols="3">{{ total_folic_acid.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_folic_acid,
 														folic_acid_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ folic_acid_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ folic_acid_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_folic_acid, folic_acid_standard)"
@@ -437,7 +437,7 @@
 													<v-col cols="3">{{ total_pantothenic_acid.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_pantothenic_acid,
 														pantothenic_acid_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ pantothenic_acid_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ pantothenic_acid_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_pantothenic_acid, pantothenic_acid_standard)"
@@ -458,7 +458,7 @@
 													<v-col cols="3">{{ total_biotin.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_biotin,
 														biotin_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ biotin_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ biotin_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_biotin, biotin_standard)"
@@ -479,7 +479,7 @@
 													<v-col cols="3">{{ total_vitamin_c.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_c,
 														vitamin_c_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_c_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_c_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_c, vitamin_c_standard)"
@@ -504,7 +504,7 @@
 													<v-col cols="3">{{ total_natrium.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_natrium,
 														natrium_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ natrium_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ natrium_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_natrium, natrium_standard)" :color="total_natrium < natrium_standard ? 'blue'
@@ -524,7 +524,7 @@
 													<v-col cols="3">{{ total_potassium.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_potassium,
 														potassium_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ potassium_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ potassium_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_potassium, potassium_standard)"
@@ -545,7 +545,7 @@
 													<v-col cols="3">{{ total_calcium.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_calcium,
 														calcium_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ calcium_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ calcium_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<!-- 17歳以下耐容上限なし -->
 												<v-progress-linear v-if="user_age <= 17"
@@ -572,7 +572,7 @@
 													<v-col cols="3">{{ total_magnesium.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_magnesium,
 														magnesium_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ magnesium_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ magnesium_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_magnesium, magnesium_standard)"
@@ -593,7 +593,7 @@
 													<v-col cols="3">{{ total_phosphorus.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_phosphorus,
 														phosphorus_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ phosphorus_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ phosphorus_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 
 												<v-progress-linear v-if="user_age <= 17"
@@ -622,7 +622,7 @@
 													<v-col cols="3">{{ total_iron.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_iron, iron_standard).toFixed(1)
 														}}%</v-col>
-													<v-col cols="4">{{ iron_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ iron_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear :model-value="getFillRate(total_iron, iron_standard)"
 													:color="total_iron < iron_standard ? 'blue' :'green'" height="10"
@@ -641,7 +641,7 @@
 													<v-col cols="3">{{ total_zinc.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_zinc, zinc_standard).toFixed(1)
 														}}%</v-col>
-													<v-col cols="4">{{ zinc_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ zinc_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 
 												<!-- 17歳以下の場合耐容上限なしに分岐 -->
@@ -669,7 +669,7 @@
 													<v-col cols="3">{{ total_copper.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_copper,
 														copper_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ copper_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ copper_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 
 												<v-progress-linear v-if="user_age <= 17"
@@ -697,7 +697,7 @@
 													<v-col cols="3">{{ total_manganese.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_manganese,
 														manganese_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ manganese_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ manganese_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 
 												<v-progress-linear v-if="user_age <= 17"
@@ -725,7 +725,7 @@
 													<v-col cols="3">{{ total_iodine.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_iodine,
 														iodine_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ iodine_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ iodine_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_iodine, iodine_standard)" :color="total_iodine < iodine_standard ? 'blue'
@@ -745,7 +745,7 @@
 													<v-col cols="3">{{ total_selenium.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_selenium,
 														selenium_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ selenium_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ selenium_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_selenium, selenium_standard)"
@@ -766,7 +766,7 @@
 													<v-col cols="3">クロム</v-col>
 													<v-col cols="3">{{ total_chrome.toFixed(1)}} μg</v-col>
 													<v-col cols="2">N/A</v-col>
-													<v-col cols="4">17歳以下は推奨量なし</v-col>
+													<v-col class="text-right" cols="4">17歳以下は推奨量なし</v-col>
 												</v-row>
 												<v-progress-linear :model-value="100" color="green" height="10"
 													:striped="false"></v-progress-linear>
@@ -783,7 +783,7 @@
 													<v-col cols="3">{{ total_chrome.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_chrome,
 														chrome_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ chrome_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ chrome_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_chrome, chrome_standard)" :color="total_chrome < chrome_standard ? 'blue'
@@ -803,7 +803,7 @@
 													<v-col cols="3">{{ total_molybdenum.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_molybdenum,
 														molybdenum_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ molybdenum_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ molybdenum_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 
 												<v-progress-linear v-if="user_age <= 17"
@@ -834,7 +834,7 @@
 													<v-col cols="3">{{ total_sodium_content.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_sodium_content,
 														sodium_content_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ sodium_content_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ sodium_content_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_sodium_content, sodium_content_standard)"
@@ -856,7 +856,7 @@
 													<v-col cols="3">{{ total_food_fiber.toFixed(1)}} g</v-col>
 													<v-col cols="2">{{ getFillRate(total_food_fiber,
 														fiber_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ fiber_standard.toFixed(1)}} g</v-col>
+													<v-col class="text-right" cols="4">{{ fiber_standard.toFixed(1)}} g</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_food_fiber, fiber_standard)"

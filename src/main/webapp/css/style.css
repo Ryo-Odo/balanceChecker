@@ -16,11 +16,11 @@ body, #app, v-app, .v-container{
 }
 
 .v-toolbar__content{
-  background-color: #fcfbf5; /* 任意の色 */
+  background-color: #fcfbf5; 
 }
 
 .v-toolbar-title {
-  color: #ff9800; /* 濃いオレンジに変更 */
+  color: #ff9800;
   font-weight: bold;
   font-size: 2rem;
   letter-spacing: 1px;
@@ -77,6 +77,12 @@ a {
 p {
 	margin: 0.25rem;
 }
+
+.tdee {
+	font-weight: bold;
+	color: #ff9800;
+}
+
 
 .checkbox {
 	margin: 1rem;
