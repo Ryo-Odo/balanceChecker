@@ -9,7 +9,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
 		<link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
 		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 		<meta charset="UTF-8">
 		<title>ホーム画面</title>
 	</head>
@@ -20,12 +20,12 @@
 					  <v-container>
 					    <v-row align="center">
 					      <v-col cols="6">
-					        <v-toolbar-title>balanceChecker</v-toolbar-title>
+					        <v-toolbar-title>BalanceChecker<v-icon start>mdi-scale</v-icon></v-toolbar-title>
 					      </v-col>
 					      <v-col class="text-right" cols="6">
-					        ${user.name} 様ログイン中 |
-					        <a href="/balanceChecker/edit">メンバー情報編集</a> |
-					        <a href="/balanceChecker/delete">退会</a> |
+					        ${user.name} 様ログイン中
+					        <a href="/balanceChecker/edit">　　メンバー情報編集　　</a>
+					        <a href="/balanceChecker/delete">退会　　</a>
 					        <a href="/balanceChecker/logout">ログアウト</a>
 					      </v-col>
 					    </v-row>
@@ -33,7 +33,7 @@
 					</v-app-bar>
 				<v-main>
 					<v-container style="max-width: 80%;">
-						<v-row>
+						<v-row class="top_row">
 							<v-col cols="12" sm="6">
 									<div class="top_left_div">
 										<v-row>
@@ -61,32 +61,38 @@
                                                         { title: '非常に高い活動レベル (1.9):毎日のハードな運動と肉体労働、アスリートなど。', value: 1.9 }
                                                     ]" item-title="title" item-value="value" density="compact" outlined
 													required></v-select>
-												<div class="box1">
-													<p>総消費カロリー：{{ tdee.toFixed(1) }} kcal</p>
-												</div>
+
 											</v-col>
 											<v-col cols="12" sm="6" md="6">
 												<div class="box1">
 													<!----------------------------------------------------------------------------------------------------------------->
 													<!-- 検索ボタン -->
-													<v-btn  @click="dialog = true">食品名で検索</v-btn>
-													<v-btn  @click="dialogNutrition = true">栄養素別検索</v-btn>
+													<v-btn @click="dialog = true"><v-icon start>mdi-magnify</v-icon>食品名で検索</v-btn>
+													<v-btn @click="dialogNutrition = true"><v-icon start>mdi-magnify</v-icon>栄養素で検索</v-btn>
 													<!----------------------------------------------------------------------------------------------------------------->
 												</div>
 											</v-col>
 										</v-row>
+												<div class="box1">
+													<p class="tdee">総消費カロリー：{{ tdee.toFixed(1) }} kcal</p>
+												</div>
 									</div>
 							</v-col>
 							<v-col cols="12" sm="6">
 								<div class="top_right_div">
 									<v-row>
-										<v-col cols="12" sm="6">
-											<p>総評とレーダーチャート</p>
-										</v-col>
-										<v-col cols="12" sm="6">
-											 
+										<v-col md="12">
+											<div id="chart" ref="chartRef" style="width: 100%; height: 342px;"></div>
 										</v-col>
 									</v-row>
+
+
+											
+
+											 
+											
+											
+			
 								</div>
 							</v-col>
 						</v-row>
@@ -102,10 +108,18 @@
 													<v-list-item-title>{{ food.foodName }}</v-list-item-title>
 													<v-list-item-subtitle>エネルギー: {{ food.calc_energy }}
 														kcal</v-list-item-subtitle>
-													<v-text-field v-model="food.weight" label="グラム数" type="number"
-														min="1" step="1" @input="onInputWeight(food)"></v-text-field>
-													<v-btn @click="selectedFoods.splice(index, 1)" color="red"
-														small>削除</v-btn>
+													<v-row>
+														<v-col sm="9">
+															<v-text-field v-model="food.weight" label="グラム数" type="number"
+																min="1" step="1" @input="onInputWeight(food)"></v-text-field>
+														</v-col>
+														<v-col sm="3">
+															<v-btn @click="selectedFoods.splice(index, 1)" color="red"
+																small> <v-icon>mdi-delete</v-icon>削除</v-btn>
+														</v-col>
+													</v-row>
+
+
 												</v-list-item>
 											</v-list>
 										</div>
@@ -114,7 +128,7 @@
 							<v-col cols="12" sm="6">
 								<div class="bottom_right_div">
 									<div class="scroll-area">
-										<div class="box1">
+										<div class="energy_div">
 										
 											<p>総エネルギー及び三大栄養素</p>
 											<!-- エネルギー -->
@@ -132,7 +146,7 @@
 													    : 'yellow'" height="10" :striped="getFillRate(total_energy, tdee) < 100"></v-progress-linear>
 												<v-row class="mt-0">
 													<v-col class="text-right text-caption ma-0 pa-0" cols="12">
-														<p>推奨上限（想定総消費エネルギーの120％）： {{ tdee_high_standard.toFixed(1) }}
+														<p>最高基準（想定総消費エネルギーの115％）： {{ tdee_high_standard.toFixed(1) }}
 															kcal</p>
 													</v-col>
 												</v-row>
@@ -155,7 +169,7 @@
 													    : 'yellow'" height="10" :striped="getFillRate(total_protein, protein_low_standard) < 100"></v-progress-linear>
 												<v-row class="mt-0">
 													<v-col class="text-right text-caption ma-0 pa-0" cols="12">
-														<p>推奨上限（総エネルギーの20％）： {{ protein_high_standard.toFixed(1) }} g
+														<p>最高基準（総エネルギーの20％）： {{ protein_high_standard.toFixed(1) }} g
 														</p>
 													</v-col>
 												</v-row>
@@ -177,7 +191,7 @@
 													    : 'yellow'" height="10" :striped="getFillRate(total_lipid, lipid_low_standard) < 100"></v-progress-linear>
 												<v-row class="mt-0">
 													<v-col class="text-right text-caption ma-0 pa-0" cols="12">
-														<p>推奨上限（総エネルギーの30％）： {{ lipid_high_standard.toFixed(1) }} g</p>
+														<p>最高基準（総エネルギーの30％）： {{ lipid_high_standard.toFixed(1) }} g</p>
 													</v-col>
 												</v-row>
 											</div>
@@ -199,13 +213,13 @@
 													    : 'yellow'" height="10" :striped="getFillRate(total_carbohydrate, carbohydrate_low_standard) < 100"></v-progress-linear>
 												<v-row class="mt-0">
 													<v-col class="text-right text-caption ma-0 pa-0" cols="12">
-														<p>推奨上限（総エネルギーの65％）： {{ carbohydrate_high_standard.toFixed(1) }}
+														<p>最高基準（総エネルギーの65％）： {{ carbohydrate_high_standard.toFixed(1) }}
 															g</p>
 													</v-col>
 												</v-row>
 											</div>
 										</div>
-										<div class="box1">
+										<div class="vitamin_div">
 											<p>ビタミン</p>
 											<!-- ビタミンA -->
 											<div>
@@ -214,7 +228,7 @@
 													<v-col cols="3">{{ total_vitamin_a.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_a,
 														vitamin_a_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_a_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_a_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_a, vitamin_a_standard)"
@@ -235,7 +249,7 @@
 													<v-col cols="3">{{ total_vitamin_d.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_d,
 														vitamin_d_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_d_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_d_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_d, vitamin_d_standard)"
@@ -256,7 +270,7 @@
 													<v-col cols="3">{{ total_vitamin_e.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_e,
 														vitamin_e_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_e_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_e_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_e, vitamin_e_standard)"
@@ -277,7 +291,7 @@
 													<v-col cols="3">{{ total_vitamin_k.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_k,
 														vitamin_k_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_k_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_k_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_k, vitamin_k_standard)"
@@ -298,7 +312,7 @@
 													<v-col cols="3">{{ total_vitamin_b1.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_b1,
 														vitamin_b1_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_b1_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_b1_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_b1, vitamin_b1_standard)"
@@ -319,7 +333,7 @@
 													<v-col cols="3">{{ total_vitamin_b2.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_b2,
 														vitamin_b2_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_b2_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_b2_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_b2, vitamin_b2_standard)"
@@ -340,7 +354,7 @@
 													<v-col cols="3">{{ total_niacin.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_niacin,
 														niacin_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ niacin_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ niacin_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_niacin, niacin_standard)" :color="total_niacin < niacin_standard ? 'blue'
@@ -360,7 +374,7 @@
 													<v-col cols="3">{{ total_vitamin_b6.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_b6,
 														vitamin_b6_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_b6_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_b6_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_b6, vitamin_b6_standard)"
@@ -381,7 +395,7 @@
 													<v-col cols="3">{{ total_vitamin_b12.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_b12,
 														vitamin_b12_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_b12_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_b12_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_b12, vitamin_b12_standard)"
@@ -402,7 +416,7 @@
 													<v-col cols="3">{{ total_folic_acid.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_folic_acid,
 														folic_acid_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ folic_acid_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ folic_acid_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_folic_acid, folic_acid_standard)"
@@ -424,7 +438,7 @@
 													<v-col cols="3">{{ total_pantothenic_acid.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_pantothenic_acid,
 														pantothenic_acid_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ pantothenic_acid_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ pantothenic_acid_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_pantothenic_acid, pantothenic_acid_standard)"
@@ -445,7 +459,7 @@
 													<v-col cols="3">{{ total_biotin.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_biotin,
 														biotin_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ biotin_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ biotin_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_biotin, biotin_standard)"
@@ -466,7 +480,7 @@
 													<v-col cols="3">{{ total_vitamin_c.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_c,
 														vitamin_c_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ vitamin_c_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_c_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_c, vitamin_c_standard)"
@@ -482,7 +496,7 @@
 										</div>
 
 
-										<div class="box1">
+										<div class="mineral_div">
 											<p>ミネラル</p>
 											<!-- ナトリウム (Natrium) -->
 											<div>
@@ -491,7 +505,7 @@
 													<v-col cols="3">{{ total_natrium.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_natrium,
 														natrium_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ natrium_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ natrium_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_natrium, natrium_standard)" :color="total_natrium < natrium_standard ? 'blue'
@@ -511,7 +525,7 @@
 													<v-col cols="3">{{ total_potassium.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_potassium,
 														potassium_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ potassium_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ potassium_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_potassium, potassium_standard)"
@@ -532,7 +546,7 @@
 													<v-col cols="3">{{ total_calcium.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_calcium,
 														calcium_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ calcium_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ calcium_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<!-- 17歳以下耐容上限なし -->
 												<v-progress-linear v-if="user_age <= 17"
@@ -559,7 +573,7 @@
 													<v-col cols="3">{{ total_magnesium.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_magnesium,
 														magnesium_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ magnesium_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ magnesium_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_magnesium, magnesium_standard)"
@@ -580,7 +594,7 @@
 													<v-col cols="3">{{ total_phosphorus.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_phosphorus,
 														phosphorus_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ phosphorus_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ phosphorus_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 
 												<v-progress-linear v-if="user_age <= 17"
@@ -609,7 +623,7 @@
 													<v-col cols="3">{{ total_iron.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_iron, iron_standard).toFixed(1)
 														}}%</v-col>
-													<v-col cols="4">{{ iron_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ iron_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear :model-value="getFillRate(total_iron, iron_standard)"
 													:color="total_iron < iron_standard ? 'blue' :'green'" height="10"
@@ -628,7 +642,7 @@
 													<v-col cols="3">{{ total_zinc.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_zinc, zinc_standard).toFixed(1)
 														}}%</v-col>
-													<v-col cols="4">{{ zinc_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ zinc_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 
 												<!-- 17歳以下の場合耐容上限なしに分岐 -->
@@ -656,7 +670,7 @@
 													<v-col cols="3">{{ total_copper.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_copper,
 														copper_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ copper_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ copper_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 
 												<v-progress-linear v-if="user_age <= 17"
@@ -684,7 +698,7 @@
 													<v-col cols="3">{{ total_manganese.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_manganese,
 														manganese_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ manganese_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ manganese_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 
 												<v-progress-linear v-if="user_age <= 17"
@@ -712,7 +726,7 @@
 													<v-col cols="3">{{ total_iodine.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_iodine,
 														iodine_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ iodine_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ iodine_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_iodine, iodine_standard)" :color="total_iodine < iodine_standard ? 'blue'
@@ -732,7 +746,7 @@
 													<v-col cols="3">{{ total_selenium.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_selenium,
 														selenium_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ selenium_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ selenium_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_selenium, selenium_standard)"
@@ -753,7 +767,7 @@
 													<v-col cols="3">クロム</v-col>
 													<v-col cols="3">{{ total_chrome.toFixed(1)}} μg</v-col>
 													<v-col cols="2">N/A</v-col>
-													<v-col cols="4">17歳以下は推奨量なし</v-col>
+													<v-col class="text-right" cols="4">17歳以下は推奨量なし</v-col>
 												</v-row>
 												<v-progress-linear :model-value="100" color="green" height="10"
 													:striped="false"></v-progress-linear>
@@ -770,7 +784,7 @@
 													<v-col cols="3">{{ total_chrome.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_chrome,
 														chrome_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ chrome_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ chrome_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_chrome, chrome_standard)" :color="total_chrome < chrome_standard ? 'blue'
@@ -790,7 +804,7 @@
 													<v-col cols="3">{{ total_molybdenum.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_molybdenum,
 														molybdenum_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ molybdenum_standard.toFixed(1)}} μg</v-col>
+													<v-col class="text-right" cols="4">{{ molybdenum_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 
 												<v-progress-linear v-if="user_age <= 17"
@@ -812,7 +826,7 @@
 											</div>
 										</div>
 
-										<div class="box1">
+										<div class="other_div">
 											<p>その他</p>
 											<!-- 食塩相当量 (Sodium Content) -->
 											<div>
@@ -821,7 +835,7 @@
 													<v-col cols="3">{{ total_sodium_content.toFixed(1)}} mg</v-col>
 													<v-col cols="2">{{ getFillRate(total_sodium_content,
 														sodium_content_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ sodium_content_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ sodium_content_standard.toFixed(1)}} mg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_sodium_content, sodium_content_standard)"
@@ -843,7 +857,7 @@
 													<v-col cols="3">{{ total_food_fiber.toFixed(1)}} g</v-col>
 													<v-col cols="2">{{ getFillRate(total_food_fiber,
 														fiber_standard).toFixed(1) }}%</v-col>
-													<v-col cols="4">{{ fiber_standard.toFixed(1)}} g</v-col>
+													<v-col class="text-right" cols="4">{{ fiber_standard.toFixed(1)}} g</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_food_fiber, fiber_standard)"
@@ -941,7 +955,7 @@
 															}}</v-list-item-title>
 														<v-list-item-subtitle>{{ food.other }}</v-list-item-subtitle>
 														<v-btn color="success"
-															@click="addFoodToSelection(food.id)">追加</v-btn>
+															@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 													</v-list-item>
 												</v-list>
 
@@ -977,7 +991,7 @@
 													item-value="value" label="栄養素を選択"
 													@update:model-value="submitForm"></v-select>
 											</div>
-											<label>
+											<label class="checkbox">
 												<input type="checkbox" v-model="moisture_40_or_less" />
 												水分40パーセント以下も表示する
 											</label>
@@ -990,7 +1004,7 @@
 
 												<v-row v-if="food_list_by_group['穀類'].length">
 													<v-col cols="6">
-														<p>穀類</p>
+														<p><v-icon>mdi-barley</v-icon>穀類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1004,7 +1018,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1018,14 +1032,14 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
 													</v-col>
 
 													<v-col cols="6">
-														<p>いも及びでん粉類</p>
+														<p><v-icon>mdi-ellipse-outline</v-icon>いも及びでん粉類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1039,7 +1053,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1054,7 +1068,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
@@ -1063,7 +1077,7 @@
 
 												<v-row v-if="food_list_by_group['砂糖及び甘味類'].length">
 													<v-col cols="6">
-														<p>砂糖及び甘味類</p>
+														<p><v-icon>mdi-candy</v-icon>砂糖及び甘味類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1077,7 +1091,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1092,14 +1106,14 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
 													</v-col>
 
 													<v-col cols="6">
-														<p>豆類</p>
+														<p><v-icon>mdi-grain</v-icon>豆類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1113,7 +1127,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1136,7 +1150,7 @@
 
 												<v-row v-if="food_list_by_group['種実類'].length">
 													<v-col cols="6">
-														<p>種実類</p>
+														<p><v-icon>mdi-seed</v-icon>種実類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1150,7 +1164,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1164,14 +1178,14 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
 													</v-col>
 
 													<v-col cols="6">
-														<p>野菜類</p>
+														<p><v-icon>mdi-carrot</v-icon>野菜類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1185,7 +1199,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1199,7 +1213,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
@@ -1208,7 +1222,7 @@
 
 												<v-row v-if="food_list_by_group['果実類'].length">
 													<v-col cols="6">
-														<p>果実類</p>
+														<p><v-icon>mdi-food-apple</v-icon>果実類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1222,7 +1236,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1236,14 +1250,14 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
 													</v-col>
 
 													<v-col cols="6">
-														<p>きのこ類</p>
+														<p><v-icon>mdi-mushroom</v-icon>きのこ類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1257,7 +1271,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1271,7 +1285,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
@@ -1280,7 +1294,7 @@
 
 												<v-row v-if="food_list_by_group['藻類'].length">
 													<v-col cols="6">
-														<p>藻類</p>
+														<p><v-icon>mdi-grass</v-icon>藻類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1294,7 +1308,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1308,14 +1322,14 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
 													</v-col>
 
 													<v-col cols="6">
-														<p>魚介類</p>
+														<p><v-icon>mdi-fish</v-icon>魚介類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1329,7 +1343,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1343,7 +1357,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
@@ -1352,7 +1366,7 @@
 
 												<v-row v-if="food_list_by_group['肉類'].length">
 													<v-col cols="6">
-														<p>肉類</p>
+														<p><v-icon>mdi-food-steak</v-icon>肉類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1366,7 +1380,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1380,14 +1394,14 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
 													</v-col>
 
 													<v-col cols="6">
-														<p>卵類</p>
+														<p><v-icon>mdi-egg</v-icon>卵類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1401,7 +1415,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1415,7 +1429,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
@@ -1423,7 +1437,7 @@
 												</v-row>
 												<v-row v-if="food_list_by_group['乳類'].length">
 													<v-col cols="6">
-														<p>乳類</p>
+														<p><v-icon>mdi-cow</v-icon>乳類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1437,7 +1451,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1451,14 +1465,14 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
 													</v-col>
 
 													<v-col cols="6">
-														<p>油脂類</p>
+														<p><v-icon>mdi-water</v-icon>油脂類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1472,7 +1486,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1486,7 +1500,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
@@ -1495,7 +1509,7 @@
 
 												<v-row v-if="food_list_by_group['菓子類'].length">
 													<v-col cols="6">
-														<p>菓子類</p>
+														<p><v-icon>mdi-cupcake</v-icon>菓子類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1509,7 +1523,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1523,14 +1537,14 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
 													</v-col>
 
 													<v-col cols="6">
-														<p>し好飲料類</p>
+														<p><v-icon>mdi-cup</v-icon>し好飲料類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1544,7 +1558,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1558,7 +1572,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
@@ -1567,7 +1581,7 @@
 
 												<v-row v-if="food_list_by_group['調味料及び香辛料類'].length">
 													<v-col cols="6">
-														<p>調味料及び香辛料類</p>
+														<p><v-icon>mdi-soy-sauce</v-icon>調味料及び香辛料類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1581,7 +1595,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1596,14 +1610,14 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
 													</v-col>
 
 													<v-col cols="6">
-														<p>調理済み流通食品類</p>
+														<p><v-icon>mdi-noodles</v-icon>調理済み流通食品類</p>
 														<div class="scroll-area">
 															<v-list v-if="moisture_40_or_less === false">
 																<v-list-item
@@ -1617,7 +1631,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 															<v-list v-else>
@@ -1632,7 +1646,7 @@
 																		getNutrientTitle(selectedNutrient) }}: {{
 																		food['nutrien'] }} {{ nutrient_unit[getNutrientTitle(selectedNutrient)] }}</v-list-item-subtitle>
 																	<v-btn color="success"
-																		@click="addFoodToSelection(food.id)">追加</v-btn>
+																		@click="addFoodToSelection(food.id)"><v-icon>mdi-plus</v-icon>追加</v-btn>
 																</v-list-item>
 															</v-list>
 														</div>
@@ -1662,6 +1676,14 @@
 											</v-card-actions>
 										</v-card>
 									</v-dialog>
+	
+	
+									
+<v-snackbar v-model="snackbar" timeout="2000" color="success">
+  {{ snackbarText }}
+</v-snackbar>
+
+
 
 
 
@@ -1680,11 +1702,12 @@
 			</v-app>
 		</div>
 		<script>
-			const { createApp, ref, computed, watch } = Vue;
+			const { createApp, ref, computed, onMounted, onUnmounted,  watch } = Vue;
 			const { createVuetify } = Vuetify;
 
 			createApp({
 				setup() {
+					console.log('setup開始');
 					const dialog = ref(false);
 					const dialogNutrition = ref(false);
 					const searchQuery = ref('');
@@ -1801,7 +1824,7 @@
 					});
 
 					const tdee_high_standard = computed(() => {
-						return tdee.value * 1.2;
+						return tdee.value * 1.15;
 					});
 
 
@@ -2826,8 +2849,9 @@
 
 
 
-
-
+					//商品追加通知用
+					const snackbar = ref(false);
+					const snackbarText = ref('');
 
 
 					const addFoodToSelection = (food_Id) => {
@@ -2844,8 +2868,6 @@
 								const addedFood = response.data;
 								addedFood.weight = 100;//ユーザーが変更できる重さ、計算に使う
 
-								addedFood.calc_energy = addedFood.energy;
-								addedFood.calc_protein = addedFood.protein;
 								addedFood.calc_energy = addedFood.energy;
 								addedFood.calc_protein = addedFood.protein;
 								addedFood.calc_lipid = addedFood.lipid;
@@ -2883,14 +2905,27 @@
 
 
 
-								console.log('食品追加成功:', addedFood); // ← ここでJSONか確認
+								console.log('食品追加成功:', addedFood); 
 								selectedFoods.value.push(addedFood);
-								console.log('現在の選択中食品:', selectedFoods.value); // ← push後の確認
+								console.log('現在の選択中食品:', selectedFoods.value); 
+								snackbarText.value = addedFood.foodName + ' を追加しました';
+							    snackbar.value = true;
+							    console.log('addedFood.foodName:', addedFood.foodName); 
 							})
 							.catch(error => {
 								console.log('食品追加エラー:', error);
 							});
 					};
+
+
+
+
+
+
+
+
+
+					
 
 					const onInputWeight = (food) => {
 						// グラム数が入力されたら、その値に基づいて栄養を再計算
@@ -2955,6 +2990,97 @@
 					};
 
 
+
+
+
+			        const chartRef = ref(null);
+			        const chart = ref(null);
+
+			        const renderChart = () => {
+			          const option = {
+			            title: {
+			              text: 'PFCバランス',
+			              left: 'center',
+			            },
+			            tooltip: {},
+			            legend: {
+			              data: ['摂取量', '最低基準値', '最高基準値'],
+			              bottom: 0,
+			            },
+			            radar: {
+			            	  indicator: [
+			            	    { name: 'たんぱく質', min: 0, max: protein_high_standard.value },
+			            	    { name: '脂質', min: 0, max: lipid_high_standard.value },
+			            	    { name: '炭水化物', min: 0, max: carbohydrate_high_standard.value },
+			            	  ],
+			            	  shape: 'circle',
+			            	  splitNumber: 4,
+			            	  name: {
+			            	    textStyle: {
+			            	      color: '#333333',
+			            	      fontSize: 16,
+			            	      fontWeight: 'normal',
+			            	    }
+			            	  },
+			            	  center: ['50%', '55%'],
+			            	},
+			            series: [
+			              {
+			                type: 'radar',
+			                data: [
+			                  {
+			                    value: [total_protein.value, total_lipid.value, total_carbohydrate.value],
+			                    name: '摂取量',
+			                    areaStyle: { opacity: 0.3 },
+			                    lineStyle: { color: '#2196f3' },
+			                    symbol: 'circle',
+			                  },
+			                  {
+			                    value: [protein_low_standard.value, lipid_low_standard.value, carbohydrate_low_standard.value],
+			                    name: '最低基準値',
+			                    lineStyle: { type: 'dashed', color: '#4caf50' },
+			                    symbol: 'none',
+			                  },
+			                  {
+			                    value: [protein_high_standard.value, lipid_high_standard.value, carbohydrate_high_standard.value],
+			                    name: '最高基準値',
+			                    lineStyle: { type: 'dotted', color: '#ffb74d' },
+			                    symbol: 'none',
+			                  },
+			                ],
+			              },
+			            ],
+			          };
+
+			          chart.value.setOption(option);
+			        };
+
+			        onMounted(() => {
+			          chart.value = echarts.init(chartRef.value);
+			          renderChart();
+			          window.addEventListener('resize', () => chart.value.resize());
+			        });
+
+			        onUnmounted(() => {
+			          window.removeEventListener('resize', () => chart.value.resize());
+			        });
+
+			        // 栄養素の値が変化した時にチャートを再描画
+			        watch([total_protein, total_lipid, total_carbohydrate,protein_low_standard, lipid_low_standard, carbohydrate_low_standard,protein_high_standard, lipid_high_standard, carbohydrate_high_standard], () => {
+			          renderChart();
+			        });
+
+			     // watchでtdeeとuser_ageを監視
+			        watch([tdee, user_age], () => {
+			          renderChart();
+			        });
+
+
+
+
+
+
+					
 
 
 
@@ -3100,6 +3226,15 @@
 						moisture_40_or_less,
 
 						nutrient_unit,
+
+						//レンダーチャート
+				        chartRef,
+				        chart,
+				        renderChart,
+
+				        snackbar,
+				        snackbarText,
+				        
 
 
 
