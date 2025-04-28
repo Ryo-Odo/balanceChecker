@@ -104,7 +104,7 @@
 										<p>食品数: {{selectedFoods.length}}</p>
 										<p>合計カロリー：{{ total_energy.toFixed(1) }} kcal</p>
 											<v-list>
-												<v-list-item v-for="food in selectedFoods" :key="food.id">
+												<v-list-item v-for="(food, index) in selectedFoods" :key="food.id">
 													<v-list-item-title>{{ food.foodName }}</v-list-item-title>
 													<v-list-item-subtitle>エネルギー: {{ food.calc_energy }}
 														kcal</v-list-item-subtitle>
