@@ -1,0 +1,24 @@
+-- DB に移動 (文字コードによって"\"が半角バックスラッシュ"＼"になる場合があります)
+\c postgres;
+-- 一旦削除
+DROP TABLE IF EXISTS users;
+-- users テーブルの作成
+CREATE TABLE users (
+  id SERIAL,
+  login_id VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  name VARCHAR(255),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(id)
+);
+-- dummy_data 準備
+INSERT INTO users (login_id, password, name) VALUES ('user01', '11111111', '佐藤');
+INSERT INTO users (login_id, password, name) VALUES ('user02', '22222222', '田中');
+INSERT INTO users (login_id, password, name) VALUES ('user03', '33333333', '鈴木');
+INSERT INTO users (login_id, password, name) VALUES ('user04', '44444444', '矢野');
+INSERT INTO users (login_id, password, name) VALUES ('user05', '55555555', '松井');
+-- 確認
+SELECT * FROM users;
+
+
+test
