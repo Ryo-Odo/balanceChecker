@@ -24,7 +24,7 @@ Vue.jsを使ったシングルページアプリ（SPA）として設計され�
 
 ## スクリーンショット
 ### トップ画面  
-![トップ画面](./screenshots/top.png)
+![トップ画面](./screenshots/top.PNG)
 
 ### 食品名検索画面  
 ![食品名検索画面](./screenshots/search1.png)
