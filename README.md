@@ -44,13 +44,13 @@ Vue.jsを使ったシングルページアプリ（SPA）として設計され�
 - モバイル対応のUI強化  
 - おすすめ食品提案機能の実装
 
-- ## データソース・参考文献
+## データソース・参考文献
 - 食品成分データ：  
-　「本食品標準成分表（八訂）増補2023年」  
+　「日本食品標準成分表（八訂）増補2023年」  
 　出典：文部科学省
 　[https://www.mext.go.jp/a_menu/syokuhinseibun/mext_00001.html](https://www.mext.go.jp/a_menu/syokuhinseibun/mext_00001.html)
 
 - 栄養素の推奨摂取量：  
 　「日本人の食事摂取基準（2025年版）」策定検討会報告書
 　出典：厚生労働省  
-　[https://www.mhlw.go.jp/stf/newpage_08517.html](https://www.mhlw.go.jp/stf/newpage_44138.html)
+　[https://www.mhlw.go.jp/stf/newpage_44138.html](https://www.mhlw.go.jp/stf/newpage_44138.html)
