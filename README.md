@@ -27,10 +27,10 @@ Vue.jsを使ったシングルページアプリ（SPA）として設計され�
 ![トップ画面](./screenshots/top.PNG)
 
 ### 食品名検索画面  
-![食品名検索画面](./screenshots/search1.png)
+![食品名検索画面](./screenshots/search1.PNG)
 
 ### 栄養素別検索画面  
-![栄養素別検索画面](./screenshots/search2.png)
+![栄養素別検索画面](./screenshots/search2.PNG)
 
 ## 今後の改善点
 - 食品別詳細表示
