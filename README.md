@@ -22,6 +22,13 @@ Vue.jsを使ったシングルページアプリ（SPA）として設計され�
 - バックエンド：Java Servlet
 - 開発環境：Visual Studio Code、Eclipse
 
+## 開発期間
+2025年4月12日〜2025年4月27日（約16日間）
+
+## 動作イメージ動画
+以下のリンクより、アプリの操作デモをご覧いただけます。  
+[▶ YouTube 動画（限定公開）](https://youtu.be/jLj7YZO4Xu8)
+
 ## スクリーンショット
 ### トップ画面  
 ![トップ画面](./screenshots/top.PNG)
