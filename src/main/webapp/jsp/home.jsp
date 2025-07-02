@@ -103,22 +103,26 @@
 										<p>食品数: {{selectedFoods.length}}</p>
 										<p>合計カロリー：{{ total_energy.toFixed(1) }} kcal</p>
 											<v-list>
-												<v-list-item v-for="food in selectedFoods" :key="food.id">
-													<v-list-item-title>{{ food.foodName }}</v-list-item-title>
-													<v-list-item-subtitle>エネルギー: {{ food.calc_energy }}
-														kcal</v-list-item-subtitle>
-													<v-row>
-														<v-col sm="9">
-															<v-text-field v-model="food.weight" label="グラム数" type="number"
-																min="1" step="1" @input="onInputWeight(food)"></v-text-field>
-														</v-col>
-														<v-col sm="3">
-															<v-btn @click="selectedFoods.splice(index, 1)" color="red"
-																small> <v-icon>mdi-delete</v-icon>削除</v-btn>
-														</v-col>
-													</v-row>
-
-
+												<v-list-item v-for="(food, index) in selectedFoods" :key="food.id">
+												  <v-list-item-title>{{ food.foodName }}</v-list-item-title>
+												  <v-list-item-subtitle>エネルギー: {{ food.calc_energy }} kcal</v-list-item-subtitle>
+												  <v-row>
+												    <v-col sm="9">
+												      <v-text-field
+												        v-model="food.weight"
+												        label="グラム数"
+												        type="number"
+												        min="1"
+												        step="1"
+												        @input="onInputWeight(food)"
+												      ></v-text-field>
+												    </v-col>
+												    <v-col sm="3">
+												      <v-btn @click="selectedFoods.splice(index, 1)" color="red" small>
+												        <v-icon>mdi-delete</v-icon>削除
+												      </v-btn>
+												    </v-col>
+												  </v-row>
 												</v-list-item>
 											</v-list>
 										</div>
