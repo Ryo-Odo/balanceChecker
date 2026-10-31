@@ -90,6 +90,25 @@ http://localhost:8080/balanceChecker/login
 - 食品検索APIの結果をVue.jsで反映し、ページ遷移を抑えた操作感を実現
 - 会員とゲストの状態をセッションで明確に分離
 
+## 公開構成
+
+就職活動用のデモは、次の無料構成で公開できるようにしています。
+
+- Webアプリ：Render Web Service（Docker、Tomcat 9、Java 17）
+- データベース：Neon PostgreSQL
+- HTTPS：Renderの管理証明書
+- 自動デプロイ：GitHubの `main` 更新時に実行
+
+公開用ファイル：
+
+- `Dockerfile`：Javaソースをコンパイルし、Tomcatへ配置
+- `render.yaml`：Renderサービスと秘密設定の定義
+- `database/schema.sql`：公開DBのテーブル作成
+- `database/import-data.sql`：食品データ2,538件の投入
+- `database/README.md`：DB準備手順
+
+RenderとNeonへ登録するDB接続情報はGitへ保存せず、それぞれの管理画面で秘密情報として設定します。
+
 ## 開発期間・継続改善
 
 - 初期開発：2025年4月12日〜2025年4月27日（約16日間）

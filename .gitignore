@@ -1,0 +1,12 @@
+# Generated Java/Eclipse output
+build/
+bin/
+
+# Local server and IDE state
+.metadata/
+Servers/
+
+# Local secrets and logs
+.env
+.env.*
+*.log

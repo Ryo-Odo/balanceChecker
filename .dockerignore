@@ -1,0 +1,9 @@
+.git
+.settings
+bin
+build
+outputs
+001316585.pdf
+memo.txt
+screenshots
+*.log
