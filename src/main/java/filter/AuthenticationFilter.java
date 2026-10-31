@@ -23,7 +23,7 @@ public class AuthenticationFilter implements Filter {
 		String path = request.getRequestURI().substring(request.getContextPath().length());
 		HttpSession session = request.getSession(false);
 
-		if (path.startsWith("/jsp/")) {
+		if (path.isEmpty() || path.equals("/") || path.startsWith("/jsp/")) {
 			String destination = session != null && session.getAttribute("user") != null ? "/home" : "/login";
 			response.sendRedirect(request.getContextPath() + destination);
 			return;
