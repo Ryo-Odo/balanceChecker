@@ -3,7 +3,7 @@
 	<!DOCTYPE html>	
 	<html class="common_html">
 	<head>
-		<link rel="stylesheet" href="/balanceChecker/css/common_style.css">
+		<link rel="stylesheet" href="/balanceChecker/css/common_style.css?v=2">
 		<script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.js"></script>
 		<link href="https://cdn.jsdelivr.net/npm/vuetify@3.8.1/dist/vuetify.min.css" rel="stylesheet">
 		<script src="https://cdn.jsdelivr.net/npm/vuetify@3.8.1/dist/vuetify.min.js"></script>
