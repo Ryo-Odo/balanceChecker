@@ -21,13 +21,19 @@ public class AuthenticationFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		String path = request.getRequestURI().substring(request.getContextPath().length());
+		HttpSession session = request.getSession(false);
+
+		if (path.startsWith("/jsp/")) {
+			String destination = session != null && session.getAttribute("user") != null ? "/home" : "/login";
+			response.sendRedirect(request.getContextPath() + destination);
+			return;
+		}
 
 		if (isPublicPath(path)) {
 			chain.doFilter(request, response);
 			return;
 		}
 
-		HttpSession session = request.getSession(false);
 		if (session == null || session.getAttribute("user") == null) {
 			if (path.startsWith("/api/")) {
 				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);

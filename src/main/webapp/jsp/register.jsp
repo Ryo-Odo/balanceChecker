@@ -38,6 +38,7 @@
 	<h2>会員登録フォーム</h2>
 		<p>下記フォームより、ユーザー情報をご登録ください</p>
 	<form action="/balanceChecker/register" method="post">
+			<input type="hidden" name="_csrf" value="${sessionScope.csrfToken}">
 		<table border="1">
 			<tr>
 				<th>ユーザーID</th>

@@ -24,6 +24,7 @@
 	<h2>登録内容確認</h2>
 		<p>下記内容でよろしければ、登録ボタンを押してください</p>
 	<form action="/balanceChecker/registerConfirm" method="post">
+		<input type="hidden" name="_csrf" value="${sessionScope.csrfToken}">
 		<table border="1">
 			<tr>
 				<th>ログインID</th>

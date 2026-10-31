@@ -30,6 +30,7 @@
 	</c:if>
 	
 	<form action="/balanceChecker/login" method="post">
+		<input type="hidden" name="_csrf" value="${sessionScope.csrfToken}">
 		<table>
 			<tr>
 				<th>ユーザーID</th>
@@ -43,6 +44,7 @@
 		<input type="submit" value="ログイン" class="d-flex align-center justify-center fill-height">
 	</form>
 	<form action="/balanceChecker/guest-login" method="post">
+		<input type="hidden" name="_csrf" value="${sessionScope.csrfToken}">
 		<input type="submit" value="ゲストとして試す">
 	</form>
 	<p>登録なしですぐに主要機能をお試しいただけます。</p>

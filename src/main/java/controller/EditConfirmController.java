@@ -50,8 +50,7 @@ public class EditConfirmController extends HttpServlet {
 			session.removeAttribute("pendingEdit");
 			currentUser.setName(user.getName());
 			currentUser.setPassword(null);
-			RequestDispatcher rd = request.getRequestDispatcher("/jsp/editDone.jsp");
-			rd.forward(request, response);
+			response.sendRedirect(request.getContextPath() + "/home");
 		} else {
 			request.setAttribute("editError", "メンバー情報の更新に失敗しました");
 			RequestDispatcher rd = request.getRequestDispatcher("/jsp/edit.jsp");

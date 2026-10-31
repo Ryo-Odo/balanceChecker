@@ -22,11 +22,15 @@
 								<div class="common_div">
 	<h1>メンバー情報確認画面</h1>
 	<p style="text-align: right">${user.name} 様ログイン中</p>
-	<p style="text-align: right"><a href="/balanceChecker/logout">ログアウト</a></p>
+	<form action="/balanceChecker/logout" method="post" style="text-align: right">
+		<input type="hidden" name="_csrf" value="${sessionScope.csrfToken}">
+		<button type="submit">ログアウト</button>
+	</form>
 	
 	<h2>変更内容確認</h2>
 	<p>下記内容でよろしければ、変更ボタンを押してください。</p>
 	<form action="/balanceChecker/editConfirm" method="post">
+		<input type="hidden" name="_csrf" value="${sessionScope.csrfToken}">
 		<table border="1">
 			<tr>
 				<th>お名前</th>
@@ -39,7 +43,7 @@
 		</table>
 		<input type="submit" value="変更する">
 	</form>
-	<p><a href="/balanceChecker/jsp/login.jsp">トップ画面に戻る</a></p>
+	<p><a href="/balanceChecker/home">トップ画面に戻る</a></p>
 								</div>
 							</v-col>
 						</v-row>

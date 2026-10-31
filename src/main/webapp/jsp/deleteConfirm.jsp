@@ -31,6 +31,7 @@
 	
 	<h2>会員情報</h2>
 	<form action="/balanceChecker/delete" method="post">
+		<input type="hidden" name="_csrf" value="${sessionScope.csrfToken}">
 		<table border="1">
 			<tr>
 				<th>ユーザーID</th>

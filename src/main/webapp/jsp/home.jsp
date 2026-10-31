@@ -26,13 +26,20 @@
 					      <v-col class="text-right" cols="6">
 						<c:choose>
 							<c:when test="${sessionScope.guest == true}">
-								ゲストとして利用中　　<a href="/balanceChecker/logout">終了する</a>
+								ゲストとして利用中
+								<form action="/balanceChecker/logout" method="post" style="display: inline">
+									<input type="hidden" name="_csrf" value="${sessionScope.csrfToken}">
+									<button type="submit">終了する</button>
+								</form>
 							</c:when>
 							<c:otherwise>
 								<c:out value="${user.name}" /> 様ログイン中
 								<a href="/balanceChecker/edit">　　メンバー情報編集　　</a>
 								<a href="/balanceChecker/delete">退会　　</a>
-								<a href="/balanceChecker/logout">ログアウト</a>
+								<form action="/balanceChecker/logout" method="post" style="display: inline">
+									<input type="hidden" name="_csrf" value="${sessionScope.csrfToken}">
+									<button type="submit">ログアウト</button>
+								</form>
 							</c:otherwise>
 						</c:choose>
 					      </v-col>
@@ -1710,6 +1717,7 @@
 			</v-app>
 		</div>
 		<script>
+			axios.defaults.headers.common['X-CSRF-Token'] = '${sessionScope.csrfToken}';
 			const { createApp, ref, reactive, computed, onMounted, onUnmounted, watch } = Vue;
 			const { createVuetify } = Vuetify;
 
