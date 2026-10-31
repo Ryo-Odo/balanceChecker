@@ -29,23 +29,23 @@
 		</div>
 	</c:if>
 	
-	<form action="/balanceChecker/login" method="post">
+	<form action="/balanceChecker/login" method="post" class="login-form">
 		<input type="hidden" name="_csrf" value="${sessionScope.csrfToken}">
-		<table>
+		<table class="login-table">
 			<tr>
-				<th>ユーザーID</th>
-				<td><input type="text" name="loginId"></td>
+				<th><label for="loginId">ユーザーID</label></th>
+				<td><input id="loginId" class="login-input" type="text" name="loginId" autocomplete="username" placeholder="ユーザーIDを入力"></td>
 			</tr>
 			<tr>
-				<th>パスワード</th>
-				<td><input type="password" name="password"></td>
+				<th><label for="password">パスワード</label></th>
+				<td><input id="password" class="login-input" type="password" name="password" autocomplete="current-password" placeholder="パスワードを入力"></td>
 			</tr>
 		</table>
-		<input type="submit" value="ログイン" class="d-flex align-center justify-center fill-height">
+		<input type="submit" value="ログイン" class="login-button">
 	</form>
-	<form action="/balanceChecker/guest-login" method="post">
+	<form action="/balanceChecker/guest-login" method="post" class="guest-login-form">
 		<input type="hidden" name="_csrf" value="${sessionScope.csrfToken}">
-		<input type="submit" value="ゲストとして試す">
+		<input type="submit" value="ゲストとして試す" class="guest-login-button">
 	</form>
 	<p>登録なしですぐに主要機能をお試しいただけます。</p>
 	<p><a href="/balanceChecker/register">新規会員登録はこちら</a></p>

@@ -35,3 +35,93 @@ input {
   border-radius: 4px;
 }
 
+/* ログイン画面。Vuetifyの初期スタイルより優先し、入力箇所を明確にする。 */
+.login-table {
+  width: 100%;
+  margin: 20px 0 16px;
+  border-spacing: 0 14px;
+}
+
+.login-table th {
+  width: 34%;
+  padding-right: 16px;
+  text-align: left;
+  color: #37474f;
+  font-weight: 500;
+}
+
+.login-table td {
+  width: 66%;
+}
+
+.login-form .login-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 12px;
+  color: #263238;
+  background-color: #f8fbff;
+  border: 1px solid #90a4ae;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.login-form .login-input::placeholder {
+  color: #78909c;
+}
+
+.login-form .login-input:hover {
+  border-color: #607d8b;
+}
+
+.login-form .login-input:focus {
+  background-color: #ffffff;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.16);
+}
+
+.login-button,
+.guest-login-button {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.login-button {
+  width: 100%;
+  color: #ffffff;
+  background-color: #1976d2;
+  border-color: #1976d2;
+}
+
+.login-button:hover {
+  background-color: #1565c0;
+}
+
+.guest-login-form {
+  margin-top: 12px;
+}
+
+.guest-login-button {
+  width: 100%;
+  color: #1976d2;
+  background-color: #ffffff;
+  border-color: #90a4ae;
+}
+
+.guest-login-button:hover {
+  background-color: #f5f9ff;
+  border-color: #1976d2;
+}
+
+@media (max-width: 520px) {
+  .login-table th,
+  .login-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .login-table th {
+    padding: 0 0 6px;
+  }
+}
+
