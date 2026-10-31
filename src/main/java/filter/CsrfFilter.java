@@ -28,6 +28,8 @@ public class CsrfFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
+		// Set the encoding before CSRF validation reads any form parameters.
+		request.setCharacterEncoding(StandardCharsets.UTF_8.name());
 		HttpSession session = request.getSession(true);
 		String expectedToken = (String) session.getAttribute(SESSION_ATTRIBUTE);
 
