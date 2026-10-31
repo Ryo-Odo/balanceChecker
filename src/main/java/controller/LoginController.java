@@ -66,6 +66,7 @@ public class LoginController extends HttpServlet {
 			}
 			HttpSession session = request.getSession(true);
 			session.setAttribute("user", user);
+			session.setAttribute("guest", Boolean.FALSE);
 
 			
 //			FoodGetService getSelvice= new FoodGetService();

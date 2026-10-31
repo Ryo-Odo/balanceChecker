@@ -24,7 +24,7 @@
 					      </v-col>
 					      <v-col class="text-right" cols="6">
 						<c:choose>
-							<c:when test="${sessionScope.guest}">
+							<c:when test="${sessionScope.guest == true}">
 								ゲストとして利用中　　<a href="/balanceChecker/logout">終了する</a>
 							</c:when>
 							<c:otherwise>
