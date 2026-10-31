@@ -1677,9 +1677,6 @@
 													<p v-if="errorMessage">{{ errorMessage }}</p>
 													<p v-else>該当する食品が見つかりませんでした。</p>
 												</div>
-												<v-pagination v-if="nutrientFoods.length > itemsPerPage"
-													v-model="currentNutrientPage" :length="totalNutrientPages"
-													:total-visible="7" class="mt-4"></v-pagination>
 											</v-card-text>
 											<v-card-actions>
 												<v-spacer></v-spacer>
@@ -1801,9 +1798,6 @@
 
 					
 					const nutrientFoods = ref([]);
-					const paginatedNutrientFoods = ref([]);
-					const currentNutrientPage = ref(1);
-					const totalNutrientPages = ref(1);
 					const selectedFoods = ref([]); // 選択済み食品を保持する配列を定義
 
 					const user_age = ref(34);            // 初期年齢
@@ -3097,7 +3091,6 @@
 
 
 					watch(currentPage, paginateFoods);
-					//watch(currentNutrientPage, paginateNutrientFoods);
 					watch(selectedNutrient, () => {
 						if (selectedNutrient.value) {
 							submitForm();
@@ -3122,11 +3115,6 @@
 						nutrients,
 						submitForm,
 						nutrientFoods,
-						paginatedNutrientFoods,
-						currentNutrientPage,
-						totalNutrientPages,
-
-						//paginateNutrientFoods,
 						getNutrientTitle,
 						addFoodToSelection,
 						selectedFoods,
