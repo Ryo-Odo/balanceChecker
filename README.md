@@ -1,73 +1,107 @@
 # BalanceChecker
 
-## 概要
-BalanceCheckerは、パーソナルデータと食品情報をもとに、約2500種類の食品データから1日に必要な栄養素の充足率をリアルタイムで可視化するWebアプリケーションです。
-Vue.jsを使ったシングルページアプリ（SPA）として設計されており、簡単に食品検索・登録・栄養素計算が可能です。
+年齢・性別・体格・活動量と、選択した食品の栄養情報をもとに、1日に必要な栄養素の充足率をリアルタイムで確認できるWebアプリケーションです。
+
+約2,500種類の食品データを収録し、消費カロリーの計算、食品検索、栄養素別ランキング、摂取量の可視化を一つの画面にまとめています。会員登録をしなくても、ゲストアカウントですぐに主要機能を試せます。
 
 ## 開発背景
-栄養管理をする際、  
-「消費カロリー計算サイト」や「性別・年齢別の摂取推奨量掲載サイト」、  
-「栄養素別の食品ランキングサイト」など複数のWebサイトを行き来する必要がありました。  
-そこで、これらの機能を一つに統合し、  一つのページで完結できるWebアプリを作成しました。
 
+栄養管理をする際は、消費カロリーの計算、年代・性別ごとの摂取基準、食品ごとの栄養情報を別々のWebサイトで調べる必要がありました。
+
+そこで、必要な情報の検索と計算を一つの画面で完結させ、食品を選ぶだけで栄養バランスを直感的に確認できるアプリを開発しました。
 
 ## 主な機能
-- 年齢・性別・身体活動レベルなどのパーソナルデータ入力  
-- 食品名のインクリメンタルサーチ（リアルタイム検索）  
-- 選択食品の一覧表示と栄養素の合計値計算  
-- 栄養素充足率のパーセント表示およびグラフ可視化
+
+- 年齢・性別・身長・体重・身体活動レベルから総消費カロリーを計算
+- 食品名のインクリメンタルサーチ
+- 栄養素を指定した食品ランキング検索
+- 選択した食品の重量変更・削除
+- 選択食品のカロリーと各栄養素を自動集計
+- 摂取基準に対する充足率をプログレスバーで可視化
+- 会員登録、ログイン、会員情報編集、退会
+- 登録不要のゲストログイン
+
+## セキュリティ対応
+
+- パスワードをPBKDF2-HMAC-SHA256でハッシュ化して保存
+- 旧形式の平文パスワードを、正常ログイン時にハッシュへ自動移行
+- DB接続パスワードをソースコードから分離
+- 認証フィルターによる未ログイン時のアクセス制御
+- JSPへの直接アクセスを禁止し、コントローラー経由に統一
+- CSRFトークンによるPOSTリクエストの検証
+- ログアウトをGETからCSRF保護されたPOSTへ変更
+- 確認画面でのパスワード再表示を廃止
+- SQL操作にPreparedStatementを使用
 
 ## 使用技術
-- フロントエンド：Vue.js（CDN版）、Vuetify （CDN版）、ECharts（CDN版）
-- バックエンド：Java Servlet
-- データベース：PostgreSQL
-- 実行環境：Java 17、Tomcat 9
-- 開発環境：Visual Studio Code、Eclipse
 
-## 開発期間
-2025年4月12日〜2025年4月27日（約16日間）
+| 分類 | 技術 |
+| --- | --- |
+| フロントエンド | Vue.js 3、Vuetify 3、Axios |
+| バックエンド | Java 17、Servlet/JSP、JSTL |
+| データベース | PostgreSQL |
+| Webサーバー | Apache Tomcat 9 |
+| 開発環境 | Eclipse、Visual Studio Code |
 
-## 動作イメージ動画
-以下のリンクより、アプリの操作デモをご覧いただけます。  
-[▶ YouTube 動画（限定公開）](https://youtu.be/jLj7YZO4Xu8)
+## 画面イメージ
+
+### トップ画面
+
+![トップ画面](./screenshots/top.PNG)
+
+### 食品名検索
+
+![食品名検索画面](./screenshots/search1.PNG)
+
+### 栄養素別検索
+
+![栄養素別検索画面](./screenshots/search2.PNG)
+
+## 操作デモ
+
+[YouTubeで操作デモを見る](https://youtu.be/jLj7YZO4Xu8)
 
 ## ローカル実行時の設定
 
-データベースのパスワードはソースコードに保存せず、環境変数で設定します。
+Java 17、Tomcat 9、PostgreSQLが必要です。データベースの接続情報はソースコードに保存せず、環境変数またはJavaシステムプロパティで指定します。
 
-| 環境変数 | 必須 | 既定値 |
-| --- | --- | --- |
-| `BALANCECHECKER_DB_PASSWORD` | はい | なし |
-| `BALANCECHECKER_DB_URL` | いいえ | `jdbc:postgresql://localhost:5433/foods_db` |
-| `BALANCECHECKER_DB_USER` | いいえ | `postgres` |
+| 環境変数 | Javaシステムプロパティ | 必須 | 既定値 |
+| --- | --- | --- | --- |
+| `BALANCECHECKER_DB_PASSWORD` | `balancechecker.db.password` | はい | なし |
+| `BALANCECHECKER_DB_URL` | `balancechecker.db.url` | いいえ | `jdbc:postgresql://localhost:5433/foods_db` |
+| `BALANCECHECKER_DB_USER` | `balancechecker.db.user` | いいえ | `postgres` |
 
-TomcatをEclipseから起動する場合は、サーバーの起動構成に同じ値を設定してください。Javaシステムプロパティの`balancechecker.db.password`、`balancechecker.db.url`、`balancechecker.db.user`でも指定できます。
+EclipseからTomcatを起動する場合は、サーバーの起動構成に次のように追加します。
 
-ユーザーパスワードはPBKDF2-HMAC-SHA256でハッシュ化して保存します。旧バージョンで作成された平文パスワードは、正しいパスワードでの初回ログイン時に自動移行されます。
+```text
+-Dbalancechecker.db.password=データベースのパスワード
+```
 
-## スクリーンショット
-### トップ画面  
-![トップ画面](./screenshots/top.PNG)
+必要に応じてURLとユーザー名も同じ形式で指定してください。設定後、Tomcatへプロジェクトを追加して起動し、次のURLを開きます。
 
-### 食品名検索画面  
-![食品名検索画面](./screenshots/search1.PNG)
+```text
+http://localhost:8080/balanceChecker/login
+```
 
-### 栄養素別検索画面  
-![栄養素別検索画面](./screenshots/search2.PNG)
+## 設計上のポイント
 
-## 今後の改善点
-- 食品別詳細表示
-- モバイル対応のUI強化  
-- おすすめ食品提案機能の実装
+- 画面表示はServletからJSPへフォワードし、JSPを直接公開しない構成
+- DAO・Service・Controllerを分離し、画面処理とDB処理の責務を整理
+- 食品検索APIの結果をVue.jsで反映し、ページ遷移を抑えた操作感を実現
+- 会員とゲストの状態をセッションで明確に分離
+
+## 開発期間
+
+2025年4月12日〜2025年4月27日（約16日間）
+
+## 今後の改善案
+
+- 食品ごとの詳細画面
+- モバイル向けレイアウトの強化
+- 目標に応じたおすすめ食品の提案
+- 自動テストとCIの導入
 
 ## データソース・参考文献
-- 食品成分データ：  
-　「日本食品標準成分表（八訂）増補2023年」  
-　出典：文部科学省  
-　[https://www.mext.go.jp/a_menu/syokuhinseibun/mext_00001.html](https://www.mext.go.jp/a_menu/syokuhinseibun/mext_00001.html)
 
-- 栄養素の推奨摂取量：  
-　「日本人の食事摂取基準（2025年版）」策定検討会報告書  
-　出典：厚生労働省  
-　[https://www.mhlw.go.jp/stf/newpage_44138.html](https://www.mhlw.go.jp/stf/newpage_44138.html)
-
+- 文部科学省「[日本食品標準成分表（八訂）増補2023年](https://www.mext.go.jp/a_menu/syokuhinseibun/mext_00001.html)」
+- 厚生労働省「[日本人の食事摂取基準（2025年版）策定検討会報告書](https://www.mhlw.go.jp/stf/newpage_44138.html)」
