@@ -1710,7 +1710,7 @@
 			</v-app>
 		</div>
 		<script>
-			const { createApp, ref, computed, onMounted, onUnmounted,  watch } = Vue;
+			const { createApp, ref, reactive, computed, onMounted, onUnmounted, watch } = Vue;
 			const { createVuetify } = Vuetify;
 
 			createApp({
@@ -2740,7 +2740,7 @@
 					};
 
 					//食品グループ別連想配列
-					const food_list_by_group = {
+					const food_list_by_group = reactive({
 						'穀類': [],
 						'いも及びでん粉類': [],
 						'砂糖及び甘味類': [],
@@ -2759,7 +2759,7 @@
 						'し好飲料類': [],
 						'調味料及び香辛料類': [],
 						'調理済み流通食品類': []
-					};
+					});
 
 					const moisture_40_or_less = ref(false);
 
