@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import domain.User;
 import service.UserRegisterService;
@@ -34,21 +35,21 @@ public class RegisterConfirmController extends HttpServlet {
 		
 		request.setCharacterEncoding("UTF-8");
 		
-		String loginId = request.getParameter("loginId");
-		String password = request.getParameter("password");
-		String name = request.getParameter("name");
-		
-		User user = new User(loginId, password, name);
+		HttpSession session = request.getSession(false);
+		User user = session == null ? null : (User) session.getAttribute("pendingRegistration");
+		if (user == null) {
+			response.sendRedirect(request.getContextPath() + "/register");
+			return;
+		}
 		
 		UserRegisterService userRegister = new UserRegisterService();
 		boolean result = userRegister.userEntryDo(user);
 		
 		if (result == true) {
-			System.out.println("true");
+			session.removeAttribute("pendingRegistration");
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/registerDone.jsp");
 			rd.forward(request, response);
 		} else {
-			System.out.println("false 会員登録失敗");
 			request.setAttribute("registerError", "新規会員登録に失敗しました");
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/register.jsp");
 			rd.forward(request, response);

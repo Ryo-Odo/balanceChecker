@@ -27,17 +27,17 @@
 		<table border="1">
 			<tr>
 				<th>ログインID</th>
-				<td><input type="hidden" name="loginId" value="${user.loginId}">${user.loginId}</td>
+				<td><c:out value="${user.loginId}" /></td>
 			</tr>
 			
 			<tr>
 				<th>パスワード</th>
-				<td><input type="hidden" name="password" value="${user.password}">${user.password}</td>
+				<td>入力済み（非表示）</td>
 			</tr>
 			
 			<tr>
 				<th>お名前</th>
-				<td><input type="hidden" name="name" value="${user.name}">${user.name}</td>
+				<td><c:out value="${user.name}" /></td>
 			</tr>
 		</table>
 		<input type="submit" value="登録">

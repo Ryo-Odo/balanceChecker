@@ -30,12 +30,11 @@
 		<table border="1">
 			<tr>
 				<th>お名前</th>
-				<td><input type="hidden" name="editName" value="${editName}">${editName}</td>
+				<td><c:out value="${editName}" /></td>
 			</tr>
 			<tr>
 				<th>パスワード</th>
-				<td><input type="hidden" name="editPassword" value="${editPassword}">${editPassword}</td>
-				<input type="hidden" name="loginId" value="${user.loginId}" />
+				<td>入力済み（非表示）</td>
 			</tr>
 		</table>
 		<input type="submit" value="変更する">

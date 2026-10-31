@@ -47,8 +47,7 @@
 			</tr>
 			<tr>
 				<th>パスワード</th>
-				<td><input type="text" name="editPassword" placeholder="2～10文字"></td>
-				<input type="hidden" name="loginId" value="${user.loginId}" />
+				<td><input type="password" name="editPassword" placeholder="8～64文字" autocomplete="new-password"></td>
 			</tr>
 		</table>
 		<input type="submit" value="変更する（確認画面へ）">

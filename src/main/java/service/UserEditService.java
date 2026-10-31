@@ -3,12 +3,12 @@ package service;
 import dao.UserDAO;
 import domain.User;
 import dto.UserDTO;
+import security.PasswordHasher;
 
 public class UserEditService {
 	
 	public boolean  userEditDo(User user) {
-		System.out.println("UserEditService開始");
-		UserDTO dto = new UserDTO(user.getLoginId(), user.getPassword(), user.getName());
+		UserDTO dto = new UserDTO(user.getLoginId(), PasswordHasher.hash(user.getPassword()), user.getName());
 		UserDAO userDAO = new UserDAO();
 		int result = userDAO.edit(dto);
 		

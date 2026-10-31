@@ -34,15 +34,11 @@
 		<table border="1">
 			<tr>
 				<th>ユーザーID</th>
-				<td><input type="hidden" name="deleteLoginId" value="${user.loginId}">${user.loginId}</td>
+				<td><c:out value="${user.loginId}" /></td>
 			</tr>
 			<tr>
 				<th>お名前</th>
-				<td>${user.name}</td>
-			</tr>
-			<tr>
-				<th>パスワード</th>
-				<td>${user.password}</td>
+				<td><c:out value="${user.name}" /></td>
 			</tr>
 		</table>
 		<input type="submit" value="退会する">

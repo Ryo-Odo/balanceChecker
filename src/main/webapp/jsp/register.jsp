@@ -46,7 +46,7 @@
 			
 			<tr>
 				<th>パスワード</th>
-				<td><input type="text" name="password" placeholder="2～10文字"></td>
+				<td><input type="password" name="password" placeholder="8～64文字" autocomplete="new-password"></td>
 			</tr>
 			
 			<tr>

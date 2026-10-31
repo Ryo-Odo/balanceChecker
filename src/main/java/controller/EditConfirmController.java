@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import domain.User;
 import service.UserEditService;
@@ -34,16 +35,21 @@ public class EditConfirmController extends HttpServlet {
 		
 		request.setCharacterEncoding("UTF-8");
 		
-		String loginId = request.getParameter("loginId");
-		String password = request.getParameter("editPassword");
-		String name = request.getParameter("editName");
-		
-		User user = new User(loginId, password, name);
+		HttpSession session = request.getSession(false);
+		User currentUser = session == null ? null : (User) session.getAttribute("user");
+		User user = session == null ? null : (User) session.getAttribute("pendingEdit");
+		if (currentUser == null || user == null || !currentUser.getLoginId().equals(user.getLoginId())) {
+			response.sendRedirect(request.getContextPath() + "/login");
+			return;
+		}
 		
 		UserEditService editService = new UserEditService();
 		boolean result = editService.userEditDo(user);
 		
 		if (result == true) {
+			session.removeAttribute("pendingEdit");
+			currentUser.setName(user.getName());
+			currentUser.setPassword(null);
 			RequestDispatcher rd = request.getRequestDispatcher("/jsp/editDone.jsp");
 			rd.forward(request, response);
 		} else {

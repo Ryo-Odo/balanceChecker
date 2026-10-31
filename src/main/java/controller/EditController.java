@@ -8,6 +8,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import domain.User;
 
 import validation.Validation;
 /**
@@ -40,6 +43,10 @@ public class EditController extends HttpServlet {
 		
 		
 		request.setCharacterEncoding("UTF-8");
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.removeAttribute("pendingEdit");
+		}
 		
 		String editPassword = request.getParameter("editPassword");
 		String editName = request.getParameter("editName");
@@ -47,7 +54,7 @@ public class EditController extends HttpServlet {
 		Validation validation = new Validation();
 		validation.isBlank("パスワード", editPassword);
 		validation.isBlank("お名前", editName);
-		validation.length("パスワード", editPassword, 2, 10);
+		validation.length("パスワード", editPassword, 8, 64);
 		validation.length("お名前", editName, 1, 10);
 		
 		if (validation.hasErrorMsg()) {
@@ -55,9 +62,14 @@ public class EditController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("/jsp/edit.jsp");
 			rd.forward(request, response);
 		} else {
-			System.out.println("editController エラーなし");
+			User currentUser = session == null ? null : (User) session.getAttribute("user");
+			if (currentUser == null) {
+				response.sendRedirect(request.getContextPath() + "/login");
+				return;
+			}
+			User pendingEdit = new User(currentUser.getLoginId(), editPassword, editName);
+			session.setAttribute("pendingEdit", pendingEdit);
 			request.setAttribute("editName", editName);
-			request.setAttribute("editPassword", editPassword);
 			RequestDispatcher rd = request.getRequestDispatcher("/jsp/editConfirm.jsp");
 			rd.forward(request, response);
 		}

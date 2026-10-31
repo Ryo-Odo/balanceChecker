@@ -40,15 +40,17 @@ public class DeleteController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String loginId = request.getParameter("deleteLoginId");
-		
-		User user = new User(loginId, null, null);
+		HttpSession session = request.getSession(false);
+		User user = session == null ? null : (User) session.getAttribute("user");
+		if (user == null) {
+			response.sendRedirect(request.getContextPath() + "/login");
+			return;
+		}
 		
 		UserDeleteSarvice deleteService = new UserDeleteSarvice();
 		boolean result = deleteService.userDeleteDo(user);
 		
 		if (result == true) {
-			HttpSession session = request.getSession();
 			session.invalidate();
 			RequestDispatcher rd = request.getRequestDispatcher("/jsp/deleteDone.jsp");
 			rd.forward(request, response);

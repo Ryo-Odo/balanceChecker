@@ -18,14 +18,13 @@ public class UserDAO extends BaseDAO{
 		Connection conn = getonConnection();
 		//DBへ接続
 		
-		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE login_id = ?");
+		try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE login_id = ?")) {
 			//SQL文を格納、プレースホルダー(?)で下記からセット
 			
 			ps.setString(1, loginId);
 			//SQL文の条件セット、第一引数はプレースホルダーの順番
 			
-			ResultSet rs = ps.executeQuery();
+			try (ResultSet rs = ps.executeQuery()) {
 			//上記SQL文の実行結果をrsに格納
 			
 			
@@ -40,10 +39,13 @@ public class UserDAO extends BaseDAO{
 				dto.setCreatedAt(rs.getTimestamp(5));
 				//セッターを使用して各変数へ取得した値を格納				
 			}
+			}
 			
 		} catch (SQLException e) {
 			System.out.println("エラー：DBからデータを取り出せていない");
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
 		return dto;
 		//ユーザー情報を返す、データ取り出せていなかったらnullを返す
@@ -58,9 +60,6 @@ public class UserDAO extends BaseDAO{
 		
 		try {
 			System.out.println("DB登録try開始");
-			System.out.println("ID" + dto.getLoginId());
-			System.out.println("パスワード" + dto.getPassword());
-			System.out.println("名前" + dto.getName());
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO users(login_id, password, name) VALUES(?, ?, ?)");
 			ps.setString(1, dto.getLoginId());
 			ps.setString(2, dto.getPassword());
@@ -77,6 +76,26 @@ public class UserDAO extends BaseDAO{
 			e.printStackTrace();
 		}
 		tm.close();
+		return result;
+	}
+
+	public int updatePassword(String loginId, String passwordHash) {
+		int result = 0;
+		Connection conn = getonConnection();
+		TransactionManager tm = new TransactionManager(conn);
+
+		try {
+			PreparedStatement ps = conn.prepareStatement("UPDATE users SET password = ? WHERE login_id = ?");
+			ps.setString(1, passwordHash);
+			ps.setString(2, loginId);
+			result = ps.executeUpdate();
+			tm.commit();
+		} catch (SQLException e) {
+			tm.rollback();
+			e.printStackTrace();
+		} finally {
+			tm.close();
+		}
 		return result;
 	}
 	

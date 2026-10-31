@@ -20,6 +20,8 @@ Vue.jsを使ったシングルページアプリ（SPA）として設計され�
 ## 使用技術
 - フロントエンド：Vue.js（CDN版）、Vuetify （CDN版）、ECharts（CDN版）
 - バックエンド：Java Servlet
+- データベース：PostgreSQL
+- 実行環境：Java 17、Tomcat 9
 - 開発環境：Visual Studio Code、Eclipse
 
 ## 開発期間
@@ -28,6 +30,20 @@ Vue.jsを使ったシングルページアプリ（SPA）として設計され�
 ## 動作イメージ動画
 以下のリンクより、アプリの操作デモをご覧いただけます。  
 [▶ YouTube 動画（限定公開）](https://youtu.be/jLj7YZO4Xu8)
+
+## ローカル実行時の設定
+
+データベースのパスワードはソースコードに保存せず、環境変数で設定します。
+
+| 環境変数 | 必須 | 既定値 |
+| --- | --- | --- |
+| `BALANCECHECKER_DB_PASSWORD` | はい | なし |
+| `BALANCECHECKER_DB_URL` | いいえ | `jdbc:postgresql://localhost:5433/foods_db` |
+| `BALANCECHECKER_DB_USER` | いいえ | `postgres` |
+
+TomcatをEclipseから起動する場合は、サーバーの起動構成に同じ値を設定してください。Javaシステムプロパティの`balancechecker.db.password`、`balancechecker.db.url`、`balancechecker.db.user`でも指定できます。
+
+ユーザーパスワードはPBKDF2-HMAC-SHA256でハッシュ化して保存します。旧バージョンで作成された平文パスワードは、正しいパスワードでの初回ログイン時に自動移行されます。
 
 ## スクリーンショット
 ### トップ画面  

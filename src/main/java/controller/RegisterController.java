@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import domain.User;
 import service.UserRegisterService;
@@ -42,6 +43,7 @@ public class RegisterController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		request.setCharacterEncoding("UTF-8");
+		request.getSession().removeAttribute("pendingRegistration");
 		
 		String loginId = request.getParameter("loginId");
 		String password = request.getParameter("password");
@@ -53,13 +55,14 @@ public class RegisterController extends HttpServlet {
 		validation.isBlank("パスワード", password);
 		validation.isBlank("お名前", name);
 		validation.length("ユーザーID", loginId, 1, 8);
-		validation.length("パスワード", password, 2, 10);
+		validation.length("パスワード", password, 8, 64);
 		validation.length("お名前", name, 1, 10);
 		
 		if(validation.hasErrorMsg()) {
 			request.setAttribute("errorMsg", validation.getErrorMsgList());
 			RequestDispatcher rd = request.getRequestDispatcher("/jsp/register.jsp");
 			rd.forward(request, response);
+			return;
 		}
 		
 		User user = new User(loginId, password, name);
@@ -69,6 +72,8 @@ public class RegisterController extends HttpServlet {
 		boolean result = registarService.userEntryConfirm(user);
 		
 		if(result == true) {
+			HttpSession session = request.getSession();
+			session.setAttribute("pendingRegistration", user);
 			request.setAttribute("user", user);
 			RequestDispatcher rd = request.getRequestDispatcher("jsp/registerConfirm.jsp");
 			rd.forward(request, response);
@@ -76,7 +81,8 @@ public class RegisterController extends HttpServlet {
 			validation.addErrorMsg("入力いただいたID「" + loginId + "」は既に使われています");
 			request.setAttribute("errorMsg", validation.getErrorMsgList());
 			RequestDispatcher rd = request.getRequestDispatcher("/jsp/register.jsp");
-			rd.forward(request, response);			
+			rd.forward(request, response);
+			return;
 		}
 			
 	}
