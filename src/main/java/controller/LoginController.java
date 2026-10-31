@@ -32,6 +32,11 @@ public class LoginController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+		if (session != null && session.getAttribute("user") != null) {
+			response.sendRedirect(request.getContextPath() + "/home");
+			return;
+		}
 		RequestDispatcher rd = request.getRequestDispatcher("/jsp/login.jsp");
 		rd.forward(request, response);
 	}
@@ -55,7 +60,11 @@ public class LoginController extends HttpServlet {
 		
 		
 		if (user != null) {
-			HttpSession session = request.getSession();
+			HttpSession previousSession = request.getSession(false);
+			if (previousSession != null) {
+				previousSession.invalidate();
+			}
+			HttpSession session = request.getSession(true);
 			session.setAttribute("user", user);
 
 			

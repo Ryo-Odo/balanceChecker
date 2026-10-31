@@ -42,6 +42,10 @@
 		</table>
 		<input type="submit" value="ログイン" class="d-flex align-center justify-center fill-height">
 	</form>
+	<form action="/balanceChecker/guest-login" method="post">
+		<input type="submit" value="ゲストとして試す">
+	</form>
+	<p>登録なしですぐに主要機能をお試しいただけます。</p>
 	<p><a href="/balanceChecker/register">新規会員登録はこちら</a></p>
 								</div>
 							</v-col>

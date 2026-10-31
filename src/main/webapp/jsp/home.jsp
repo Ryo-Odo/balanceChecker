@@ -23,10 +23,17 @@
 					        <v-toolbar-title>BalanceChecker<v-icon start>mdi-scale</v-icon></v-toolbar-title>
 					      </v-col>
 					      <v-col class="text-right" cols="6">
-					        ${user.name} 様ログイン中
-					        <a href="/balanceChecker/edit">　　メンバー情報編集　　</a>
-					        <a href="/balanceChecker/delete">退会　　</a>
-					        <a href="/balanceChecker/logout">ログアウト</a>
+						<c:choose>
+							<c:when test="${sessionScope.guest}">
+								ゲストとして利用中　　<a href="/balanceChecker/logout">終了する</a>
+							</c:when>
+							<c:otherwise>
+								<c:out value="${user.name}" /> 様ログイン中
+								<a href="/balanceChecker/edit">　　メンバー情報編集　　</a>
+								<a href="/balanceChecker/delete">退会　　</a>
+								<a href="/balanceChecker/logout">ログアウト</a>
+							</c:otherwise>
+						</c:choose>
 					      </v-col>
 					    </v-row>
 					  </v-container>
@@ -1798,10 +1805,10 @@
 					const totalNutrientPages = ref(1);
 					const selectedFoods = ref([]); // 選択済み食品を保持する配列を定義
 
-					const user_age = ref(30);            // 初期年齢
-					const user_gender = ref('女性');     // 初期性別
-					const user_height = ref(158);        // 初期身長(cm)
-					const user_weight = ref(54);          // 初期体重(kg)
+					const user_age = ref(34);            // 初期年齢
+					const user_gender = ref('男性');     // 初期性別
+					const user_height = ref(169);        // 初期身長(cm)
+					const user_weight = ref(56);          // 初期体重(kg)
 					const user_activity_level = ref(1.375);//初期活動レベルの値
 
 					//基礎代謝計算
