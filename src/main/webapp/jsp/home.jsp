@@ -1010,8 +1010,7 @@
 
 											<div style="padding: 16px; border-bottom: 1px solid #eee;">
 												<v-select v-model="selectedNutrient" :items="nutrients"
-													item-value="value" label="栄養素を選択"
-													@update:model-value="submitForm"></v-select>
+									item-value="value" label="栄養素を選択"></v-select>
 											</div>
 											<label class="checkbox">
 												<input type="checkbox" v-model="moisture_40_or_less" />
@@ -1024,7 +1023,11 @@
 
 
 
-												<v-row v-if="food_list_by_group['穀類'].length">
+								<div v-if="isNutrientSearchLoading" class="d-flex flex-column align-center justify-center py-8" role="status" aria-live="polite">
+									<v-progress-circular indeterminate color="primary" size="40"></v-progress-circular>
+									<p class="mt-3 mb-0">検索中...</p>
+								</div>
+								<v-row v-else-if="food_list_by_group['穀類'].length">
 													<v-col cols="6">
 														<p><v-icon>mdi-barley</v-icon>穀類</p>
 														<div class="scroll-area">
@@ -1730,6 +1733,7 @@
 					console.log('setup開始');
 					const dialog = ref(false);
 					const dialogNutrition = ref(false);
+					const isNutrientSearchLoading = ref(false);
 					const searchQuery = ref('');
 					const isFoodSearchLoading = ref(false);
 					const filteredFoods = ref([]);
@@ -2825,6 +2829,8 @@
 
 					//栄養素別食品検索    
 					const submitForm = async () => {
+						if (!selectedNutrient.value) return;
+						isNutrientSearchLoading.value = true;
 						try {
 							errorMessage.value = '';
 							nutrientFoods.value = []; // 前回の結果をリセット
@@ -2862,6 +2868,8 @@
 						} catch (error) {
 							console.error('送信失敗:', error);
 							errorMessage.value = "検索エラーが発生しました。";
+						} finally {
+							isNutrientSearchLoading.value = false;
 						}
 					};
 
@@ -3120,6 +3128,7 @@
 					return {
 						dialog,
 						dialogNutrition,
+						isNutrientSearchLoading,
 						searchQuery,
 						isFoodSearchLoading,
 						filteredFoods,
