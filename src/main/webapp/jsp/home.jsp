@@ -967,7 +967,11 @@
 											</div>
 
 											<v-card-text style="max-height: 400px; overflow-y: auto;">
-												<v-list v-if="paginatedFoods.length">
+								<div v-if="isFoodSearchLoading" class="d-flex flex-column align-center justify-center py-8" role="status" aria-live="polite">
+									<v-progress-circular indeterminate color="primary" size="40"></v-progress-circular>
+									<p class="mt-3 mb-0">検索中...</p>
+								</div>
+								<v-list v-else-if="paginatedFoods.length">
 													<v-list-item v-for="food in paginatedFoods" :key="food.id">
 														<v-list-item-title>{{ food.id }} - {{ food.foodName
 															}}</v-list-item-title>
@@ -977,7 +981,7 @@
 													</v-list-item>
 												</v-list>
 
-												<div v-else>
+								<div v-else>
 													<p>該当する食品が見つかりませんでした。</p>
 												</div>
 												<v-pagination v-if="filteredFoods.length > itemsPerPage"
@@ -1727,6 +1731,7 @@
 					const dialog = ref(false);
 					const dialogNutrition = ref(false);
 					const searchQuery = ref('');
+					const isFoodSearchLoading = ref(false);
 					const filteredFoods = ref([]);
 					const paginatedFoods = ref([]);
 					const itemsPerPage = 20;
@@ -2791,10 +2796,12 @@
 
 					const onInput = () => {
 						if (searchQuery.value.trim().length === 0) {
+							isFoodSearchLoading.value = false;
 							filteredFoods.value = [];
 							return;
 						}
 
+						isFoodSearchLoading.value = true;
 						axios.post('/balanceChecker/api/foodSearch', { keyword: searchQuery.value })
 							.then(response => {
 								filteredFoods.value = response.data;
@@ -2805,6 +2812,9 @@
 							.catch(error => {
 								errorMessage.value = '検索エラーが発生しました。';
 								console.error('検索エラー:', error);
+							})
+							.finally(() => {
+								isFoodSearchLoading.value = false;
 							});
 					};
 
@@ -3111,6 +3121,7 @@
 						dialog,
 						dialogNutrition,
 						searchQuery,
+						isFoodSearchLoading,
 						filteredFoods,
 						paginatedFoods,
 						currentPage,
