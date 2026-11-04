@@ -973,7 +973,7 @@
 								</div>
 								<v-list v-else-if="paginatedFoods.length">
 													<v-list-item v-for="food in paginatedFoods" :key="food.id">
-														<v-list-item-title>{{ food.id }} - {{ food.foodName
+														<v-list-item-title>{{ food.foodName
 															}}</v-list-item-title>
 														<v-list-item-subtitle>{{ food.other }}</v-list-item-subtitle>
 														<v-btn color="success"
