@@ -306,10 +306,10 @@
 											<div>
 												<v-row>
 													<v-col cols="3">ビタミンK</v-col>
-													<v-col cols="3">{{ total_vitamin_k.toFixed(1)}} mg</v-col>
+													<v-col cols="3">{{ total_vitamin_k.toFixed(1)}} μg</v-col>
 													<v-col cols="2">{{ getFillRate(total_vitamin_k,
 														vitamin_k_standard).toFixed(1) }}%</v-col>
-													<v-col class="text-right" cols="4">{{ vitamin_k_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">{{ vitamin_k_standard.toFixed(1)}} μg</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_vitamin_k, vitamin_k_standard)"
@@ -850,20 +850,20 @@
 											<div>
 												<v-row>
 													<v-col cols="3">食塩相当量</v-col>
-													<v-col cols="3">{{ total_sodium_content.toFixed(1)}} mg</v-col>
+													<v-col cols="3">{{ total_sodium_content.toFixed(1)}} g</v-col>
 													<v-col cols="2">{{ getFillRate(total_sodium_content,
 														sodium_content_standard).toFixed(1) }}%</v-col>
-													<v-col class="text-right" cols="4">{{ sodium_content_standard.toFixed(1)}} mg</v-col>
+													<v-col class="text-right" cols="4">目標 {{ sodium_content_standard.toFixed(1)}} g未満</v-col>
 												</v-row>
 												<v-progress-linear
 													:model-value="getFillRate(total_sodium_content, sodium_content_standard)"
-													:color="total_sodium_content < sodium_content_standard ? 'blue'
-								                    : total_sodium_content < sodium_content_standard * 2 ? 'green' 
-													    : 'red'" height="10" :striped="getFillRate(total_sodium_content, sodium_content_standard) < 100"></v-progress-linear>
+													:color="total_sodium_content < sodium_content_standard ? 'green' : 'orange-darken-3'"
+													height="10"></v-progress-linear>
 												<v-row class="mt-0">
 													<v-col class="text-right text-caption ma-0 pa-0" cols="12">
-														<p>推奨上限（推奨量×2）： {{ (sodium_content_standard * 2).toFixed(1) }}
-															mg</p>
+														<p :class="total_sodium_content < sodium_content_standard ? 'text-green' : 'text-orange-darken-3'">
+															{{ total_sodium_content < sodium_content_standard ? '目標量未満' : '目標量以上' }}（目標量に対する割合）
+														</p>
 													</v-col>
 												</v-row>
 											</div>
@@ -3075,7 +3075,8 @@
 			                  {
 			                    value: [protein_high_standard.value, lipid_high_standard.value, carbohydrate_high_standard.value],
 			                    name: '最高基準値',
-			                    lineStyle: { type: 'dotted', color: '#ffb74d' },
+			                    itemStyle: { color: '#ff9800' },
+			                    lineStyle: { type: 'dotted', color: '#ff9800' },
 			                    symbol: 'none',
 			                  },
 			                ],
